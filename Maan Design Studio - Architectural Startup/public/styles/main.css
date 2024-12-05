@@ -1,0 +1,649 @@
+/*RESET*/
+
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body{
+    height: 100dvh;
+    overflow-x:hidden;
+    color: #2d2d2d;
+    background-color: white;
+}
+
+/*Avoiding bootstrap overwriting the anchor tags*/
+
+a{
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+h2{
+    font-family: "Source Serif 4", serif;
+    font-weight: 500;
+    font-size: 2rem;
+}
+p{
+    font-family: "Nunito Sans",sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 15px;
+}
+.top-img, .mid-img, .btm-img {
+    max-width: 30%;
+}
+
+/*Header styling*/
+
+header{
+    background-color: rgba(245, 245, 245, 0.6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+    font-family: "Nunito Sans",sans-serif;
+    font-weight: 600;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}
+header nav{
+    margin-right: 4rem;
+}
+header a{
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    margin-left: 47px;
+}
+.logo{
+    height: 100%;
+}
+.ham-menu-img{
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+}
+.off-screen-menu{
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 2rem;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    min-width: 600px;
+    position: fixed;
+    top:5rem;
+    left: -2000px;
+    transition: 0.4s ease-in-out;
+    background-color: rgba(227, 226, 226, 0.90);
+    border-radius: 10px;
+    z-index: 2;
+}
+.off-screen-menu li{
+    list-style: none;
+    cursor: pointer;
+    margin: 30px;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+}
+.off-screen-menu li:hover{
+    border-bottom: 2px solid dimgray;
+    transition: border-bottom-color;
+    transition-duration: 200ms;
+}
+
+/*Applying this class to off-screen-menu dynamically using JS*/
+
+.active{
+    left: 0;
+}
+
+#top-section{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+#top-section h1{
+    font-family: "Source Serif 4", serif;
+    font-weight: 500;
+    font-size: 2.2rem;
+    padding: 20px;
+    margin:110px 0 40px 30px;
+}
+
+/*Top image and the associated paragraph*/
+
+#top-img-container {
+    display: flex;
+    flex-grow: 1;
+}
+article{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.txt-cont{
+    max-width: 60%;
+    padding: 20px;
+}
+
+/*Top-txt animation*/
+
+.top-txt-cont{
+    position: relative;
+    left: 2000px;
+    animation-name: change-position-top-txt;
+    animation-delay: 100ms;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+}
+@keyframes change-position-top-txt {
+    0%{left:2000px}
+    100%{left:0}
+}
+#top-btn-container{
+    cursor: pointer;
+    height: 100%;
+    padding: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(227, 223, 214);
+}
+.top-btn{
+    font-family: "Nunito Sans",sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 15px;
+    border: 1px solid dimgray;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+    color: #3b3b3b;
+}
+.top-btn:hover{
+    background-color: #0d6efd;
+    color: whitesmoke;
+}
+#mid-section{
+    display: flex;
+}
+
+/*Mid-txt animation*/
+
+.mid-txt-cont{
+    position: relative;
+    left: -2000px;
+    animation-name: change-position-mid-txt;
+    animation-delay: 2000ms;
+    animation-duration: 3s;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+@keyframes change-position-mid-txt {
+    0%{left:-2000px}
+    100%{left:0}
+}
+
+#btm-section{
+    display: flex;
+    justify-content: space-between;
+    background-color: whitesmoke;
+}
+.btm-left-cont{
+    padding: 20px;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.btm-left-cont h2{
+    margin: 50px 0 30px 0;
+}
+.input-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+input{
+    padding: 5px;
+    border-radius: 5px;
+}
+textarea{
+    margin: 20px 0;
+    font-family: Arial,sans-serif;
+    border-radius: 5px;
+    padding: 5px;
+    min-width: 100%;
+}
+textarea::placeholder{
+    font-family: Arial,sans-serif;
+    color: rgb(118, 118, 118);
+}
+.btm-btn{
+    font-size: 1rem;
+    width: 80px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #3b3b3b;
+    border: 1px solid dimgray;
+    background-color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+.btm-btn:hover{
+    background-color: rgb(227, 223, 214);
+}
+.btm-info{
+    display: flex;
+    align-items: center;
+    gap: 250px;
+}
+.btm-info a{
+    height: 4.5rem;
+    width: 4.5rem;
+}
+.instagram-icon{
+    height: 100%;
+    width: 100%;
+}
+.btm-info p{
+    font-size: 0.9rem;
+    line-height: normal;
+    font-weight: 600;
+}
+footer{
+    font-family: "Nunito Sans",sans-serif;
+    font-size: 0.8rem;
+    background-color: #313131;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+footer div{
+    color: #9d9d9d;
+    text-align: center;
+}
+
+/*Founder page styling*/
+
+#atf-founder{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+.founder{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 120px;
+    flex-grow: 1;
+}
+.founder-img {
+    width: 300px;
+    border-radius: 10px;
+}
+.founder-description{
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin-top: 10px;
+    padding: 20px;
+}
+
+/*Services page styling*/
+
+#atf-services{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+#atf-services .card{
+    background-color: inherit;
+    border: none;
+    height: 50%;
+    margin-top: 150px;
+}
+#atf-services h2{
+    font-size: 1.5rem;
+}
+#atf-services .card-body{
+    margin-top: 10px;
+}
+.card-text{
+    line-height: normal;
+}
+.services-card-cont{
+    display: flex;
+    flex-grow: 1;
+    padding: 20px;
+    justify-content: space-around;
+    gap: 20px;
+}
+.services-img{
+    filter:grayscale(1);
+}
+.services-img:hover {
+    filter: grayscale(0);
+}
+
+/*Portfolio styling*/
+
+#atf-portfolio{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.portfolio-cont{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+.portfolio-img{
+    width: 100%;
+    filter: grayscale(1);
+}
+.portfolio-img:hover{
+    filter: grayscale(0);
+}
+
+#atf-portfolio .card{
+    width: 30rem;
+    padding: 20px;
+}
+
+#atf-portfolio h2{
+    font-size: 1.4rem;
+    text-align: center;
+    margin-top: 30px;
+}
+small{
+    font-family: "Nunito Sans",sans-serif;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: dimgray;
+    font-size: 1rem;
+}
+
+/*Nulla styling*/
+
+#nulla{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.txt{
+    margin-top: 130px;
+    max-width: 75%;
+}
+
+.txt p{
+    margin-top: 20px;
+}
+.carousel{
+    margin: 50px 0;
+}
+
+#nulla .container{
+    max-width: 70%;
+}
+
+/*Kensington st styling*/
+
+#kensington{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#kensington .container{
+    max-width: 70%;
+}
+
+/*State st styling*/
+
+#state{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#state .container{
+    max-width: 70%;
+}
+
+/*Post form submission pages styling (success and unsuccess pages)*/
+
+.response-page-nav{
+    background-color: white;
+    justify-content: center;
+}
+.logo-cont{
+    margin: 0;
+}
+.response-page-cont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+.response-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.response-page-cont button{
+    margin-top: 100px;
+    border: 2px solid dimgray;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: dimgray;
+    color: whitesmoke;
+}
+.response-page-cont h1{
+    font-family: roboto,sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: 3rem;
+}
+.response-page-cont p{
+    font-family: roboto, sans-serif;
+    font-weight: 300;
+}
+.check-mark{
+    fill: dimgray;
+    margin: 30px 0;
+    width: 10rem;
+    height: 10rem;
+}
+.x-mark{
+    background-color: dimgray;
+    padding: 10px;
+    height: 7rem;
+    width: 7rem;
+    border-radius: 50%;
+    margin: 80px 0;
+}
+
+/*// Preloader spinner on each page*/
+
+.spinner-cont{
+    min-height: 100%;
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 5;
+    background-color: white;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+.spinner{
+    width: 5rem;
+    height: 5rem;
+    border: 8px solid #e6e6e6;
+    border-top-color: #0d6efd;
+    border-radius: 50%;
+    animation-name: spinning-circle;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+.spinner-hidden{
+    opacity: 0;
+    visibility: hidden;
+}
+
+/*// Bottom button spinner after form submission. This class is dynamically added by JS*/
+
+.sml-spinner{
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e6e6e6;
+    border-top-color: #2d2d2d;
+    border-radius: 50%;
+    animation: spinning-circle 1s ease infinite;
+}
+@keyframes spinning-circle {
+    0% { transform:rotate(0deg); }
+    100%   { transform:rotate(360deg);}
+}
+
+/*Media Queries*/
+
+@media(max-width: 770px) {
+    #top-img-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+    #mid-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+    .top-img, .mid-img {
+        min-width: 80%;
+        border-radius: 10px;
+    }
+    .mid-img {
+        margin-top: 50px;
+    }
+    .top-txt-cont {
+        min-width: 80%;
+        margin-bottom: 20px;
+    }
+    #top-section p, #mid-section p {
+        text-align: start;
+    }
+    #top-section h2, #mid-section h2 {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .btm-img {
+        display: none;
+    }
+    #btm-section {
+        justify-content: center;
+    }
+    .services-card-cont{
+        margin-top: 110px;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+        justify-content: center;
+    }
+    #atf-services .card {
+        margin: 0;
+    }
+
+    #atf-services h2, p {
+        text-align: center;
+    }
+    .portfolio-cont{
+        flex-direction: column;
+        margin-top: 120px;
+    }
+}
+@media (max-width: 570px ){
+        #top-section h1{
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    h2{
+        font-size: 1.3rem ;
+        text-align: center;
+    }
+    p{
+        font-size: 1rem;
+    }
+    .top-img, .mid-img{
+        min-width: 100%;
+    }
+    .txt-cont{
+        min-width: 100%;
+    }
+    .top-btn, .btm-btn{
+        font-size: 0.9rem;
+    }
+    .off-screen-menu{
+        justify-content: start;
+        font-size: 1.5rem;
+    }
+    .btm-left-cont{
+        max-width: 300px;
+    }
+    .btm-left-cont h2{
+        margin-top: 0;
+    }
+    .input-container{
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+    input{
+       width: 100%;
+    }
+    textarea{
+        max-width: 250px;
+    }
+    .btm-info{
+        gap: 0;
+    }
+    .services-img{
+        width: 250px;
+        display: block;
+        margin: 0 auto;
+    }
+    #atf-services .card-text{
+        padding: 0 70px;
+    }
+    .portfolio-cont{
+        gap: 0;
+    }
+    #atf-portfolio .card{
+        padding: 50px 95px;
+    }
+    #state .container, #kensington .container, #nulla .container{
+        max-width: 90%;
+    }
+}

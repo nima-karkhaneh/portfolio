@@ -1,0 +1,206 @@
+*{
+    border: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html, body{
+    height: 100vh;
+    font-family: "Raleway", sans-serif;
+    color: whitesmoke;
+    background-image: url("https://media.istockphoto.com/id/1508481754/photo/blue-ocean-waves-background-water-surface-on-ocean-copy-space-area-for-text-reflection-on-the.jpg?s=612x612&w=0&k=20&c=ix7BAixyL6tSSwfSce3Xy0vzfPVsIvgrpKnEkt1CfjE=");
+    background-size: cover;
+    background-position: center;
+
+}
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0 0 0;
+    width: 100%;
+}
+a{
+    color: inherit;
+    text-decoration: none;
+}
+.logo{
+    height: 3rem;
+}
+.add{
+    height: 1.5rem;
+    margin-right: 30px;
+}
+header a{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+main{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    align-items: center;
+}
+.content{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+h2{
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+h1{
+    font-family: "Alice", serif;
+    font-size: 4.5rem;
+    font-weight: 400;
+}
+p{
+    font-size: 1.3rem;
+    margin-top: 10px;
+    font-weight: 300;
+}
+button{
+    padding: 20px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: whitesmoke;
+    margin-top: 50px;
+}
+footer{
+    font-size: 0.8rem;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    margin-top: 30px;
+    flex-grow: 1;
+}
+form h2{
+    color: dimgray;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+input{
+    border: 1px solid dimgray;
+    padding: 5px;
+    border-radius: 5px;
+}
+textarea{
+    border: 1px solid dimgray;
+    font-family: Arial, sans-serif;
+    padding: 5px;
+    border-radius: 5px;
+}
+form button{
+    border: 1px solid dimgray;
+    width: 80px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.posts-container{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 4rem;
+    width: 80%;
+}
+.posts-content{
+    max-height: 800px;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    padding: 20px;
+    overflow-y: scroll;
+    color: black;
+}
+.posts-content h2, .posts-content p{
+    padding: 5px;
+}
+.title{
+    display: flex;
+    justify-content: center;
+    font-size: 3.5rem;
+    margin: 20px auto;
+}
+.no-title{
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 0 auto;
+}
+.author, .date{
+    font-size: 0.8rem;
+}
+.edit, .delete{
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    height: 100%;
+    margin-top: 15px;
+    color: whitesmoke;
+}
+.separator{
+    border-top: 1px solid #c0c0c0;
+    margin: 30px auto;
+}
+.posts-content a{
+    padding: 8px;
+    border-radius: 5px;
+    display: inline-block;
+}
+.edit{
+    background-color:#ffc107 ;
+}
+.delete{
+    background-color: #dc3545;
+    margin-left: 5px;
+}
+
+/*Media Queries*/
+
+@media (max-width:740px) {
+        h1{
+            font-size: 2rem;
+        }
+    .content h2{
+            font-size: 1.2rem;
+        }
+    .content p{
+            font-size: 1rem;
+            text-align: center;
+        }
+        header a{
+            font-size: 1rem;
+        }
+        button{
+            font-size: 0.8rem;
+        }
+        footer{
+            font-size: 0.7rem;
+        }
+        form{
+            max-width: 300px;
+        }
+        .title{
+            font-size: 2.5rem;
+        }
+        .posts-title{
+            font-size: 1.5rem;
+        }
+    }
