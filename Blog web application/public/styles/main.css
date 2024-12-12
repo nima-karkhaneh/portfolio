@@ -138,6 +138,9 @@ form button{
     font-size: 3.5rem;
     margin: 20px auto;
 }
+.posts-title{
+    margin-bottom: 0;
+}
 .no-title{
     text-align: center;
     font-size: 1.8rem;
