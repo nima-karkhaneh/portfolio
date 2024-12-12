@@ -1,0 +1,127 @@
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: whitesmoke;
+    font-family: "Montserrat", sans-serif;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    background: rgb(60,162,255);
+    background: linear-gradient(90deg, rgba(60,162,255,1) 30%, rgba(144,185,255,1) 100%);
+    min-height: 100dvh;
+}
+p{
+    font-size: 1.2rem;
+}
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+input{
+    padding: 5px;
+    width: 30rem;
+    font-size: 1.2rem;
+    background-color: transparent;
+    border-bottom: 2px solid whitesmoke;
+}
+input:focus{
+    outline: none;
+}
+input::placeholder{
+    color: whitesmoke;
+    font-size: 1.3rem;
+}
+input:focus::placeholder {
+    color: transparent;
+}
+.search-btn{
+    background-color: transparent;
+    height: 3rem;
+    cursor: pointer;
+}
+.search-icon{
+    height: 100%;
+}
+#info{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+}
+#city-name{
+    font-size: 4rem;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+#temp{
+    font-size: 3rem;
+}
+#description{
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+#humidity{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0;
+}
+i{
+    margin-bottom: 10px;
+}
+#min-max{
+    display: flex;
+    gap: 50px;
+}
+.home-btn{
+    cursor: pointer;
+    font-size: 1rem;
+    border: 1px solid whitesmoke;
+    border-radius: 30px;
+    padding: 15px;
+    color: dimgray;
+    background-color: whitesmoke;
+    margin-top: 80px;
+}
+#welcome-msg{
+    flex-grow: 1;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+padding: 5px;
+}
+/*Media Queries*/
+@media(max-width:770px) {
+    #city-name{
+        font-size: 2.5rem;
+    }
+    #temp{
+        font-size: 2rem;
+    }
+    #description{
+        font-size: 1.2rem;
+    }
+    p{
+        font-size: 1rem;
+    }
+}
+@media(max-width: 430px){
+    #welcome-msg{
+        font-size: 1.3rem;
+    }
+    input::placeholder{
+        font-size: 1rem;
+    }
+}
+
