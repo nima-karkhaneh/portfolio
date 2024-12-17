@@ -12,10 +12,10 @@ body{
 
 }
 header{
-    border-bottom: 1px solid dimgray;
     display: flex;
     justify-content: space-between;
     padding: 20px;
+    background-color: whitesmoke;
 }
 header div{
     text-transform: uppercase;
@@ -23,9 +23,48 @@ header div{
 }
 #main-content{
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#main-content div{
+    text-align: center;
+    line-height: 50px;
+}
+h1{
+    font-size: 2.5rem;
+}
+#main-content > p {
+    margin: 20px 0;
+}
+#main-content button{
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: deepskyblue;
+    color: whitesmoke;
 }
 footer{
-    text-align: center;
-    padding: 20px;
-    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.7rem;
+    padding: 15px;
+    line-height: 25px;
+    color: #9d9d9d;
+    background-color: #313131;
+}
+.fa-solid{
+    color: dimgray;
+    margin-right: 5px;
+}
+.fa-linkedin{
+    color: dimgray;
+}
+.fa-github{
+    color: dimgray;
+    margin-left: 5px;
 }
