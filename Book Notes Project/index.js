@@ -10,7 +10,9 @@ app.use(express.urlencoded({extended:true}));
 app.get("/", (req,res)=>{
     res.render("index.ejs")
 })
-
+app.get("/add", (req,res)=>{
+    res.render("add.ejs");
+})
 
 
 

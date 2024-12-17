@@ -11,6 +11,10 @@ body{
     flex-direction: column;
 
 }
+a{
+    color: inherit;
+    text-decoration: none;
+}
 header{
     display: flex;
     justify-content: space-between;
@@ -50,8 +54,8 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    font-size: 0.7rem;
+    gap: 20px;
+    font-size: 0.8rem;
     padding: 15px;
     line-height: 25px;
     color: #9d9d9d;
@@ -67,4 +71,14 @@ footer{
 .fa-github{
     color: dimgray;
     margin-left: 5px;
+}
+#main-add{
+    flex-grow: 1;
+}
+@media(max-width: 600px) {
+    footer{
+        font-size: 0.6rem;
+        flex-direction: column;
+        gap: 0;
+    }
 }

@@ -13,13 +13,8 @@
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
-<main id="main-content">
-    <div>
-       <h1>Welcome to your virtual bookroom</h1>
-       <p>Please add books to your library</p>
-    </div>
-    <p>OR</p>
-    <button>View your existing libaray</button>
+<main id="main-add">
+    <form action="/submit" method="post"></form>
 </main>
 <%- include("./partials/footer.ejs") %>
 </body>
