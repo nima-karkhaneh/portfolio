@@ -73,8 +73,48 @@ footer{
     margin-left: 5px;
 }
 #main-add{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     flex-grow: 1;
 }
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    gap: 20px;
+    background-color: whitesmoke;
+    padding: 20px;
+}
+input{
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+}
+textarea{
+    padding: 5px;
+}
+#main-add button{
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #198854;
+    color: whitesmoke;
+    text-transform: uppercase;
+}
+.ranking-container{
+    display: flex;
+    padding: 5px;
+    gap: 5px;
+}
+/*select{*/
+/*    padding: 5px;*/
+/*    width: 20%;*/
+/*    text-align: center;*/
+/*}*/
 @media(max-width: 600px) {
     footer{
         font-size: 0.6rem;

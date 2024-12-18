@@ -14,7 +14,32 @@
 <body>
 <%- include("./partials/header.ejs") %>
 <main id="main-add">
-    <form action="/submit" method="post"></form>
+    <form action="/submit" method="post">
+        <h2>Please add a new book</h2>
+        <input type="text" name="ISBN" placeholder="ISBN" autocomplete="off" required>
+        <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review"></textarea>
+        <label for="select">Please leave a ranking</label>
+        <div class="ranking-container">
+            <label for="rate-1"><i class="fa-solid fa-star"></i></label>
+            <input type="radio" id="rate-1" hidden="hidden">
+            <label for="rate-2"><i class="fa-solid fa-star"></i></label>
+            <input type="radio" id="rate-2" hidden="hidden">
+            <label for="rate-3"><i class="fa-solid fa-star"></i></label>
+            <input type="radio" id="rate-3" hidden="hidden">
+            <label for="rate-4"><i class="fa-solid fa-star"></i></label>
+            <input type="radio" id="rate-4" hidden="hidden">
+            <label for="rate-5"><i class="fa-solid fa-star"></i></label>
+            <input type="radio" id="rate-5" hidden="hidden">
+        </div>
+<!--        <select name="rating" id="rating">-->
+<!--            <option value="1>">1</option>-->
+<!--            <option value="2">2</option>-->
+<!--            <option value="3">3</option>-->
+<!--            <option value="4">4</option>-->
+<!--            <option value="5">5</option>-->
+<!--        </select>-->
+        <button type="submit">Submit</button>
+    </form>
 </main>
 <%- include("./partials/footer.ejs") %>
 </body>
