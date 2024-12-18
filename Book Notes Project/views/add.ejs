@@ -16,9 +16,11 @@
 <main id="main-add">
     <form action="/submit" method="post">
         <h2>Please add a new book</h2>
+        <input type="text" name="title" placeholder="Title" autocomplete="off" required>
+        <input type="text" name="author" placeholder="Author" autocomplete="off" required>
         <input type="text" name="ISBN" placeholder="ISBN" autocomplete="off" required>
         <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review"></textarea>
-        <label for="select">Please leave a ranking</label>
+        <label for="select">Please leave a rating</label>
         <div class="ranking-container">
             <label for="rate-1"><i class="fa-solid fa-star"></i></label>
             <input type="radio" id="rate-1" hidden="hidden">
