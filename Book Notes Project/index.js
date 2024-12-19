@@ -13,8 +13,16 @@ app.get("/", (req,res)=>{
 app.get("/add", (req,res)=>{
     res.render("add.ejs");
 })
-
-
+app.get("/books", (req,res)=>{
+    res.render("books.ejs")
+})
+app.post("/submit",(req,res)=>{
+    console.log(req.body);
+    console.log(req.body.rate);
+    res.render("books.ejs",{
+        rate: req.body.rate
+    });
+})
 
 app.listen(port, () =>{
     console.log(`server is listening on http://localhost:3000/`);

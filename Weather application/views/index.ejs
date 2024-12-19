@@ -35,12 +35,12 @@
     <p>Current weather around Australia</p>
 </div>
 <% } %>
-</body>
 <script>
-// Adding the error message to the input placeholder
-const error = "<%= locals.errMsg %>"
-if (error){
-    document.querySelector("input").setAttribute("placeholder", error);
-}
+    // Adding the error message to the input placeholder
+    const error = "<%= locals.errMsg %>"
+    if (error){
+        document.querySelector("input").setAttribute("placeholder", error);
+    }
 </script>
+</body>
 </html>

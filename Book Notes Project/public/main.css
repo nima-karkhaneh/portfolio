@@ -111,11 +111,19 @@ textarea{
     padding: 5px;
     gap: 5px;
 }
-/*select{*/
-/*    padding: 5px;*/
-/*    width: 20%;*/
-/*    text-align: center;*/
-/*}*/
+.active{
+    color: #dabd18b2;
+}
+.fa-star{
+    cursor: pointer;
+}
+#main-books{
+    flex-grow: 1;
+}
+.ranking-show-container{
+    border: 1px solid dimgray;
+}
+
 @media(max-width: 600px) {
     footer{
         font-size: 0.6rem;
