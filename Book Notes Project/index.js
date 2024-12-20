@@ -7,21 +7,29 @@ const port = process.env.port || 3000;
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
+let dataArr = [];
+
 app.get("/", (req,res)=>{
     res.render("index.ejs")
 })
 app.get("/add", (req,res)=>{
     res.render("add.ejs");
 })
-app.get("/books", (req,res)=>{
-    res.render("books.ejs")
-})
-app.post("/submit",(req,res)=>{
-    console.log(req.body);
-    console.log(req.body.rate);
+app.get("/books", (req,res)=> {
     res.render("books.ejs",{
-        rate: req.body.rate
+        dataArr: dataArr
     });
+});
+app.post("/submit",(req,res)=>{
+    const data = {
+        title: req.body.title,
+        author: req.body.author,
+        review: req.body.review,
+        rate: req.body.rate
+    }
+    dataArr.push(data);
+    console.log(dataArr);
+    res.redirect("/books");
 })
 
 app.listen(port, () =>{
