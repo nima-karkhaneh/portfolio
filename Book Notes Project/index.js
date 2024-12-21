@@ -22,6 +22,7 @@ app.get("/books", (req,res)=> {
 });
 app.post("/submit",(req,res)=>{
     const data = {
+        id: dataArr.length + 1,
         title: req.body.title,
         author: req.body.author,
         review: req.body.review,
