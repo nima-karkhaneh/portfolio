@@ -28,6 +28,7 @@
             </div>
             <h3>Review</h3>
             <p><%= data.review %></p>
+            <a class="delete" href="/books/delete/<%= data.id %>"><button>Delete</button></a>
         </div>
     <% }) %>
 <% } else { %>
@@ -40,8 +41,9 @@
     const year = date.getFullYear();
     document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
     const stars = document.querySelectorAll(".star-ranking");
-    const data = JSON.parse('<%- JSON.stringify(dataArr) %>');
+    const data = JSON.parse('<%-JSON.stringify( starDisplay )%>');
     console.log(data);
+    console.log(data.length);
     data.forEach((d)=>{
         const id  = d.id;
         const rate = d.rate;
@@ -49,8 +51,7 @@
         for (let i = 0; i < rate; i++){
             stars[i].style.color ="#dabd18b2"
         }
-    })
-   ;
+    });
 </script>
 </body>
 </html>

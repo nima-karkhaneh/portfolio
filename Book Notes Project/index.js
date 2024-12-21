@@ -8,6 +8,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
 let dataArr = [];
+let starDisplay = [];
 
 app.get("/", (req,res)=>{
     res.render("index.ejs")
@@ -17,7 +18,8 @@ app.get("/add", (req,res)=>{
 })
 app.get("/books", (req,res)=> {
     res.render("books.ejs",{
-        dataArr: dataArr
+        dataArr: dataArr,
+        starDisplay: starDisplay
     });
 });
 app.post("/submit",(req,res)=>{
@@ -28,9 +30,24 @@ app.post("/submit",(req,res)=>{
         review: req.body.review,
         rate: req.body.rate
     }
+    const starDisplaydata = {
+        id: starDisplay.length + 1,
+        rate: req.body.rate
+    }
     dataArr.push(data);
+    starDisplay.push(starDisplaydata);
     console.log(dataArr);
+    console.log(starDisplaydata)
     res.redirect("/books");
+})
+
+
+app.get("/books/delete/:bookID", (req,res)=> {
+    const foundIndex = dataArr.findIndex((d) => d.id === parseInt(req.params.bookID));
+    const foundStarIndex = starDisplay.findIndex((d) => d.id === parseInt(req.params.bookID));
+    dataArr.splice(foundIndex, 1);
+    starDisplay.splice(foundStarIndex, 1);
+    res.redirect("/books")
 })
 
 app.listen(port, () =>{
