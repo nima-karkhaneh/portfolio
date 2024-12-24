@@ -43,7 +43,8 @@ app.post("/submit", (req,res) =>{
 
 app.get("/edit/:postID", (req,res)=>{
     const foundPost = posts.find((p) => p.id === parseInt(req.params.postID));
-    res.render("edit-posts.ejs", {
+    console.log(foundPost)
+    res.render("edit-posts.ejs",{
         foundPost: foundPost
     });
 })

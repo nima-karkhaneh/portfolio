@@ -7,47 +7,48 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="/main.css">
     <title>Book Notes Project</title>
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
 <main id="main-books">
-<% if(dataArr.length > 0){ %>
-    <% dataArr.forEach((data) => { %>
-        <div class="book-container">
-            <h2> <%= data.title%> </h2>
-            <p>By: <%= data.author %></p>
-            <div class="ranking-display">
-                <i class="star<%=data.id%> fa-solid fa-star"></i>
-                <i class="star<%=data.id%> fa-solid fa-star"></i>
-                <i class="star<%=data.id%> fa-solid fa-star"></i>
-                <i class="star<%=data.id%> fa-solid fa-star"></i>
-                <i class="star<%=data.id%> fa-solid fa-star"></i>
-                <p> <%= data.rate %> / 5 </p>
+    <% if(dataArr.length > 0){ %>
+        <% dataArr.forEach((data) => { %>
+            <div class="book-container">
+                <h2> <%= data.title%> </h2>
+                <p>By: <%= data.author %></p>
+                <div class="ranking-display">
+                    <i class="star<%=data.id%> fa-solid fa-star"></i>
+                    <i class="star<%=data.id%> fa-solid fa-star"></i>
+                    <i class="star<%=data.id%> fa-solid fa-star"></i>
+                    <i class="star<%=data.id%> fa-solid fa-star"></i>
+                    <i class="star<%=data.id%> fa-solid fa-star"></i>
+                    <p> <%= data.rate %> / 5 </p>
+                </div>
+                <h3>Review</h3>
+                <p><%= data.review %></p>
+                <a class="delete" href="/books/delete/<%= data.id %>"><button>Delete</button></a>
+                <a class="delete" href="/books/edit/<%= data.id %>"><button>Edit</button></a>
             </div>
-            <h3>Review</h3>
-            <p><%= data.review %></p>
-            <a class="delete" href="/books/delete/<%= data.id %>"><button>Delete</button></a>
-        </div>
-    <% }) %>
-<% } else { %>
+        <% }) %>
+    <% } else { %>
         <h2>You haven't add any books yet. Please use the + icon on the top right to add books.</h2>
-<% } %>
+    <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
 <script>
     const date = new Date ();
     const year = date.getFullYear();
     document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
-    const stars = document.querySelectorAll(".star-ranking");
-    const data = JSON.parse('<%-JSON.stringify( starDisplay )%>');
+    const data = JSON.parse('<%- JSON.stringify( starDisplay )%>');
     console.log(data);
     console.log(data.length);
     data.forEach((d)=>{
         const id  = d.id;
         const rate = d.rate;
         const stars = document.querySelectorAll(`.star${id}`);
+        console.log(stars);
         for (let i = 0; i < rate; i++){
             stars[i].style.color ="#dabd18b2"
         }

@@ -30,18 +30,46 @@ app.post("/submit",(req,res)=>{
         review: req.body.review,
         rate: req.body.rate
     }
-    const starDisplaydata = {
+    const starDisplayData = {
         id: starDisplay.length + 1,
         rate: req.body.rate
     }
     dataArr.push(data);
-    starDisplay.push(starDisplaydata);
-    console.log(dataArr);
-    console.log(starDisplaydata)
+    starDisplay.push(starDisplayData);
     res.redirect("/books");
 })
 
+app.get("/books/edit/:bookID", (req, res)=>{
+    const foundBook = dataArr.find((d)=>d.id===parseInt(req.params.bookID));
+    res.render("edit.ejs",{
+        foundBook: foundBook,
+        starDisplay: starDisplay
 
+    })
+});
+
+app.post("/books/edit/:bookID", (req,res)=>{
+    const foundBook = dataArr.find((d) => d.id === parseInt(req.params.bookID));
+    const foundStar= starDisplay.find((d)=>d.id===parseInt(req.params.bookID));
+    const foundStarIndex = starDisplay.findIndex((d) => d.id === parseInt(req.params.bookID));
+    const foundIndex = dataArr.findIndex((d) => d.id === parseInt(req.params.bookID));
+    const updatedBook = {
+        id: foundIndex+1,
+        title: req.body.title || foundBook.title,
+        author: req.body.author || foundBook.author,
+        review: req.body.review || foundBook.review,
+        rate: req.body.rate || foundBook.rate
+    }
+    const updatedStarDisplay = {
+        id: foundStarIndex + 1,
+        rate: req.body.rate || foundStar.id
+    }
+    dataArr[foundIndex] = updatedBook;
+    starDisplay[foundStarIndex] = updatedStarDisplay;
+    res.redirect("/books")
+})
+
+// DELETING A BOOK
 app.get("/books/delete/:bookID", (req,res)=> {
     const foundIndex = dataArr.findIndex((d) => d.id === parseInt(req.params.bookID));
     const foundStarIndex = starDisplay.findIndex((d) => d.id === parseInt(req.params.bookID));
