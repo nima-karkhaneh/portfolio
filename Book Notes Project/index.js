@@ -23,10 +23,12 @@ app.get("/books", (req,res)=> {
     });
 });
 app.post("/submit",(req,res)=>{
+    console.log(req.body)
     const data = {
         id: dataArr.length + 1,
         title: req.body.title,
         author: req.body.author,
+        date: req.body.date,
         review: req.body.review,
         rate: req.body.rate
     }
@@ -57,6 +59,7 @@ app.post("/books/edit/:bookID", (req,res)=>{
         id: foundIndex+1,
         title: req.body.title || foundBook.title,
         author: req.body.author || foundBook.author,
+        date: req.body.date || foundBook.date,
         review: req.body.review || foundBook.review,
         rate: req.body.rate || foundBook.rate
     }

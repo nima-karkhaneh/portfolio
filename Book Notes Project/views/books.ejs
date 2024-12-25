@@ -14,26 +14,38 @@
 <%- include("./partials/header.ejs") %>
 <main id="main-books">
     <% if(dataArr.length > 0){ %>
+        <form id="sort-form" action="#">
+            <div id="sort-container">
+                <label for="sort">Sort by:</label>
+                <select name="sort" id="sort">
+                    <option value="Rating">Rating</option>
+                    <option value="Date Read">Date Read</option>
+                    <option value="Alphabet">Alphabet</option>
+                </select>
+            </div>
+        </form>
         <% dataArr.forEach((data) => { %>
-            <div class="book-container">
-                <h2> <%= data.title%> </h2>
-                <p>By: <%= data.author %></p>
-                <div class="ranking-display">
-                    <i class="star<%=data.id%> fa-solid fa-star"></i>
-                    <i class="star<%=data.id%> fa-solid fa-star"></i>
-                    <i class="star<%=data.id%> fa-solid fa-star"></i>
-                    <i class="star<%=data.id%> fa-solid fa-star"></i>
-                    <i class="star<%=data.id%> fa-solid fa-star"></i>
-                    <p> <%= data.rate %> / 5 </p>
-                </div>
-                <h3>Review</h3>
-                <p><%= data.review %></p>
-                <a class="delete" href="/books/delete/<%= data.id %>"><button>Delete</button></a>
-                <a class="delete" href="/books/edit/<%= data.id %>"><button>Edit</button></a>
+        <div class="book-container">
+            <h2> <%= data.title%> </h2>
+            <p>By: <%= data.author %></p>
+            <p>Date Read: <%= data.date %></p>
+            <div class="ranking-display">
+                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
+            </div>
+            <h3>Review</h3>
+            <p><%= data.review %></p>
+            <div id="edit-delete-container">
+            <a href="/books/delete/<%= data.id %>"><button class="delete">Delete</button></a>
+            <a href="/books/edit/<%= data.id %>"><button class="edit">Edit</button></a>
+            </div>
             </div>
         <% }) %>
     <% } else { %>
-        <h2>You haven't add any books yet. Please use the + icon on the top right to add books.</h2>
+        <h2 class="no-books-hds">You haven't add any books yet. Please use the + icon on the top right to add books.</h2>
     <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
