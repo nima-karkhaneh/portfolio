@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/main.css">
     <title>Book Notes Project</title>
@@ -26,9 +26,9 @@
         </form>
         <% dataArr.forEach((data) => { %>
         <div class="book-container">
-            <h2> <%= data.title%> </h2>
-            <p>By: <%= data.author %></p>
-            <p>Date Read: <%= data.date %></p>
+            <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= data.ISBN %>-M.jpg" alt="book cover">
+            <h2 class="title"> <%= data.title%> - By <%= data.author %>  </h2>
+            <p class="date-read">DATE READ: <%= data.date %></p>
             <div class="ranking-display">
                 <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
                 <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
@@ -36,16 +36,15 @@
                 <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
                 <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
             </div>
-            <h3>Review</h3>
-            <p><%= data.review %></p>
+            <p class="review"><%= data.review %></p>
             <div id="edit-delete-container">
             <a href="/books/delete/<%= data.id %>"><button class="delete">Delete</button></a>
             <a href="/books/edit/<%= data.id %>"><button class="edit">Edit</button></a>
             </div>
-            </div>
+        </div>
         <% }) %>
     <% } else { %>
-        <h2 class="no-books-hds">You haven't add any books yet. Please use the + icon on the top right to add books.</h2>
+        <p class="no-books-hds">You have not added any books yet. Please use the + icon on the top right to add books.</p>
     <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
