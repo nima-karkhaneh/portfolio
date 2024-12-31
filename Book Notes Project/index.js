@@ -1,8 +1,19 @@
 import express from "express"
-import axios from "axios";
+import pg from "pg";
+import env from "dotenv"
 
 const app = express();
+env.config();
 const port = process.env.port || 3000;
+
+const db = new pg.Client({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+});
+db.connect();
 
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
@@ -10,76 +21,84 @@ app.use(express.urlencoded({extended:true}));
 let dataArr = [];
 let starDisplay = [];
 
+// GET ROUTES
 app.get("/", (req,res)=>{
     res.render("index.ejs")
 })
 app.get("/add", (req,res)=>{
     res.render("add.ejs");
 })
-app.get("/books", (req,res)=> {
-    res.render("books.ejs",{
-        dataArr: dataArr,
-        starDisplay: starDisplay
-    });
-});
-app.post("/submit", (req,res)=>{
-    const data = {
-        id: dataArr.length + 1,
-        title: req.body.title,
-        author: req.body.author,
-        ISBN: req.body.ISBN,
-        date: req.body.date,
-        review: req.body.review,
-        rate: req.body.rate
+
+// DISPLAYING BOOKS VIA BOOKS ROUTE
+app.get("/books", async (req,res)=>{
+    try{
+        const book = await db.query("SELECT * FROM library ORDER by id ASC");
+        const rating = await db.query("SELECT * FROM rating ORDER by id ASC")
+        dataArr = book.rows;
+        starDisplay = rating.rows
+        res.render("books.ejs",{
+            dataArr: dataArr,
+            starDisplay: starDisplay
+        })
     }
-    const starDisplayData = {
-        id: starDisplay.length + 1,
-        rate: req.body.rate
+    catch(err){
+        console.log(err.message)
     }
-    dataArr.push(data);
-    starDisplay.push(starDisplayData);
-    res.redirect("/books");
 })
 
+// POSTING A NEW BOOK
+app.post("/submit", async (req, res) =>{
+    const title = req.body.title;
+    const author = req.body.author;
+    const ISBN = req.body.ISBN;
+    const date = req.body.date;
+    const review = req.body.review;
+    const rate = req.body.rate;
+    try{
+        await db.query("INSERT INTO library (title, author, isbn, date, review, rate) VALUES ($1, $2, $3, $4, $5, $6);", [title, author, ISBN, date, review, rate])
+        await db.query("INSERT INTO rating (rate) VALUES ($1);", [rate])
+    }
+    catch(err){
+        console.log(err.message)
+    }
+    res.redirect("/books")
+})
+
+// DELETE ROUTE
+app.get("/books/delete/:bookID", async (req,res) =>{
+    const foundStarRating = starDisplay.find((d)=> d.id === parseInt(req.params.bookID));
+    const foundBook = dataArr.find((d)=> d.id === parseInt(req.params.bookID));
+    try{
+        await db.query("DELETE FROM RATING WHERE id = $1", [foundStarRating.id]);
+        await db.query("DELETE FROM library WHERE id = $1", [foundBook.id]);
+        res.redirect("/books")
+    }
+    catch(err){
+        console.log(err.message)
+    }
+})
+
+// GETTING A SPECIFIC BOOK
 app.get("/books/edit/:bookID", (req, res)=>{
-    const foundBook = dataArr.find((d)=>d.id===parseInt(req.params.bookID));
+    const foundBook = dataArr.find((d) => d.id === parseInt(req.params.bookID));
     res.render("edit.ejs",{
         foundBook: foundBook,
         starDisplay: starDisplay
-
     })
-});
-
-app.post("/books/edit/:bookID", (req,res)=>{
-    const foundBook = dataArr.find((d) => d.id === parseInt(req.params.bookID));
-    const foundStar= starDisplay.find((d)=>d.id===parseInt(req.params.bookID));
-    const foundStarIndex = starDisplay.findIndex((d) => d.id === parseInt(req.params.bookID));
-    const foundIndex = dataArr.findIndex((d) => d.id === parseInt(req.params.bookID));
-    const updatedBook = {
-        id: foundIndex+1,
-        title: req.body.title || foundBook.title,
-        author: req.body.author || foundBook.author,
-        ISBN: req.body.ISBN || foundBook.ISBN,
-        date: req.body.date || foundBook.date,
-        review: req.body.review || foundBook.review,
-        rate: req.body.rate || foundBook.rate
-    }
-    const updatedStarDisplay = {
-        id: foundStarIndex + 1,
-        rate: req.body.rate || foundStar.id
-    }
-    dataArr[foundIndex] = updatedBook;
-    starDisplay[foundStarIndex] = updatedStarDisplay;
-    res.redirect("/books")
 })
 
-// DELETING A BOOK
-app.get("/books/delete/:bookID", (req,res)=> {
-    const foundIndex = dataArr.findIndex((d) => d.id === parseInt(req.params.bookID));
-    const foundStarIndex = starDisplay.findIndex((d) => d.id === parseInt(req.params.bookID));
-    dataArr.splice(foundIndex, 1);
-    starDisplay.splice(foundStarIndex, 1);
-    res.redirect("/books")
+// EDIT ROUTE
+app.post("/books/edit/:bookID", async (req, res) =>{
+    const foundStarRating = starDisplay.find((d)=> d.id === parseInt(req.params.bookID));
+    const foundBook = dataArr.find((d)=> d.id === parseInt(req.params.bookID));
+    try{
+        await db.query("UPDATE rating SET rate = ($1) WHERE id = ($2)", [req.body.rate, foundStarRating.id]);
+        await db.query("UPDATE library SET title = ($1), author = ($2), isbn = ($3), date = ($4), review = ($5) , rate = ($6) WHERE id = ($7)", [req.body.title, req.body.author, req.body.ISBN, req.body.date, req.body.review, req.body.rate, foundBook.id]);
+        res.redirect("/books")
+    }
+    catch(err){
+        console.log(err.message);
+    }
 })
 
 app.listen(port, () =>{

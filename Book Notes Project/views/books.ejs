@@ -26,7 +26,7 @@
         </form>
         <% dataArr.forEach((data) => { %>
         <div class="book-container">
-            <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= data.ISBN %>-M.jpg" alt="book cover">
+            <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= data.isbn %>-M.jpg" alt="book cover">
             <h2 class="title"> <%= data.title%> - By <%= data.author %>  </h2>
             <p class="date-read">DATE READ: <%= data.date %></p>
             <div class="ranking-display">
@@ -54,16 +54,16 @@
     document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
     const data = JSON.parse('<%- JSON.stringify( starDisplay )%>');
     console.log(data);
-    console.log(data.length);
     data.forEach((d)=>{
-        const id  = d.id;
+        const id = d.id;
         const rate = d.rate;
         const stars = document.querySelectorAll(`.star${id}`);
         console.log(stars);
+        if (stars != null)
         for (let i = 0; i < rate; i++){
-            stars[i].style.color ="#dabd18b2"
+            stars[i].style.color = "#dabd18b2"
         }
-    });
+    })
 </script>
 </body>
 </html>
