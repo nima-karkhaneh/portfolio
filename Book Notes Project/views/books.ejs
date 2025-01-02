@@ -14,10 +14,11 @@
 <%- include("./partials/header.ejs") %>
 <main id="main-books">
     <% if(dataArr.length > 0){ %>
-        <form id="sort-form" action="#">
+        <form id="sort-form" action="/sort" method="post">
             <div id="sort-container">
                 <label for="sort">Sort by:</label>
-                <select name="sort" id="sort">
+                <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="">-- Please choose an option --</option>
                     <option value="Rating">Rating</option>
                     <option value="Date Read">Date Read</option>
                     <option value="Alphabet">Alphabet</option>

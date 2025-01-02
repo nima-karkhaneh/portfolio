@@ -20,6 +20,7 @@ app.use(express.urlencoded({extended:true}));
 
 let dataArr = [];
 let starDisplay = [];
+let condition = true;
 
 // GET ROUTES
 app.get("/", (req,res)=>{
@@ -31,18 +32,26 @@ app.get("/add", (req,res)=>{
 
 // DISPLAYING BOOKS VIA BOOKS ROUTE
 app.get("/books", async (req,res)=>{
-    try{
-        const book = await db.query("SELECT * FROM library ORDER by id ASC");
-        const rating = await db.query("SELECT * FROM rating ORDER by id ASC")
-        dataArr = book.rows;
-        starDisplay = rating.rows
+    if (condition) {
+        try{
+            const book = await db.query("SELECT * FROM library ORDER BY id ASC");
+            const rating = await db.query("SELECT * FROM rating")
+            dataArr = book.rows;
+            starDisplay = rating.rows
+            res.render("books.ejs",{
+                dataArr: dataArr,
+                starDisplay: starDisplay
+            })
+        }
+        catch(err){
+            console.log(err.message)
+        }
+    } else {
         res.render("books.ejs",{
             dataArr: dataArr,
             starDisplay: starDisplay
         })
-    }
-    catch(err){
-        console.log(err.message)
+        condition = true;
     }
 })
 
@@ -99,6 +108,50 @@ app.post("/books/edit/:bookID", async (req, res) =>{
     catch(err){
         console.log(err.message);
     }
+})
+
+// SORT ROUTE
+app.post("/sort", async (req, res) =>{
+    const sort = req.body.sort;
+    switch(sort){
+        case "Rating":
+            try{
+                const result = await db.query("SELECT * FROM library ORDER BY rate DESC");
+                const rating = await db.query("SELECT * FROM rating")
+                dataArr = result.rows;
+                starDisplay = rating.rows;
+                condition = false;
+            }
+            catch(err){
+                console.log(err)
+            }
+            break;
+        case "Date Read":
+            try{
+                const result = await db.query("SELECT * FROM library ORDER BY date DESC");
+                const rating = await db.query("SELECT * FROM rating")
+                dataArr = result.rows;
+                starDisplay = rating.rows;
+                condition = false;
+            }
+            catch (err){
+                console.log(err);
+            }
+            break;
+        case "Alphabet":
+            try{
+                const result = await db.query("SELECT * FROM library ORDER by title ASC");
+                const rating = await db.query("SELECT * FROM rating")
+                dataArr = result.rows;
+                starDisplay = rating.rows;
+                condition = false;
+            }
+            catch(err){
+                console.log(err.message)
+            }
+            break;
+    }
+    res.redirect("/books");
 })
 
 app.listen(port, () =>{
