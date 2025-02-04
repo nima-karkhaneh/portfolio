@@ -40,7 +40,6 @@ app.post("/submit", async (req, res) => {
          const addItem = await db.query("INSERT INTO items (description) VALUES ($1) RETURNING *;", [description])
         res.json(addItem.rows[0])
     }
-
     catch(err){
         console.error(err.message)
     }
