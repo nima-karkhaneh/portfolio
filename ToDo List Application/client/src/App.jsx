@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
-import Axios from './components/Axios.jsx'
 import Input from "./components/Input.jsx"
+import ListItems from "./components/ListItems.jsx";
+import  Getdata from "./components/Axios.jsx";
 
 function App() {
-
   return (
     <>
-      <Input></Input>
-    <Axios></Axios>
+        <Getdata />
+        <Input></Input>
+        <ul className="container mt-0">
+            <ListItems></ListItems>
+        </ul>
     </>
   )
 }

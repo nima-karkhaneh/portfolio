@@ -10,8 +10,8 @@ function Input() {
     async function handleClick(e) {
         e.preventDefault();
         try{
-            const response = await axios.post("http://localhost:3000/submit", {description:inputText});
-            console.log(response.data)
+            await axios.post("http://localhost:3000/submit", {description:inputText});
+            window.location = ("/")
         }
         catch(err){
             console.log(err)
@@ -23,7 +23,7 @@ function Input() {
             <h1>Daily ToDo List</h1>
             <form>
                 <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={handleChange} value={inputText}/>
-                <button type="submit" className="btn btn-outline-secondary" onClick={handleClick}>Add</button>
+                <button type="submit" className=" btn btn-primary" onClick={handleClick}>Add</button>
             </form>
         </div>
         </>

@@ -1,13 +1,12 @@
 import React, {useEffect} from "react";
 import axios from "axios";
 
-const APIurl = "http://localhost:3000/todos/"
 
 function Axios () {
    useEffect(() =>{
        async function fetchData(){
             try{
-                const response = await axios.get(APIurl)
+                const response = await axios.get("http://localhost:3000/todos/")
                 const data = response.data
                 console.log(data)
             }

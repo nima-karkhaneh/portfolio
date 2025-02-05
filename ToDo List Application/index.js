@@ -35,7 +35,6 @@ app.get("/todos", async (req, res) => {
 // POST ROUTE
 app.post("/submit", async (req, res) => {
     const { description } = req.body;
-    console.log(description)
     try{
          const addItem = await db.query("INSERT INTO items (description) VALUES ($1) RETURNING *;", [description])
         res.json(addItem.rows[0])
