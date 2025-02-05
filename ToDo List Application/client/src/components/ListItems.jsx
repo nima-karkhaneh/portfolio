@@ -5,7 +5,13 @@ import React from "react";
 function ListItem(props) {
     return(
         <>
-            <li>{props.text}</li>
+            <div className="list-cont container mt-5">
+                <li>{props.text}</li>
+                <div className="btn-cont">
+                    <button className="btn btn-warning">Edit</button>
+                    <button className="btn btn-danger">Delete</button>
+                </div>
+            </div>
         </>
     )
 }

@@ -23,14 +23,14 @@ function App() {
     }, [])
 
   return (
-    <>
+      <>
         <Input></Input>
         <ul className="container mt-0">
             {items.map(item => {
                 return <ListItems key={item.id} text={item.description} />
             })}
         </ul>
-    </>
+      </>
   )
 }
 
