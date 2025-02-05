@@ -1,6 +1,5 @@
 import React from "react";
-import Axios from "./Axios.jsx";
-import axios from "axios";
+
 
 
 function ListItem(props) {
