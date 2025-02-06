@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import axios from "axios";
 
+
+
 function Input() {
     const [inputText, setInputText] = useState("")
     function handleChange(e) {
@@ -10,7 +12,8 @@ function Input() {
     async function handleClick(e) {
         e.preventDefault();
         try{
-            await axios.post("http://localhost:3000/submit", {description:inputText});
+            const API_URL_POST = import.meta.env.VITE_API_URL_POST
+            await axios.post(API_URL_POST, {description:inputText});
             window.location = ("/")
         }
         catch(err){

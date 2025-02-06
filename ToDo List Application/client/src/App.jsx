@@ -10,7 +10,8 @@ function App() {
     useEffect(() =>{
         async function fetchData(){
             try{
-                const response = await axios.get("http://localhost:3000/todos/")
+                const API_URL_GET = import.meta.env.VITE_API_URL_GET
+                const response = await axios.get(API_URL_GET)
                 const data = response.data
                 console.log(data)
                 setItems(data)
