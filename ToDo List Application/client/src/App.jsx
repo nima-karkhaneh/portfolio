@@ -13,7 +13,6 @@ function App() {
                 const API_URL_GET = import.meta.env.VITE_API_URL_GET
                 const response = await axios.get(API_URL_GET)
                 const data = response.data
-                console.log(data)
                 setItems(data)
             }
             catch (err){
@@ -23,12 +22,26 @@ function App() {
         fetchData()
     }, [])
 
+    async function deleteItem(id) {
+        try{
+             await axios.delete(`http://localhost:3000/todos/${id}`)
+            setItems(items.filter(item => {
+                return item.id !== id
+            }))
+
+        }
+        catch(err){
+            console.log(err.message)
+        }
+
+    }
+
   return (
       <>
         <Input></Input>
         <ul className="container mt-0">
             {items.map(item => {
-                return <ListItems key={item.id} text={item.description} />
+                return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} />
             })}
         </ul>
       </>

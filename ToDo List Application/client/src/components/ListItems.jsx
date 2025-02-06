@@ -9,7 +9,7 @@ function ListItem(props) {
                 <li>{props.text}</li>
                 <div className="btn-cont">
                     <button className="btn btn-warning">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button className="btn btn-danger" onClick={props.onDelete}>Delete</button>
                 </div>
             </div>
         </>
