@@ -7,6 +7,7 @@ import axios from "axios";
 
 function App() {
     const [items, setItems] = useState([])
+
     useEffect(() =>{
         async function fetchData(){
             try{
@@ -21,6 +22,7 @@ function App() {
         }
         fetchData()
     }, [])
+
 
     async function deleteItem(id) {
         try{
