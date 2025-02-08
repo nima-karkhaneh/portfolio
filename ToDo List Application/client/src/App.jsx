@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './App.css'
 import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
@@ -41,7 +41,7 @@ function App() {
 
   return (
       <>
-        <Input></Input>
+        <Input />
         <ul className="container mt-0">
             {items.map(item => {
                 return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} />

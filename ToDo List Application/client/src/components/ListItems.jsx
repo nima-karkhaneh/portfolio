@@ -1,5 +1,5 @@
 import React from "react";
-
+import Edit from "./Edit.jsx"
 
 
 function ListItem(props) {
@@ -8,7 +8,7 @@ function ListItem(props) {
             <div className="list-cont container mt-5">
                 <li>{props.text}</li>
                 <div className="btn-cont">
-                    <button className="btn btn-warning">Edit</button>
+                    <Edit />
                     <button className="btn btn-danger" onClick={props.onDelete}>Delete</button>
                 </div>
             </div>

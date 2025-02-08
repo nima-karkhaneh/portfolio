@@ -29,3 +29,6 @@ li{
   gap: 10px;
   padding-bottom: 10px;
 }
+.modal-header, .modal-footer{
+  border: none
+}
