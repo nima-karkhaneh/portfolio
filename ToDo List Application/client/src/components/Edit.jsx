@@ -1,27 +1,27 @@
 import React from "react";
 
 
-function Edit() {
+function Edit(props) {
     return(
         <>
-            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal">
+            <button type="button" className="btn btn-warning" onClick={props.onEdit} data-bs-toggle="modal" data-bs-target="#myModal">
                 Edit
             </button>
 
-            <div class="modal fade" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+            <div className="modal" id="myModal">
+                <div className="modal-dialog">
+                    <div className="modal-content">
 
-                        <div class="modal-header">
-                            <h4 class="modal-title">Edit your Todo Item</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <div className="modal-header">
+                            <h4 className="modal-title">Edit your Todo Item</h4>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <input className="form-control" type="text" placeholder="Please edit your item here"/>
                         </div>
 
-                        <div class="modal-footer">
+                        <div className="modal-footer">
                             <button type="button" className="btn btn-success" data-bs-dismiss="modal">Submit</button>
                         </div>
 
