@@ -1,14 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 
 
-function Edit(props) {
+function Edit({item}) {
+    const [editItem, setEditItem] = useState(item.description)
+
+    function handleChange(e) {
+        const { value } = e.target
+        setEditItem(value)
+    }
     return(
         <>
-            <button type="button" className="btn btn-warning" onClick={props.onEdit} data-bs-toggle="modal" data-bs-target="#myModal">
+            <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target={`#id${item.id}`}>
                 Edit
             </button>
 
-            <div className="modal" id="myModal">
+            <div className="modal" id={`id${item.id}`}>
                 <div className="modal-dialog">
                     <div className="modal-content">
 
@@ -18,7 +24,7 @@ function Edit(props) {
                         </div>
 
                         <div className="modal-body">
-                            <input className="form-control" type="text" placeholder="Please edit your item here"/>
+                            <input className="form-control" type="text" onChange={handleChange} value={editItem}/>
                         </div>
 
                         <div className="modal-footer">

@@ -8,7 +8,7 @@ function ListItem(props) {
             <div className="list-cont container mt-5">
                 <li>{props.text}</li>
                 <div className="btn-cont">
-                    <Edit onEdit={props.editItem} />
+                    <Edit item={props.item} />
                     <button className="btn btn-danger" onClick={props.onDelete}>Delete</button>
                 </div>
             </div>

@@ -23,9 +23,7 @@ function App() {
         fetchData()
     }, [])
 
-    function edit(item){
-        console.log(item)
-    }
+
     async function deleteItem(id) {
         try{
             const API_URL_DELETE = import.meta.env.VITE_API_URL_DELETE;
@@ -46,7 +44,7 @@ function App() {
         <Input />
         <ul className="container mt-0">
             {items.map(item => {
-                return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} editItem={() => edit(item)} />
+                return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />
             })}
         </ul>
       </>
