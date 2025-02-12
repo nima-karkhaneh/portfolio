@@ -11,10 +11,7 @@ function Input() {
 
     async function addItem(e) {
         e.preventDefault()
-        if (!inputText) {
-            alert("ToDo item cannot be empty!")
-        }
-        else {
+        if (inputText) {
             try{
                 const API_URL_POST = import.meta.env.VITE_API_URL_POST
                 await axios.post(API_URL_POST, {description:inputText});
@@ -24,14 +21,20 @@ function Input() {
                 console.log(err)
             }
         }
+        else{
+            alert("Please add your Todo Item!")
+        }
     }
 
     return(
         <>
         <div className="container">
-            <h1>Daily ToDo List</h1>
+            <div className="header">
+                <h1>Daily ToDo List</h1>
+                <button className="btn btn-light">Sign out</button>
+            </div>
             <form>
-                <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} />
+                <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} required />
                 <button type="submit" className="btn btn-primary" onClick={addItem}>Add</button>
             </form>
         </div>
