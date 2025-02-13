@@ -2,11 +2,14 @@ import React, {useEffect, useState} from 'react'
 import './App.css'
 import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
+import Auth from "./components/Auth.jsx";
 import axios from "axios";
 
 
 function App() {
     const [items, setItems] = useState([])
+
+    const authToken = false
 
     useEffect(() =>{
         async function fetchData(){
@@ -41,12 +44,16 @@ function App() {
 
   return (
       <>
-        <Input />
-        <ul className="container mt-0">
-            {items.map(item => {
-                return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />
-            })}
-        </ul>
+          {!authToken && <Auth />}
+          {authToken &&
+              <div>
+                <Input />
+                <ul className="container mt-0">
+                    {items.map(item => {
+                        return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />
+                    })}
+                </ul>
+              </div>}
       </>
   )
 }
