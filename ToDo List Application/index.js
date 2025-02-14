@@ -80,3 +80,30 @@ app.delete("/todos/:id", async (req, res) => {
 app.listen(PORT, () => {
     console.log(`server is listening on ${PORT}`)
 })
+
+// SIGN UP ROUTE
+app.post("/signup", async (req, res) => {
+    const {email, password} = req.body
+    console.log(email, password)
+    res.json("signup data received")
+    try{
+
+    }
+    catch(err){
+        console.log(err.message)
+    }
+})
+
+
+// LOGIN ROUTE
+app.post("/login", async(req, res) =>{
+    const {email, password} = req.body
+    console.log(email, password)
+    res.json("login data received")
+    try{
+
+    }
+    catch(err){
+        console.log(err.message)
+    }
+})

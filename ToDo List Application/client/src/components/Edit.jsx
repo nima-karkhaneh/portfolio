@@ -41,7 +41,7 @@ function Edit({item}) {
                         </div>
 
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-success" onClick={updateItem} data-bs-dismiss="modal">Submit</button>
+                            <button className="btn btn-success" onClick={updateItem} data-bs-dismiss="modal">Submit</button>
                         </div>
 
                     </div>

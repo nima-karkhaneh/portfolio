@@ -34,7 +34,7 @@ function Input() {
                 <button className="btn btn-light">Sign out</button>
             </div>
             <form>
-                <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} required />
+                <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} />
                 <button type="submit" className="btn btn-primary" onClick={addItem}>Add</button>
             </form>
         </div>
