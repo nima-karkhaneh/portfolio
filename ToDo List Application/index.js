@@ -2,9 +2,11 @@ import express from "express"
 import cors from "cors"
 import pg from "pg"
 import env from "dotenv"
+import bcrypt from "bcrypt"
 
 const app =  express()
 const PORT = 3000;
+const saltRounds = 10;
 
 env.config();
 app.use(cors())
@@ -84,10 +86,22 @@ app.listen(PORT, () => {
 // SIGN UP ROUTE
 app.post("/signup", async (req, res) => {
     const {email, password} = req.body
-    console.log(email, password)
-    res.json("signup data received")
     try{
-
+        const checkUser = await db.query("SELECT * from users WHERE email = $1", [email])
+        if (checkUser.rows.length > 0){
+            res.json("user already exists!")
+        }
+        else{
+            bcrypt.hash(password, saltRounds, async(err, hash) =>{
+                if (err) {
+                    console.error(err.message)
+                }
+                else{
+                    await db.query("INSERT INTO users (email, password) VALUES ($1, $2)",[email, hash])
+                    res.json("signup data received")
+                }
+            })
+        }
     }
     catch(err){
         console.log(err.message)
