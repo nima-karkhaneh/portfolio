@@ -9,7 +9,7 @@ import axios from "axios";
 function App() {
     const [items, setItems] = useState([])
 
-    const authToken = false
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     useEffect(() =>{
         async function fetchData(){
@@ -44,8 +44,8 @@ function App() {
 
   return (
       <>
-          {!authToken && <Auth />}
-          {authToken &&
+          {!isAuthenticated && <Auth />}
+          {isAuthenticated &&
               <div>
                 <Input />
                 <ul className="container mt-0">

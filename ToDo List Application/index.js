@@ -87,7 +87,7 @@ app.listen(PORT, () => {
 app.post("/signup", async (req, res) => {
     const {email, password} = req.body
     try{
-        const checkUser = await db.query("SELECT * from users WHERE email = $1", [email])
+        const checkUser = await db.query("SELECT * from users  WHERE email = $1", [email])
         if (checkUser.rows.length > 0){
             res.json("user already exists!")
         }
@@ -97,8 +97,8 @@ app.post("/signup", async (req, res) => {
                     console.error(err.message)
                 }
                 else{
-                    await db.query("INSERT INTO users (email, password) VALUES ($1, $2)",[email, hash])
-                    res.json("signup data received")
+                    await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",[email, hash])
+                    res.json("sign up data received!")
                 }
             })
         }
@@ -113,9 +113,24 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async(req, res) =>{
     const {email, password} = req.body
     console.log(email, password)
-    res.json("login data received")
     try{
-
+        const user = await db.query("SELECT * FROM users WHERE email = $1" , [email])
+        if (user.rows.length === 0) {
+            res.json("User not found. Please sign up!")
+        } else {
+            const storedPassword = user.rows[0].password
+            bcrypt.compare(password, storedPassword, (err, result) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    if (result) {
+                        res.json("User Authenticated!")
+                    } else {
+                        res.json("Incorrect Password! Please try again!")
+                    }
+                }
+            })
+        }
     }
     catch(err){
         console.log(err.message)

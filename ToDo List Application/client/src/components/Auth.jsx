@@ -24,7 +24,9 @@ function Auth() {
                 password: password
             })
             setErr("")
-            console.log(response.data)
+            const { data } = response;
+            console.log(data)
+            alert(data)
         }
     }
 
