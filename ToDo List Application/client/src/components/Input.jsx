@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { userID } from "./Auth.jsx";
 
 
 function Input() {
@@ -14,8 +15,11 @@ function Input() {
         if (inputText) {
             try{
                 const API_URL_POST = import.meta.env.VITE_API_URL_POST
-                await axios.post(API_URL_POST, {description:inputText});
-                window.location = "/"
+                await axios.post(API_URL_POST, {
+                    description:inputText,
+                    user_id:userID
+                });
+                // window.location = "/"
             }
             catch(err){
                 console.log(err)

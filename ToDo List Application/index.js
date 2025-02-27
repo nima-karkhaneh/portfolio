@@ -1,4 +1,4 @@
-import express from "express"
+import express, {raw} from "express"
 import cors from "cors"
 import pg from "pg"
 import env from "dotenv"
@@ -21,6 +21,7 @@ const db = new pg.Client({
 });
 db.connect();
 
+
 // API ROUTES
 
 // GET ROUTE
@@ -36,9 +37,9 @@ app.get("/todos", async (req, res) => {
 
 // POST ROUTE
 app.post("/submit", async (req, res) => {
-    const { description } = req.body;
+    const { description, user_id } = req.body;
     try{
-         const addItem = await db.query("INSERT INTO items (description) VALUES ($1) RETURNING *;", [description])
+        const addItem = await db.query("INSERT INTO items (description, user_id) VALUES ($1, $2) RETURNING *;", [description, user_id])
         res.json(addItem.rows[0])
     }
     catch(err){
@@ -97,8 +98,8 @@ app.post("/signup", async (req, res) => {
                     console.error(err.message)
                 }
                 else{
-                    await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",[email, hash])
-                    res.json("sign up data received!")
+                    const result = await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",[email, hash])
+                    res.json("User signed up successfully!")
                 }
             })
         }
@@ -112,7 +113,6 @@ app.post("/signup", async (req, res) => {
 // LOGIN ROUTE
 app.post("/login", async(req, res) =>{
     const {email, password} = req.body
-    console.log(email, password)
     try{
         const user = await db.query("SELECT * FROM users WHERE email = $1" , [email])
         if (user.rows.length === 0) {
@@ -124,7 +124,7 @@ app.post("/login", async(req, res) =>{
                     console.log(err)
                 } else {
                     if (result) {
-                        res.json("User Authenticated!")
+                        res.json(user.rows[0])
                     } else {
                         res.json("Incorrect Password! Please try again!")
                     }
@@ -136,3 +136,4 @@ app.post("/login", async(req, res) =>{
         console.log(err.message)
     }
 })
+

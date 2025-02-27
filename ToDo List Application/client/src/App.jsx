@@ -8,8 +8,12 @@ import axios from "axios";
 
 function App() {
     const [items, setItems] = useState([])
-
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+
+    function authenticate(a) {
+        setIsAuthenticated(true)
+    }
 
     useEffect(() =>{
         async function fetchData(){
@@ -44,7 +48,7 @@ function App() {
 
   return (
       <>
-          {!isAuthenticated && <Auth />}
+          {!isAuthenticated && <Auth login={authenticate} />}
           {isAuthenticated &&
               <div>
                 <Input />

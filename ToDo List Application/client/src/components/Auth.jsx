@@ -1,12 +1,14 @@
 import React, { useState } from "react"
 import axios from "axios";
 
-function Auth() {
-    const[isLoggedIn, setIsLoggedIn] = useState(true)
+let userID;
+function Auth(props) {
+    const[isLoggedIn, setIsLoggedIn] = useState(false)
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [err, setErr] = useState("")
+
 
 
     function viewLogin(status) {
@@ -24,9 +26,14 @@ function Auth() {
                 password: password
             })
             setErr("")
-            const { data } = response;
-            console.log(data)
-            alert(data)
+            if (endpoint === "login") {
+                const { id } = response.data;
+                userID = id;
+                {props.login()}
+            } else {
+                alert(response.data)
+            }
+
         }
     }
 
@@ -70,3 +77,4 @@ function Auth() {
 }
 
 export default Auth
+export { userID }
