@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios";
 
+// userID to be set to each users_id and exported to Inupt component
 let userID;
 function Auth(props) {
     const[isLoggedIn, setIsLoggedIn] = useState(false)
@@ -29,7 +30,7 @@ function Auth(props) {
             if (endpoint === "login") {
                 const { id } = response.data;
                 userID = id;
-                {props.login()}
+                {props.login("login")}
             } else {
                 alert(response.data)
             }

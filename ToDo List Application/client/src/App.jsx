@@ -8,11 +8,17 @@ import axios from "axios";
 
 function App() {
     const [items, setItems] = useState([])
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(null)
 
 
     function authenticate(a) {
-        setIsAuthenticated(true)
+       if (!a) {
+           setIsAuthenticated(false)
+       } else if (a === "login") {
+           setIsAuthenticated(true)
+       } else {
+           setIsAuthenticated(true)
+       }
     }
 
     useEffect(() =>{
@@ -51,7 +57,7 @@ function App() {
           {!isAuthenticated && <Auth login={authenticate} />}
           {isAuthenticated &&
               <div>
-                <Input />
+                <Input signOut={() => authenticate()} manageAuth={authenticate}/>
                 <ul className="container mt-0">
                     {items.map(item => {
                         return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />
