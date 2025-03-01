@@ -29,11 +29,12 @@ function Auth(props) {
             })
             setErr("")
             if (response.data.error) {
-                setErr(response.data.error)
+                const { error } = response.data
+                setErr(error)
             } else if (response.data.email) {
-                const { id } = response.data
+                const { id , password } = response.data
                 userID = id;
-                {props.login()}
+                {props.login(password)}
             } else {
                 setSuccess(response.data.success)
             }

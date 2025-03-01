@@ -4,7 +4,7 @@ import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
-import {buttonValue} from "./components/Input.jsx";
+
 
 
 function App() {
@@ -12,34 +12,31 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(null)
 
 
-    // function authenticate(a) {
-    //    if (!a) {
-    //        setIsAuthenticated(false)
-    //    } else if (a === "login") {
-    //        setIsAuthenticated(true)
-    //    } else {
-    //        setIsAuthenticated(true)
-    //    }
-    // }
 
     function authenticate (a) {
-        setIsAuthenticated(true)
+        if (a){
+            setIsAuthenticated(true)
+        }
+        else {
+            setIsAuthenticated(false)
+        }
     }
 
-    useEffect(() =>{
-        async function fetchData(){
-            try{
-                const API_URL_GET = import.meta.env.VITE_API_URL_GET
-                const response = await axios.get(API_URL_GET)
-                const data = response.data
-                setItems(data)
-            }
-            catch (err){
-                console.log(err.message)
-            }
+
+    async function fetchData(){
+        try{
+            const API_URL_GET = import.meta.env.VITE_API_URL_GET
+            const response = await axios.get(API_URL_GET)
+            const data = response.data
+            setItems(data)
         }
-        fetchData()
-    }, [])
+        catch (err){
+            console.log(err.message)
+        }
+    }
+    useEffect(() => {
+            fetchData(), []
+        })
 
 
     async function deleteItem(id) {
@@ -63,7 +60,10 @@ function App() {
           {isAuthenticated &&
               <div>
                 {/*<Input signOut={() => authenticate()} manageAuth={authenticate}/>*/}
-                  <Input />
+                  <Input
+                      signOut={() => authenticate()}
+                      getData={fetchData}
+                  />
                 <ul className="container mt-0">
                     {items.map(item => {
                         return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />

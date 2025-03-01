@@ -90,7 +90,7 @@ app.post("/signup", async (req, res) => {
     try{
         const checkUser = await db.query("SELECT * from users  WHERE email = $1", [email])
         if (checkUser.rows.length > 0){
-            res.json({error: "User already exists! Please log in!"})
+            res.json({error: "User already exists, please log in!"})
         }
         else{
             bcrypt.hash(password, saltRounds, async(err, hash) =>{
@@ -99,7 +99,7 @@ app.post("/signup", async (req, res) => {
                 }
                 else{
                     const result = await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",[email, hash])
-                    res.json({success: "User signed up successfully. Please log in!"})
+                    res.json({success: "User signed up successfully, please log in!"})
                 }
             })
         }
@@ -116,7 +116,7 @@ app.post("/login", async(req, res) =>{
     try{
         const user = await db.query("SELECT * FROM users WHERE email = $1" , [email])
         if (user.rows.length === 0) {
-            res.json({error: "Incorrect email, Please sign up first!"})
+            res.json({error: "User not found, please sign up first!"})
         } else {
             const storedPassword = user.rows[0].password
             bcrypt.compare(password, storedPassword, (err, result) => {

@@ -4,7 +4,6 @@ import { userID } from "./Auth.jsx";
 
 
 
- let buttonValue;
 function Input(props) {
     const [inputText, setInputText] = useState("")
     function setItem(e) {
@@ -13,8 +12,6 @@ function Input(props) {
     }
 
     async function addItem(e) {
-        const { value } = e.target
-        buttonValue = value
         e.preventDefault()
         if (inputText) {
             try{
@@ -24,8 +21,7 @@ function Input(props) {
                     description:inputText,
                     user_id:userID
                 });
-                {props.manageAuth(value)}
-                // window.location = "/"
+                {props.getData()}
             }
             catch(err){
                 console.log(err)
@@ -46,7 +42,7 @@ function Input(props) {
             </div>
             <form>
                 <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} />
-                <button type="submit" className="btn btn-primary" onClick={addItem} value={inputText}>Add</button>
+                <button type="submit" className="btn btn-primary" onClick={addItem}>Add</button>
             </form>
         </div>
         </>
@@ -54,4 +50,3 @@ function Input(props) {
 }
 
 export default Input
-export { buttonValue }
