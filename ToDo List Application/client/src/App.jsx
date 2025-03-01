@@ -4,6 +4,7 @@ import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
+import {buttonValue} from "./components/Input.jsx";
 
 
 function App() {
@@ -11,14 +12,18 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(null)
 
 
-    function authenticate(a) {
-       if (!a) {
-           setIsAuthenticated(false)
-       } else if (a === "login") {
-           setIsAuthenticated(true)
-       } else {
-           setIsAuthenticated(true)
-       }
+    // function authenticate(a) {
+    //    if (!a) {
+    //        setIsAuthenticated(false)
+    //    } else if (a === "login") {
+    //        setIsAuthenticated(true)
+    //    } else {
+    //        setIsAuthenticated(true)
+    //    }
+    // }
+
+    function authenticate (a) {
+        setIsAuthenticated(true)
     }
 
     useEffect(() =>{
@@ -57,7 +62,8 @@ function App() {
           {!isAuthenticated && <Auth login={authenticate} />}
           {isAuthenticated &&
               <div>
-                <Input signOut={() => authenticate()} manageAuth={authenticate}/>
+                {/*<Input signOut={() => authenticate()} manageAuth={authenticate}/>*/}
+                  <Input />
                 <ul className="container mt-0">
                     {items.map(item => {
                         return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />

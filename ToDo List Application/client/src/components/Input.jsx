@@ -3,6 +3,8 @@ import axios from "axios";
 import { userID } from "./Auth.jsx";
 
 
+
+ let buttonValue;
 function Input(props) {
     const [inputText, setInputText] = useState("")
     function setItem(e) {
@@ -12,6 +14,7 @@ function Input(props) {
 
     async function addItem(e) {
         const { value } = e.target
+        buttonValue = value
         e.preventDefault()
         if (inputText) {
             try{
@@ -51,3 +54,4 @@ function Input(props) {
 }
 
 export default Input
+export { buttonValue }

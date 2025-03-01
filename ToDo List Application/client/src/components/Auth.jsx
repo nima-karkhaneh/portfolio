@@ -9,6 +9,7 @@ function Auth(props) {
     const[password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [err, setErr] = useState("")
+    const [success, setSuccess] = useState("")
 
 
 
@@ -27,14 +28,15 @@ function Auth(props) {
                 password: password
             })
             setErr("")
-            if (endpoint === "login") {
-                const { id } = response.data;
+            if (response.data.error) {
+                setErr(response.data.error)
+            } else if (response.data.email) {
+                const { id } = response.data
                 userID = id;
-                {props.login("login")}
+                {props.login()}
             } else {
-                alert(response.data)
+                setSuccess(response.data.success)
             }
-
         }
     }
 
@@ -67,6 +69,7 @@ function Auth(props) {
                 >SUBMIT</button>
             </form>
             {err && <p>{err}</p>}
+            {success && <p>{success}</p>}
             <div className="auth-options">
                 <button className="btn btn-light" onClick={() => viewLogin(false)}>Sign Up</button>
                 <button className="btn btn-success" onClick={() => viewLogin(true) }>Login</button>
