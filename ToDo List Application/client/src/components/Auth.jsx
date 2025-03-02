@@ -1,16 +1,18 @@
 import React, { useState } from "react"
 import axios from "axios";
+import Cookies from "js-cookie"
+
+
 
 // userID to be set to each users_id and exported to Inupt component
 let userID;
-function Auth(props) {
+function Auth() {
     const[isLoggedIn, setIsLoggedIn] = useState(false)
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [err, setErr] = useState("")
     const [success, setSuccess] = useState("")
-
 
 
     function viewLogin(status) {
@@ -23,7 +25,8 @@ function Auth(props) {
         if (!isLoggedIn && password !== confirmPassword) {
             setErr("Confirmation did not match. Please try again!")
         } else {
-            const response = await axios.post(`http://localhost:3000/${endpoint}`,{
+            const VITE_API_URL = import.meta.env.VITE_API_URL
+            const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
                 email: email,
                 password: password
             })
@@ -32,13 +35,18 @@ function Auth(props) {
                 const { error } = response.data
                 setErr(error)
             } else if (response.data.email) {
-                const { id , password } = response.data
+                const { id, token } = response.data
+                setCookie(token)
                 userID = id;
-                {props.login(password)}
+                window.location = "/"
             } else {
                 setSuccess(response.data.success)
             }
         }
+    }
+
+    function setCookie(token) {
+        Cookies.set("authToken", token, { expires: 1, sameSite: "strict" })
     }
 
     return(

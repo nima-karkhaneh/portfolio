@@ -4,6 +4,7 @@ import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
+import Cookies from "js-cookie"
 
 
 
@@ -11,17 +12,18 @@ function App() {
     const [items, setItems] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(null)
 
-
-
-    function authenticate (a) {
-        if (a){
+    useEffect(() => {
+        const token = Cookies.get("authToken")
+        if (token) {
             setIsAuthenticated(true)
         }
-        else {
-            setIsAuthenticated(false)
-        }
-    }
+    }, [])
 
+
+    function signOut() {
+        Cookies.remove("authToken");
+        window.location  = "/"
+    }
 
     async function fetchData(){
         try{
@@ -56,13 +58,12 @@ function App() {
 
   return (
       <>
-          {!isAuthenticated && <Auth login={authenticate} />}
+          {!isAuthenticated && <Auth />}
           {isAuthenticated &&
               <div>
-                {/*<Input signOut={() => authenticate()} manageAuth={authenticate}/>*/}
                   <Input
-                      signOut={() => authenticate()}
                       getData={fetchData}
+                      signOut={() => signOut()}
                   />
                 <ul className="container mt-0">
                     {items.map(item => {

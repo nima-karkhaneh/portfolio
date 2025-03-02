@@ -3,6 +3,8 @@ import cors from "cors"
 import pg from "pg"
 import env from "dotenv"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import Cookies from "js-cookie"
 
 const app =  express()
 const PORT = 3000;
@@ -124,7 +126,12 @@ app.post("/login", async(req, res) =>{
                     console.log(err)
                 } else {
                     if (result) {
-                        res.json(user.rows[0])
+                        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1hr" })
+                        let response = {
+                            ...user.rows[0],
+                            token: token
+                        }
+                        res.json(response)
                     } else {
                         res.json({error: "Incorrect Password, please try again!"})
                     }
