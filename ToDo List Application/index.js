@@ -4,15 +4,20 @@ import pg from "pg"
 import env from "dotenv"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import Cookies from "js-cookie"
+import cookieParser from "cookie-parser"
 
 const app =  express()
 const PORT = 3000;
 const saltRounds = 10;
+const corsOptions = {
+    origin: "http://localhost:5173",
+    credentials: true
+}
 
 env.config();
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
+app.use(cookieParser())
 
 const db = new pg.Client({
     user: process.env.DB_USER,
@@ -82,9 +87,7 @@ app.delete("/todos/:id", async (req, res) => {
     res.json("Item was deleted!")
 })
 
-app.listen(PORT, () => {
-    console.log(`server is listening on ${PORT}`)
-})
+
 
 // SIGN UP ROUTE
 app.post("/signup", async (req, res) => {
@@ -127,11 +130,13 @@ app.post("/login", async(req, res) =>{
                 } else {
                     if (result) {
                         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1hr" })
-                        let response = {
-                            ...user.rows[0],
-                            token: token
-                        }
-                        res.json(response)
+                        res.cookie("authToken", token, {
+                            httpOnly: true,
+                            secure: true,
+                            sameSite: "none",
+                            maxAge: 60 * 60 * 1000,
+                        });
+                        res.status(200).send(user.rows[0])
                     } else {
                         res.json({error: "Incorrect Password, please try again!"})
                     }
@@ -144,3 +149,28 @@ app.post("/login", async(req, res) =>{
     }
 })
 
+// VERIFY MIDDLEWARE AND ROUTE
+
+function authenticate(req, res, next) {
+    const token = req.cookies.authToken;
+    if (!token) {
+        return res.status(403).json({ error: "authorisation denied" });
+    }
+    try {
+        jwt.verify(token, process.env.JWT_SECRET);
+        next();
+    } catch (err) {
+        res.status(401).json({ error: "Token is not valid" });
+    }
+}
+
+app.get("/verify", authenticate, (req, res) => {
+        res.json(true)
+})
+
+
+
+
+app.listen(PORT, () => {
+    console.log(`server is listening on ${PORT}`)
+})

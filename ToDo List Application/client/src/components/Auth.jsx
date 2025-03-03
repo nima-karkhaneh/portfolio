@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import axios from "axios";
-import Cookies from "js-cookie"
 
 
 
@@ -16,7 +15,8 @@ function Auth() {
 
 
     function viewLogin(status) {
-        setErr(null)
+        setErr("")
+        setSuccess("")
         setIsLoggedIn(status)
     }
 
@@ -25,29 +25,35 @@ function Auth() {
         if (!isLoggedIn && password !== confirmPassword) {
             setErr("Confirmation did not match. Please try again!")
         } else {
-            const VITE_API_URL = import.meta.env.VITE_API_URL
-            const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
-                email: email,
-                password: password
-            })
-            setErr("")
-            if (response.data.error) {
-                const { error } = response.data
-                setErr(error)
-            } else if (response.data.email) {
-                const { id, token } = response.data
-                setCookie(token)
-                userID = id;
-                window.location = "/"
-            } else {
-                setSuccess(response.data.success)
+            try {
+                const VITE_API_URL = import.meta.env.VITE_API_URL
+                const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
+                    email: email,
+                    password: password
+                }, {
+                    withCredentials: true
+                })
+                if (response.data.error) {
+                    const { error } = response.data;
+                    setSuccess("")
+                    setErr(error)
+                } else if (response.data.id) {
+                    console.log(response.data)
+                    const { id } = response.data;
+                    userID = id
+                    window.location = "/"
+                } else {
+                    setErr("")
+                    const { success } = response.data
+                    setSuccess(success)
+                }
+            }
+            catch(err) {
+                console.error(err)
             }
         }
     }
 
-    function setCookie(token) {
-        Cookies.set("authToken", token, { expires: 1, sameSite: "strict" })
-    }
 
     return(
         <div className="auth-container">

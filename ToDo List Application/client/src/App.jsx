@@ -4,26 +4,31 @@ import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
-import Cookies from "js-cookie"
 
 
 
 function App() {
     const [items, setItems] = useState([])
-    const [isAuthenticated, setIsAuthenticated] = useState(null)
+    const [isAuthenticated, setIsAuthenticated] = useState(false )
+
+    async function manageAuth() {
+            try{
+                const VITE_API_URL_VERIFY = import.meta.env.VITE_API_URL_VERIFY
+                const response = await axios.get(VITE_API_URL_VERIFY, {
+                    withCredentials: true
+                })
+                console.log(response.data)
+                response.data ? setIsAuthenticated(true) : setIsAuthenticated(false)
+            }
+            catch (err) {
+                console.error(err.message)
+            }
+    }
 
     useEffect(() => {
-        const token = Cookies.get("authToken")
-        if (token) {
-            setIsAuthenticated(true)
-        }
+        manageAuth()
     }, [])
 
-
-    function signOut() {
-        Cookies.remove("authToken");
-        window.location  = "/"
-    }
 
     async function fetchData(){
         try{
@@ -36,9 +41,9 @@ function App() {
             console.log(err.message)
         }
     }
-    useEffect(() => {
-            fetchData(), []
-        })
+  useEffect(() => {
+      fetchData()
+  },[])
 
 
     async function deleteItem(id) {
