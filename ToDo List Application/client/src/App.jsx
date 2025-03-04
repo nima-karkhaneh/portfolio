@@ -10,6 +10,7 @@ import axios from "axios";
 function App() {
     const [items, setItems] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(false )
+    const [email, setEmail] = useState("")
 
     async function manageAuth() {
             try{
@@ -17,8 +18,8 @@ function App() {
                 const response = await axios.get(VITE_API_URL_VERIFY, {
                     withCredentials: true
                 })
-                console.log(response.data)
                 response.data ? setIsAuthenticated(true) : setIsAuthenticated(false)
+                setEmail(response.data.email)
             }
             catch (err) {
                 console.error(err.message)
@@ -69,6 +70,7 @@ function App() {
                   <Input
                       getData={fetchData}
                       signOut={() => signOut()}
+                      email={email}
                   />
                 <ul className="container mt-0">
                     {items.map(item => {

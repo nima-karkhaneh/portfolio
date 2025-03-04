@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import { userID } from "./Auth.jsx";
 
 
 
@@ -15,18 +14,21 @@ function Input(props) {
         e.preventDefault()
         if (inputText) {
             try{
-                // Sending description and userID to db for specific users
+                const VITE_API_URL_VERIFY = import.meta.env.VITE_API_URL_VERIFY
+                const user = await axios.get(VITE_API_URL_VERIFY, {
+                    withCredentials: true
+                })
+                const userID = user.data.id
                 const API_URL_POST = import.meta.env.VITE_API_URL_POST
                 await axios.post(API_URL_POST, {
-                    description:inputText,
-                    user_id:userID
+                    description: inputText,
+                    userID: userID
                 });
                 {props.getData()}
             }
             catch(err){
                 console.log(err)
             }
-
         }
         else{
             alert("Please add your Todo Item!")
@@ -40,6 +42,7 @@ function Input(props) {
                 <h1>Daily ToDo List</h1>
                 <button className="btn btn-light" onClick={props.signOut}>Sign out</button>
             </div>
+            <p className="mb-5">Welcome, {props.email}</p>
             <form>
                 <input className="form-control" type="text" placeholder="Add your ToDo Item" onChange={setItem} value={inputText} />
                 <button type="submit" className="btn btn-primary" onClick={addItem}>Add</button>

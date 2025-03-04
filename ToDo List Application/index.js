@@ -44,9 +44,9 @@ app.get("/todos", async (req, res) => {
 
 // POST ROUTE
 app.post("/submit", async (req, res) => {
-    const { description, user_id } = req.body;
+    const { description, userID } = req.body;
     try{
-        const addItem = await db.query("INSERT INTO items (description, user_id) VALUES ($1, $2) RETURNING *;", [description, user_id])
+        const addItem = await db.query("INSERT INTO items (description, user_id) VALUES ($1, $2) RETURNING *;", [description, userID])
         res.json(addItem.rows[0])
     }
     catch(err){
@@ -123,20 +123,21 @@ app.post("/login", async(req, res) =>{
         if (user.rows.length === 0) {
             res.json({error: "User not found, please sign up first!"})
         } else {
-            const storedPassword = user.rows[0].password
-            bcrypt.compare(password, storedPassword, (err, result) => {
+            const currentUser = user.rows[0]
+            const currentUserStoredPassword = user.rows[0].password
+            bcrypt.compare(password, currentUserStoredPassword, (err, result) => {
                 if (err) {
                     console.log(err)
                 } else {
                     if (result) {
-                        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1hr" })
+                        const token = jwt.sign( currentUser , process.env.JWT_SECRET, { expiresIn: "1hr" })
                         res.cookie("authToken", token, {
                             httpOnly: true,
                             secure: true,
                             sameSite: "none",
                             maxAge: 60 * 60 * 1000,
                         });
-                        res.status(200).send(user.rows[0])
+                        res.status(200).send("Authentication successful!")
                     } else {
                         res.json({error: "Incorrect Password, please try again!"})
                     }
@@ -151,21 +152,22 @@ app.post("/login", async(req, res) =>{
 
 // VERIFY MIDDLEWARE AND ROUTE
 
-function authenticate(req, res, next) {
-    const token = req.cookies.authToken;
-    if (!token) {
-        return res.status(403).json({ error: "authorisation denied" });
+    function authenticate(req, res, next) {
+        const token = req.cookies.authToken;
+        if (!token) {
+            return res.status(403).send('Token is missing');
+        }
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(403).send('Invalid or expired token');
+            }
+            req.user = decoded;
+            next()
+        })
     }
-    try {
-        jwt.verify(token, process.env.JWT_SECRET);
-        next();
-    } catch (err) {
-        res.status(401).json({ error: "Token is not valid" });
-    }
-}
 
 app.get("/verify", authenticate, (req, res) => {
-        res.json(true)
+        res.json({email: req.user.email, id: req.user.id})
 })
 
 

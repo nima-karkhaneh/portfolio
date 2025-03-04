@@ -3,8 +3,6 @@ import axios from "axios";
 
 
 
-// userID to be set to each users_id and exported to Inupt component
-let userID;
 function Auth() {
     const[isLoggedIn, setIsLoggedIn] = useState(false)
     const[email, setEmail] = useState("")
@@ -37,15 +35,12 @@ function Auth() {
                     const { error } = response.data;
                     setSuccess("")
                     setErr(error)
-                } else if (response.data.id) {
-                    console.log(response.data)
-                    const { id } = response.data;
-                    userID = id
-                    window.location = "/"
-                } else {
+                }  else if (response.data.success) {
                     setErr("")
                     const { success } = response.data
                     setSuccess(success)
+                }  else {
+                    window.location = "/"
                 }
             }
             catch(err) {
@@ -96,4 +91,3 @@ function Auth() {
 }
 
 export default Auth
-export { userID }
