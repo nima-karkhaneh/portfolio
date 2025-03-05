@@ -18,11 +18,11 @@ function App() {
                 const response = await axios.get(VITE_API_URL_VERIFY, {
                     withCredentials: true
                 })
-                response.data ? setIsAuthenticated(true) : setIsAuthenticated(false)
+                response.data && setIsAuthenticated(true)
                 setEmail(response.data.email)
             }
             catch (err) {
-                console.error(err.message)
+                console.error(err.response.data)
             }
     }
 
@@ -54,12 +54,26 @@ function App() {
             setItems(items.filter(item => {
                 return item.id !== id
             }))
-
         }
         catch(err){
             console.log(err.message)
         }
 
+    }
+
+    async function signOut() {
+        console.log("I got clicked")
+        try{
+            const VITE_API_URL_SIGNOUT = import.meta.env.VITE_API_URL_SIGNOUT
+            const response = await axios.post(VITE_API_URL_SIGNOUT, {
+            }, {
+                withCredentials: true
+            })
+            window.location = "/"
+        }
+        catch (err) {
+            console.error(err.message)
+        }
     }
 
   return (

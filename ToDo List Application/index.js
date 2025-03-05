@@ -155,7 +155,7 @@ app.post("/login", async(req, res) =>{
     function authenticate(req, res, next) {
         const token = req.cookies.authToken;
         if (!token) {
-            return res.status(403).send('Token is missing');
+            return res.status(403).json('Token is missing');
         }
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
@@ -168,6 +168,19 @@ app.post("/login", async(req, res) =>{
 
 app.get("/verify", authenticate, (req, res) => {
         res.json({email: req.user.email, id: req.user.id})
+})
+
+
+// SIGN OUT ROUTE
+
+app.post("/signout", (req, res) => {
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    })
+    res.status(200).json({message: "successful logout"})
 })
 
 
