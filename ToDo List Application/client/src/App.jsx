@@ -12,6 +12,7 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false )
     const [email, setEmail] = useState("")
 
+
     async function manageAuth() {
             try{
                 const VITE_API_URL_VERIFY = import.meta.env.VITE_API_URL_VERIFY
@@ -22,7 +23,7 @@ function App() {
                 setEmail(response.data.email)
             }
             catch (err) {
-                console.error(err.response.data)
+                console.error(err.message)
             }
     }
 
@@ -34,12 +35,14 @@ function App() {
     async function fetchData(){
         try{
             const API_URL_GET = import.meta.env.VITE_API_URL_GET
-            const response = await axios.get(API_URL_GET)
+            const response = await axios.get(`${API_URL_GET}`, {
+                withCredentials: true
+            })
             const data = response.data
             setItems(data)
         }
         catch (err){
-            console.log(err.message)
+            console.error(err.message)
         }
     }
   useEffect(() => {
@@ -62,7 +65,6 @@ function App() {
     }
 
     async function signOut() {
-        console.log("I got clicked")
         try{
             const VITE_API_URL_SIGNOUT = import.meta.env.VITE_API_URL_SIGNOUT
             const response = await axios.post(VITE_API_URL_SIGNOUT, {

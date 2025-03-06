@@ -25,6 +25,7 @@ function Input(props) {
                     userID: userID
                 });
                 {props.getData()}
+                setInputText("")
             }
             catch(err){
                 console.log(err)

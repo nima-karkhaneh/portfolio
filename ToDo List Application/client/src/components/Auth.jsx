@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 
-function Auth() {
+function Auth(props) {
     const[isLoggedIn, setIsLoggedIn] = useState(false)
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")

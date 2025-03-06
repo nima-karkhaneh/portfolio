@@ -32,10 +32,10 @@ db.connect();
 // API ROUTES
 
 // GET ROUTE
-app.get("/todos", async (req, res) => {
+app.get("/todos", authorise, async (req, res) => {
     try{
-        const item = await db.query("SELECT * FROM items ORDER BY id ASC")
-        res.json(item.rows)
+        const items = await db.query("SELECT description, items.id FROM items JOIN users ON users.id = items.user_id WHERE user_id = $1;", [req.user.id])
+        res.json(items.rows)
     }
     catch(err){
         console.error(err.message)
@@ -55,17 +55,6 @@ app.post("/submit", async (req, res) => {
 
 })
 
-// GET A SPECIFIC ITEM
-app.get("/todos/:id", async (req, res) => {
-    try{
-        const { id }= req.params
-        const selectedItem = await db.query("SELECT * FROM items WHERE id = ($1);", [id])
-        res.json(selectedItem.rows)
-    }
-    catch(err){
-        console.error(err.message)
-    }
-})
 
 // UPDATE AN ITEM
 app.put("/todos/:id", async (req, res) => {
@@ -152,10 +141,10 @@ app.post("/login", async(req, res) =>{
 
 // VERIFY MIDDLEWARE AND ROUTE
 
-    function authenticate(req, res, next) {
+    function authorise(req, res, next) {
         const token = req.cookies.authToken;
         if (!token) {
-            return res.status(403).json('Token is missing');
+            return res.status(403).json('No token found!');
         }
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
@@ -166,7 +155,7 @@ app.post("/login", async(req, res) =>{
         })
     }
 
-app.get("/verify", authenticate, (req, res) => {
+app.get("/verify", authorise, (req, res) => {
         res.json({email: req.user.email, id: req.user.id})
 })
 
