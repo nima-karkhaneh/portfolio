@@ -34,7 +34,8 @@ db.connect();
 // GET ROUTE
 app.get("/todos", authorise, async (req, res) => {
     try{
-        const items = await db.query("SELECT description, items.id FROM items JOIN users ON users.id = items.user_id WHERE user_id = $1;", [req.user.id])
+        const userID = req.user.id
+        const items = await db.query("SELECT description, items.id FROM items JOIN users ON users.id = items.user_id WHERE user_id = $1;", [userID])
         res.json(items.rows)
     }
     catch(err){
@@ -43,8 +44,9 @@ app.get("/todos", authorise, async (req, res) => {
 })
 
 // POST ROUTE
-app.post("/submit", async (req, res) => {
-    const { description, userID } = req.body;
+app.post("/submit", authorise,async (req, res) => {
+    const { description } = req.body
+    const userID = req.user.id
     try{
         const addItem = await db.query("INSERT INTO items (description, user_id) VALUES ($1, $2) RETURNING *;", [description, userID])
         res.json(addItem.rows[0])
@@ -156,7 +158,7 @@ app.post("/login", async(req, res) =>{
     }
 
 app.get("/verify", authorise, (req, res) => {
-        res.json({email: req.user.email, id: req.user.id})
+        res.json({ email: req.user.email })
 })
 
 

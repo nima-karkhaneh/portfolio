@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 
 
-function Edit({item}) {
+function Edit({item} ,props) {
     const [editItem, setEditItem] = useState(item.description)
 
     function handleChange(e) {
@@ -13,8 +13,8 @@ function Edit({item}) {
     async function updateItem(){
         try{
             const API_URL_PUT=import.meta.env.VITE_API_URL_PUT
-            await axios.put(`${API_URL_PUT}${item.id}`,{description:editItem});
-            window.location = ("/")
+            await axios.put(`${API_URL_PUT}${item.id}`,{description: editItem});
+            window.location = "/"
         }
         catch(err){
             console.log(err.message)

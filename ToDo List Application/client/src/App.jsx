@@ -90,7 +90,12 @@ function App() {
                   />
                 <ul className="container mt-0">
                     {items.map(item => {
-                        return <ListItems key={item.id} text={item.description} onDelete={() => deleteItem(item.id)} item={item} />
+                        return <ListItems
+                            key={item.id}
+                            text={item.description}
+                            onDelete={() => deleteItem(item.id)}
+                            item={item}
+                        />
                     })}
                 </ul>
               </div>}

@@ -14,15 +14,11 @@ function Input(props) {
         e.preventDefault()
         if (inputText) {
             try{
-                const VITE_API_URL_VERIFY = import.meta.env.VITE_API_URL_VERIFY
-                const user = await axios.get(VITE_API_URL_VERIFY, {
-                    withCredentials: true
-                })
-                const userID = user.data.id
                 const API_URL_POST = import.meta.env.VITE_API_URL_POST
                 await axios.post(API_URL_POST, {
                     description: inputText,
-                    userID: userID
+                }, {
+                    withCredentials: true
                 });
                 {props.getData()}
                 setInputText("")
