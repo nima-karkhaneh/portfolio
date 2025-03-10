@@ -64,8 +64,15 @@ app.post("/submit", async (req, res) =>{
     const review = req.body.review;
     const rate = req.body.rate;
     try{
-        await db.query("INSERT INTO library (title, author, isbn, date, review, rate) VALUES ($1, $2, $3, $4, $5, $6);", [title, author, ISBN, date, review, rate])
-        await db.query("INSERT INTO rating (rate) VALUES ($1);", [rate])
+        const checkBook = await db.query("SELECT * FROM library WHERE isbn = $1", [ISBN])
+        if (checkBook.rows != 0) {
+            return res.render("add.ejs", {
+                error:"Book already exists in the library!"
+            })
+        } else {
+            await db.query("INSERT INTO library (title, author, isbn, date, review, rate) VALUES ($1, $2, $3, $4, $5, $6);", [title, author, ISBN, date, review, rate])
+            await db.query("INSERT INTO rating (rate) VALUES ($1);", [rate])
+        }
     }
     catch(err){
         console.log(err.message)
