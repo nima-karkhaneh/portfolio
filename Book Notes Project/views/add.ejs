@@ -17,7 +17,7 @@
     <form action="/submit" method="post">
         <h2>Please add a new book</h2>
         <% if (locals.error)  { %>
-        <p> <%= error %> </p>
+        <p class="error"> <%= error %> </p>
         <% } %>
         <input type="text" name="title" placeholder="Title" autocomplete="off" required>
         <input type="text" name="author" placeholder="Author" autocomplete="off" required>

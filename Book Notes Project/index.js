@@ -18,9 +18,9 @@ db.connect();
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
-let dataArr = [];
+let booksArr = [];
 let starDisplay = [];
-let condition = true;
+let sortFunctionality = false;
 
 // GET ROUTES
 app.get("/", (req,res)=>{
@@ -32,14 +32,14 @@ app.get("/add", (req,res)=>{
 
 // DISPLAYING BOOKS VIA BOOKS ROUTE
 app.get("/books", async (req,res)=>{
-    if (condition) {
+    if (!sortFunctionality) {
         try{
-            const book = await db.query("SELECT * FROM library ORDER BY id ASC");
+            const books = await db.query("SELECT * FROM library ORDER BY id ASC");
             const rating = await db.query("SELECT * FROM rating")
-            dataArr = book.rows;
+            booksArr = books.rows;
             starDisplay = rating.rows
             res.render("books.ejs",{
-                dataArr: dataArr,
+                booksArr: booksArr,
                 starDisplay: starDisplay
             })
         }
@@ -48,15 +48,15 @@ app.get("/books", async (req,res)=>{
         }
     } else {
         res.render("books.ejs",{
-            dataArr: dataArr,
+            booksArr: booksArr,
             starDisplay: starDisplay
         })
-        condition = true;
+        sortFunctionality = false;
     }
 })
 
 // POSTING A NEW BOOK
-app.post("/submit", async (req, res) =>{
+app.post("/submit", validateISBN, async (req, res) =>{
     const title = req.body.title;
     const author = req.body.author;
     const ISBN = req.body.ISBN;
@@ -83,7 +83,7 @@ app.post("/submit", async (req, res) =>{
 // DELETE ROUTE
 app.get("/books/delete/:bookID", async (req,res) =>{
     const foundStarRating = starDisplay.find((d)=> d.id === parseInt(req.params.bookID));
-    const foundBook = dataArr.find((d)=> d.id === parseInt(req.params.bookID));
+    const foundBook = booksArr.find((d)=> d.id === parseInt(req.params.bookID));
     try{
         await db.query("DELETE FROM RATING WHERE id = $1", [foundStarRating.id]);
         await db.query("DELETE FROM library WHERE id = $1", [foundBook.id]);
@@ -96,7 +96,7 @@ app.get("/books/delete/:bookID", async (req,res) =>{
 
 // GETTING A SPECIFIC BOOK
 app.get("/books/edit/:bookID", (req, res)=>{
-    const foundBook = dataArr.find((d) => d.id === parseInt(req.params.bookID));
+    const foundBook = booksArr.find((d) => d.id === parseInt(req.params.bookID));
     res.render("edit.ejs",{
         foundBook: foundBook,
         starDisplay: starDisplay
@@ -106,7 +106,7 @@ app.get("/books/edit/:bookID", (req, res)=>{
 // EDIT ROUTE
 app.post("/books/edit/:bookID", async (req, res) =>{
     const foundStarRating = starDisplay.find((d)=> d.id === parseInt(req.params.bookID));
-    const foundBook = dataArr.find((d)=> d.id === parseInt(req.params.bookID));
+    const foundBook = booksArr.find((d)=> d.id === parseInt(req.params.bookID));
     try{
         await db.query("UPDATE rating SET rate = ($1) WHERE id = ($2)", [req.body.rate, foundStarRating.id]);
         await db.query("UPDATE library SET title = ($1), author = ($2), isbn = ($3), date = ($4), review = ($5) , rate = ($6) WHERE id = ($7)", [req.body.title, req.body.author, req.body.ISBN, req.body.date, req.body.review, req.body.rate, foundBook.id]);
@@ -125,9 +125,9 @@ app.post("/sort", async (req, res) =>{
             try{
                 const result = await db.query("SELECT * FROM library ORDER BY rate DESC");
                 const rating = await db.query("SELECT * FROM rating")
-                dataArr = result.rows;
+                booksArr = result.rows;
                 starDisplay = rating.rows;
-                condition = false;
+                sortFunctionality = true;
             }
             catch(err){
                 console.log(err)
@@ -137,9 +137,9 @@ app.post("/sort", async (req, res) =>{
             try{
                 const result = await db.query("SELECT * FROM library ORDER BY date DESC");
                 const rating = await db.query("SELECT * FROM rating")
-                dataArr = result.rows;
+                booksArr = result.rows;
                 starDisplay = rating.rows;
-                condition = false;
+                sortFunctionality = true;
             }
             catch (err){
                 console.log(err);
@@ -149,9 +149,9 @@ app.post("/sort", async (req, res) =>{
             try{
                 const result = await db.query("SELECT * FROM library ORDER by title ASC");
                 const rating = await db.query("SELECT * FROM rating")
-                dataArr = result.rows;
+                booksArr = result.rows;
                 starDisplay = rating.rows;
-                condition = false;
+                sortFunctionality = true;
             }
             catch(err){
                 console.log(err.message)
@@ -160,6 +160,68 @@ app.post("/sort", async (req, res) =>{
     }
     res.redirect("/books");
 })
+
+
+// MIDDLEWARE TO VALIDATE ISBN
+
+const isbn10Regex = /^\d{9}(\d|X)$/; // ISBN-10 format regex
+const isbn13Regex = /^\d{13}$/;     // ISBN-13 format regex
+
+function validateISBN(req, res, next) {
+    const { ISBN } = req.body;
+
+    // Clean input (remove non-numeric characters except 'X' in ISBN-10)
+    const cleanedISBN = ISBN.replace(/[^0-9X]/gi, '').toUpperCase();
+
+    // Check if the ISBN matches the format for ISBN-10 or ISBN-13
+    if (isbn10Regex.test(cleanedISBN)) {
+        if (isValidISBN10(cleanedISBN)) {
+            return next(); // Valid ISBN-10, proceed to the next middleware/handler
+        } else {
+            return res.status(400).render("add.ejs", {
+                error: 'Invalid ISBN-10 checksum' });
+        }
+    } else if (isbn13Regex.test(cleanedISBN)) {
+        if (isValidISBN13(cleanedISBN)) {
+            return next(); // Valid ISBN-13, proceed to the next middleware/handler
+        } else {
+            return res.status(400).render("add.ejs", {
+                error: 'Invalid ISBN-13 checksum' });
+        }
+    }
+
+    return res.status(400).render("add.ejs",{
+        error: 'Invalid ISBN format. Please use a valid ISBN!' }); // Invalid format
+}
+
+// ISBN-10 Checksum Validation
+function isValidISBN10(isbn) {
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+        sum += (isbn.charAt(i) * (10 - i));
+    }
+
+    let checksum = isbn.charAt(9);
+    if (checksum === 'X') {
+        sum += 10; // 'X' is treated as 10 in ISBN-10
+    } else {
+        sum += parseInt(checksum);
+    }
+
+    return (sum % 11 === 0); // ISBN-10 checksum validation
+}
+
+// ISBN-13 Checksum Validation
+function isValidISBN13(isbn) {
+    let sum = 0;
+    for (let i = 0; i < 13; i++) {
+        let digit = parseInt(isbn.charAt(i));
+        sum += (i % 2 === 0) ? digit : digit * 3; // Weighted sum for ISBN-13
+    }
+
+    return (sum % 10 === 0); // ISBN-13 checksum validation
+}
+
 
 app.listen(port, () =>{
     console.log(`server is listening on http://localhost:3000/`);

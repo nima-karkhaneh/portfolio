@@ -12,40 +12,43 @@
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
-<main id="main-books">
-    <% if(dataArr.length > 0){ %>
-        <form id="sort-form" action="/sort" method="post">
-            <div id="sort-container">
-                <label for="sort">Sort by:</label>
-                <select name="sort" id="sort" onchange="this.form.submit()">
-                    <option value="">-- Please choose an option --</option>
-                    <option value="Rating">Rating</option>
-                    <option value="Date Read">Date Read</option>
-                    <option value="Alphabet">Alphabet</option>
-                </select>
-            </div>
-        </form>
-        <% dataArr.forEach((data) => { %>
-        <div class="book-container">
-            <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= data.isbn %>-M.jpg" alt="book cover">
-            <h2 class="title"> <%= data.title%> - By <%= data.author %>  </h2>
-            <p class="date-read">DATE READ: <%= data.date %></p>
-            <div class="ranking-display">
-                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=data.id%> fa-solid fa-star star-display"></i>
-            </div>
-            <p class="review"><%= data.review %></p>
-            <div id="edit-delete-container">
-            <a href="/books/delete/<%= data.id %>"><button class="delete">Delete</button></a>
-            <a href="/books/edit/<%= data.id %>"><button class="edit">Edit</button></a>
-            </div>
+<% if (booksArr.length != 0) { %>
+    <form id="sort-form" action="/sort" method="post">
+        <div id="sort-container">
+            <label for="sort">Sort by:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()">
+                <option value="">-- Please choose an option --</option>
+                <option value="Rating">Rating</option>
+                <option value="Date Read">Date Read</option>
+                <option value="Alphabet">Alphabet</option>
+            </select>
         </div>
+    </form>
+<% } %>
+
+<main id="main-books">
+    <% if(booksArr.length != 0){ %>
+        <% booksArr.forEach((book) => { %>
+            <div class="book-container">
+                <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
+                <h2 class="title"> <%= book.title%> - By <%= book.author %>  </h2>
+                <p class="date-read">DATE READ: <%= book.date %></p>
+                <div class="ranking-display">
+                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                </div>
+                <p class="review"><%= book.review %></p>
+                <div id="edit-delete-container">
+                    <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
+                    <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
+                </div>
+            </div>
         <% }) %>
     <% } else { %>
-        <p class="no-books-hds">You have not added any books yet. Please use the + icon on the top right to add books.</p>
+        <p class="no-books-message">You have not added any books yet! Please use the + icon on the top right to add books!</p>
     <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
