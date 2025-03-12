@@ -12,7 +12,7 @@
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
-<% if (booksArr.length != 0) { %>
+<main id="main-books">
     <form id="sort-form" action="/sort" method="post">
         <div id="sort-container">
             <label for="sort">Sort by:</label>
@@ -24,32 +24,25 @@
             </select>
         </div>
     </form>
-<% } %>
-
-<main id="main-books">
-    <% if(booksArr.length != 0){ %>
-        <% booksArr.forEach((book) => { %>
-            <div class="book-container">
-                <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
-                <h2 class="title"> <%= book.title%> - By <%= book.author %>  </h2>
-                <p class="date-read">DATE READ: <%= book.date %></p>
-                <div class="ranking-display">
-                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                    <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                </div>
-                <p class="review"><%= book.review %></p>
-                <div id="edit-delete-container">
-                    <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
-                    <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
-                </div>
+    <% booksArr.forEach((book) => { %>
+        <div class="book-container">
+            <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
+            <h2 class="title"> <%= book.title%> - By <%= book.author %>  </h2>
+            <p class="date-read">DATE READ: <%= book.date %></p>
+            <div class="ranking-display">
+                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
             </div>
-        <% }) %>
-    <% } else { %>
-        <p class="no-books-message">You have not added any books yet! Please use the + icon on the top right to add books!</p>
-    <% } %>
+            <p class="review"><%= book.review %></p>
+            <div id="edit-delete-container">
+                <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
+                <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
+            </div>
+        </div>
+    <% }) %>
 </main>
 <%- include("./partials/footer.ejs") %>
 <script>

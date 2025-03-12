@@ -9,7 +9,6 @@ body{
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-
 }
 a{
     color: inherit;
@@ -33,6 +32,7 @@ header div{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 #main-content div{
     text-align: center;
@@ -41,9 +41,10 @@ header div{
 h1{
     font-size: 2.5rem;
 }
-#main-content > p{
-    margin: 20px 0;
-}
+/*#main-content > p{*/
+/*    margin: 30px 0;*/
+/*    !*border: 3px solid blue;*!*/
+/*}*/
 #main-content button{
     margin-top: 10px;
     padding: 20px;
@@ -77,7 +78,7 @@ footer{
 .main-add{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-grow: 1;
     padding: 30px;
@@ -86,11 +87,11 @@ footer{
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 10px;
     gap: 10px;
     background-color: whitesmoke;
     padding: 20px;
-    margin-top: 50px;
+    margin-top: 6rem;
 }
 input::placeholder, textarea::placeholder{
     color: black;
@@ -127,7 +128,6 @@ textarea{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 10px;
 }
 #sort-form{
@@ -197,15 +197,15 @@ textarea{
 .star-display{
     cursor: auto;
 }
-.no-books-message{
-    text-align: center;
-    /*position: relative;*/
-    /*top: 350px;*/
-    font-size: 1.8rem;
-    font-weight: 400;
+.no-books-error{
+    font-size: 1.5rem;
 }
 .error{
     margin-bottom: 5px;
+}
+.fa-exclamation-triangle{
+    color: #fcc107;
+    margin-top: 30px;
 }
 
 /*Media Queries*/

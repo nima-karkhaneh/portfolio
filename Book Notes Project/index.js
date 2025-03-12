@@ -36,6 +36,11 @@ app.get("/books", async (req,res)=>{
         try{
             const books = await db.query("SELECT * FROM library ORDER BY id ASC");
             const rating = await db.query("SELECT * FROM rating")
+            if (books.rows == 0) {
+               return res.render("index.ejs", {
+                   error: "No books in your library yet! Please use the + icon on the top right to add your books!"
+               })
+            }
             booksArr = books.rows;
             starDisplay = rating.rows
             res.render("books.ejs",{

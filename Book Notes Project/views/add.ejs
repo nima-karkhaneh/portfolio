@@ -17,13 +17,13 @@
     <form action="/submit" method="post">
         <h2>Please add a new book</h2>
         <% if (locals.error)  { %>
-        <p class="error"> <%= error %> </p>
+        <p class="error"><i class="fas fa-exclamation-triangle"></i> <%= error %> </p>
         <% } %>
         <input type="text" name="title" placeholder="Title" autocomplete="off" required>
         <input type="text" name="author" placeholder="Author" autocomplete="off" required>
         <input type="text" name="ISBN" placeholder="ISBN" autocomplete="off" required>
         <input type="date" id="date" name="date" placeholder="date read" autocomplete="off" required>
-        <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review" required></textarea>
+        <textarea name="review" id="" cols="50" rows="12" autocomplete="off" placeholder="Please leave a review" required></textarea>
         <label for="select">Please leave a rating</label>
         <div class="ranking-container">
             <label for="rate-1"><i class="star-ranking fa-solid fa-star"></i></label>

@@ -20,6 +20,9 @@
     </div>
     <p>OR</p>
     <a href="/books"><button>View your existing libaray</button></a>
+    <% if (locals.error) { %>
+        <p class="no-books-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></p>
+    <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
 </body>
