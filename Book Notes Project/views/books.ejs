@@ -27,7 +27,7 @@
     <% booksArr.forEach((book) => { %>
         <div class="book-container">
             <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
-            <h2 class="title"> <%= book.title%> - By <%= book.author %>  </h2>
+            <h2 class="book-title"> <%= book.title%> - By <%= book.author %>  </h2>
             <p class="date-read">DATE READ: <%= book.date %></p>
             <div class="ranking-display">
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
@@ -50,7 +50,6 @@
     const year = date.getFullYear();
     document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
     const data = JSON.parse('<%- JSON.stringify( starDisplay )%>');
-    console.log(data);
     data.forEach((d)=>{
         const id = d.id;
         const rate = d.rate;

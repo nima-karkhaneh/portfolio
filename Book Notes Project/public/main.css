@@ -33,13 +33,15 @@ header div{
     justify-content: center;
     align-items: center;
     gap: 20px;
+    padding: 20px;
 }
 #main-content div{
     text-align: center;
     line-height: 50px;
+    margin-top: 4rem;
 }
 h1{
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 
 #main-content button{
@@ -75,10 +77,10 @@ footer{
 .main-add{
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     flex-grow: 1;
-    padding: 30px;
+    padding: 20px;
 }
 .main-add form{
     display: flex;
@@ -89,6 +91,9 @@ footer{
     background-color: whitesmoke;
     padding: 20px;
     margin-top: 6rem;
+}
+textarea{
+    width: 100%;
 }
 input::placeholder, textarea::placeholder{
     color: black;
@@ -154,13 +159,12 @@ textarea{
 }
 .book-cover{
     float: left;
-    width: 120px;
+    width: 100px;
     margin-right: 30px;
 }
-
-.title{
+.book-title{
     font-family: "Noto Serif", serif;
-    font-size: 2rem;
+    font-size: 1.7rem;
     text-decoration: underline;
     font-weight: 400;
 }
@@ -213,5 +217,17 @@ textarea{
         font-size: 0.6rem;
         flex-direction: column;
         gap: 0;
+    }
+}
+@media(max-width: 400px) {
+    .book-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .book-title{
+        font-size: 1.5rem;
+        text-align: center;
     }
 }
