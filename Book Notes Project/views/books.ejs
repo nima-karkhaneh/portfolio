@@ -37,10 +37,10 @@
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
             </div>
             <p class="review"><%= book.review %></p>
-            <div id="edit-delete-container">
-                <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
-                <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
-            </div>
+        </div>
+        <div id="edit-delete-container">
+            <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
+            <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
         </div>
     <% }) %>
 </main>
