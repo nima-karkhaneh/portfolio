@@ -1,5 +1,4 @@
-## Virtual Library (Book Notes Project)
-***
+# Virtual Library (Book Notes Project)
 ## Overview
 This project showcases a platform where users can add their favourite books, reviews, ratings, and when they have read the book to a virtual library. Users can also edit the reviews or delete the books entirely after they have been added. The content of this library is sortable by date, rating, and also alphabetically for ease of navigation.
 ## Technologies Used
