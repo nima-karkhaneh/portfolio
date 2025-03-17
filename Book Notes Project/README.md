@@ -61,7 +61,8 @@ PORT="3000"
 ```
 5. Run the application:  
 
-`node index.js `
+`node index.js `  
+
 6. Visit http://localhost:3000 in your browser to start the application
 ## Credit
 This project is one of the capstone projects included in **The Complete Full-Stack Web Development Bootcamp** by **The App Brewery**. The course is delivered by **Angela Yu**.
