@@ -14,6 +14,66 @@ This project is a fully-fledged web application designed for an architectural st
 * **express:** To create a web server on the backend of the application
 * **nodemailer:** To handle the contact section of the application
 * **serve-faviocn:** To serve the favicon for the application
+## Challenges and Solutions
+Throughout the development of this architectural startup website, several challenges arose that required thoughtful solutions to ensure a responsive, user friendly, and visually appealing experience. Below is a summary of key technical and design challenges and how they were addressed:
+* **Responsive Design with Flexbox and Media Queries** 
+  
+  Implemented responsive layouts using Flexbox and media queries. For larger screens used `flex-direction: row`, while smaller screens switched to `flex-direction: column`, improving usability across devices.
+
+
+* **Image Overflow Control**
+
+  Resolved layout issues by using `max-width: 30%` instead of `width: 30%`, ensuring images remained within their parent container without overflowing, regardless of screen size.
+
+
+* **Animated Text Entrance for Enhanced UX**
+
+  Used CSS animations with a delay to animate text sliding in from off-screen, creating a more engaging and dynamic visual experience.
+
+
+* **Client Portfolio Display with Bootstrap Carousel**
+
+  Utilised Bootstrap's built-in carousel component to showcase client portfolio images in a sleek, swipeable gallery.
+
+
+* **Fly-out Hamburger Menu with JavaScript**
+  
+  Built a custom responsive hamburger menu using vanilla JavaScript, enhance navigation on mobile and smaller screens with smooth open/close animations.
+
+
+* **Dynamic Footer Year with JavaScript**
+
+  Used JavaScript to automatically generate and update the current year in the site footer, eliminating the need for manual edits in future years.
+
+
+* **Page Loader Spinner for Improved UX**
+
+  Created a custom loading spinner using vanilla JavaScript to display before each page loads, enhancing perceived performance and user engagement.
+
+
+* **Form Submit Loader for UX Feedback** 
+
+  Added a loader spinner to the contact form's submit button using vanilla JavaScript, providing visual feedback during the form submission process. 
+
+
+* **Backend Form Handling with Nodemailer**
+  
+  Used the Nodemailer npm package to handle contact form submissions and send emails reliably from the backend.
+
+
+* **Error Handling for Form Submission**
+
+  Implemented robust error handling on form submission. The backend returns a success or error page depending on the result, ensuring users are properly informed.
+
+
+* **Logo Scaling With Inkscape For Header Integration**
+  
+  Used Inkscapte to resize and optimise the client-provided logo, ensuring it fits seamlessly within the website header while maintaining a visual quality.
+
+
+* **Image Standardisation**
+
+  Ensured consistent image dimensions across the site to prevent distortion or blurring, especially during responsive scaling.
 ## Installation Guide
 This project is located in the `Maan Design Studio` directory of a larger repository called `Portfolio`. You can add can a `.env` file to the root of the project if you wish to see how the `nodemailer` package works. Otherwise, the application should run on `port 3000`. To run the application, please follow the following steps;
 1. Clone the repository:
