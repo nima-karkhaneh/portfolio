@@ -28,12 +28,22 @@ app.get("/posts", (req,res) =>{
 // Submitting a new post
 
 app.post("/submit", (req,res) =>{
+    const now = new Date();
+    const options = {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    };
+    const formattedDate = now.toLocaleString('en-AU', options).replace(',', '');
     const post = {
         id: posts.length+1,
         author: req.body.author,
         title: req.body.title,
         text: req.body.text,
-        date: new Date(),
+        date: formattedDate
     }
     posts.push(post);
     res.redirect("/posts")

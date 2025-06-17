@@ -14,7 +14,7 @@
 <main>
 <%- include("partials/header.ejs") %>
 <div class="posts-container">
-    <div class="posts-content">
+    <div class="posts-content <%= locals.posts.length === 0 ? "no-scroll" : "" %>">
         <% if (locals.posts.length > 0) { %>
         <h2 class="title">Your Posts</h2>
         <% posts.reverse().forEach((post) => { %>
@@ -27,7 +27,7 @@
             <div class="separator"></div>
         <% }) %>
         <% } else { %>
-        <h2 class="no-title">You have no posts yet. Please add your first post using the plus icon above.</h2>
+        <h2 class="no-post">You have no posts yet. Please add your first post using the plus icon above.</h2>
        <% } %>
     </div>
 </div>

@@ -141,10 +141,16 @@ form button{
 .posts-title{
     margin-bottom: 0;
 }
-.no-title{
+.no-post{
     text-align: center;
     font-size: 1.8rem;
     margin: 0 auto;
+
+}
+
+/*Hiding the scroll bar when there is no post*/
+.posts-content.no-scroll {
+    overflow-y: hidden;
 }
 .author, .date{
     font-size: 0.8rem;
