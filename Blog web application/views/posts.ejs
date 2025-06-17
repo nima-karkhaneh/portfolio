@@ -19,7 +19,7 @@
         <h2 class="title">Your Posts</h2>
         <% posts.reverse().forEach((post) => { %>
             <h2 class="posts-title"><%= post.title %></h2>
-            <p><%= post.text %></p>
+            <p class="post-text"><%= post.text %></p>
             <p class="author"><%= `By : ${post.author}` %></p>
             <p class="date"><%=post.date%></p>
             <a class="edit" href="/edit/<%= post.id %>">Edit</a>

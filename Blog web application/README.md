@@ -6,6 +6,15 @@
 
 ---
 
+## Features
+- Create, edit, and delete posts
+- Posts are timestamped and ordered newest-first
+- Clean and responsive layout with partials (header & footer)
+- Preserves line breaks from user input (multi-line post formatting)
+- Intuitive interface for post editing and deletion
+
+---
+
 ## Technologies Used
 
 ### Frontend
@@ -70,6 +79,22 @@ Avoid code duplication and maintain consistency across multiple views.
 Abstracted the header and footer into partial EJS files (`partials/header.ejs` and `partials/footer.ejs`) and included them in all views using `<%- include("partials/header.ejs") %>` and `<%- include("partials/footer.ejs") %>`. This made the layout modular and easy to maintain.
 
 ---
+
+### 6. Preserving Line Breaks in User-Submitted Posts
+**Challenge:**  
+When users wrote multi-line posts using a `<textarea>`, any line breaks (e.g. pressing Enter) were ignored when rendering the post on the page. This caused all the text to appear as one continuous block, making posts hard to read.
+
+**Solution:**  
+Applied the CSS rule `white-space: pre-line` to a reusable `.post-text` class. This property tells the browser to preserve newline characters while still allowing natural line wrapping. The class was then applied to all `<p>` elements displaying user-submitted post content:
+
+```ejs
+<p class="post-text"><%= post.text %></p>
+```
+```css
+.post-text {
+  white-space: pre-line;
+}
+```
 
 ## Installation
 

@@ -141,6 +141,9 @@ form button{
 .posts-title{
     margin-bottom: 0;
 }
+.post-text {
+    white-space: pre-line;
+}
 .no-post{
     text-align: center;
     font-size: 1.8rem;

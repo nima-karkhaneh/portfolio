@@ -8,6 +8,22 @@ const port = process.env.port || 3000
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
+function getFormattedDate() {
+    const now = new Date();
+    const options = {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    };
+    return now.toLocaleString('en-AU', options).replace(',', '');
+}
+
+// Use it directly in your routes
+
+
 
 const posts= [];
 
@@ -29,21 +45,12 @@ app.get("/posts", (req,res) =>{
 
 app.post("/submit", (req,res) =>{
     const now = new Date();
-    const options = {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-    };
-    const formattedDate = now.toLocaleString('en-AU', options).replace(',', '');
     const post = {
         id: posts.length+1,
         author: req.body.author,
         title: req.body.title,
         text: req.body.text,
-        date: formattedDate
+        date: getFormattedDate()
     }
     posts.push(post);
     res.redirect("/posts")
@@ -53,7 +60,6 @@ app.post("/submit", (req,res) =>{
 
 app.get("/edit/:postID", (req,res)=>{
     const foundPost = posts.find((p) => p.id === parseInt(req.params.postID));
-    console.log(foundPost)
     res.render("edit-posts.ejs",{
         foundPost: foundPost
     });
@@ -69,7 +75,7 @@ app.post("/edit/:postID", (req,res)=>{
         author: req.body.author || foundPost.author,
         title: req.body.title || foundPost.title,
         text: req.body.text || foundPost.text,
-        date: new Date()
+        date: getFormattedDate()
     }
     posts[foundIndex] = updatedPost;
     res.redirect("/posts")
