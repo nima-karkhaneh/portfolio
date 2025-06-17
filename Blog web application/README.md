@@ -1,34 +1,103 @@
-# Journalog - A blog application
-## Overview
-This project is a web blog application called "Journalog". It allows users to post their blog, and once the blog is posted, they can edit or delete their post. User's posts are sorted chronologically and each post has a date associated with it. 
+
+# Journalog – A Simple Blog Application
+
+## Overview  
+**Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
+
+---
+
 ## Technologies Used
+
 ### Frontend
-* **Embedded JavaScript (EJS):** To structure the content of the website and add some functionality
-* **Cascading Style Sheets (CSS):** To style the content of the website including a responsive design
-* **JavaScript:** To add extra functionality to the website
+- **Embedded JavaScript (EJS):** For dynamic templating and rendering data on the frontend
+- **CSS:** For styling and responsive design
+- **Vanilla JavaScript:** To enhance interactivity
+
 ### Backend
-* **Node.js**: To run JavaScript on the server-side of the application
-## Dependencies Used
-* **ejs:** To enable Embedded JavasScript
-* **express**: To build server-side of the application
-## Installation Guide
-### Book Notes Project
-This project is located in the `Blog web application` directory of a larger repository called `Portfolio`.
-To install and use the project, please follow the following steps:
+- **Node.js:** JavaScript runtime for server-side logic
+
+---
+
+## Dependencies
+- **express:** Web framework for handling routes and server logic
+- **ejs:** Template engine for rendering HTML with embedded JavaScript
+
+---
+
+## Challenges & Solutions
+
+### 1. Conditional Scrollbar Display  
+**Challenge:**  
+The posts container always showed a vertical scrollbar, even when there were no posts — creating unnecessary visual clutter.  
+
+**Solution:**  
+Used conditional logic in the EJS template to apply a `.no-scroll` class only when there were no posts. This class toggled the `overflow-y` CSS property in the stylesheet, preventing the scrollbar from appearing unless needed.
+
+---
+
+### 2. Simplifying Date Formatting  
+**Challenge:**  
+JavaScript’s default `Date()` output included verbose timezone info (e.g., `GMT+1000` and full timezone names), making the UI look cluttered.  
+
+**Solution:**  
+Formatted the date on the backend using `toLocaleDateString()` and `toLocaleTimeString()` with custom options to return a cleaner, user-friendly string like `"17 June 2025 at 20:47"`.
+
+---
+
+### 3. Implementing Post Editing with Prefilled Form Values  
+**Challenge:**  
+Allowing users to edit a post by pre-populating the form with the current post content.  
+
+**Solution:**  
+Used dynamic routing (`/edit/:postID`) to fetch the selected post by ID. Passed the data to the `edit-posts.ejs` template and prefilled the input fields using EJS. Unchanged fields were preserved during submission.
+
+---
+
+### 4. Deleting a Specific Post by ID  
+**Challenge:**  
+Enable reliable and efficient deletion of a single post using its unique identifier.  
+
+**Solution:**  
+Created a dynamic GET route (`/posts/delete/:postID`) to locate the post in the in-memory array and remove it using `splice()`, then redirected back to the updated posts view.
+
+---
+
+### 5. Reusing Header and Footer with Partials  
+**Challenge:**  
+Avoid code duplication and maintain consistency across multiple views.  
+
+**Solution:**  
+Abstracted the header and footer into partial EJS files (`partials/header.ejs` and `partials/footer.ejs`) and included them in all views using `<%- include("partials/header.ejs") %>` and `<%- include("partials/footer.ejs") %>`. This made the layout modular and easy to maintain.
+
+---
+
+## Installation
+
+This project is located in the `Blog web application` folder of a larger repository named `Portfolio`.
+
+To run it locally:
+
 1. Clone the repository:
-```bash
-git clone https://github.com/nima-karkhaneh/Portfolio.git
-cd Blog\ web\ application/
+   ```bash
+   git clone https://github.com/nima-karkhaneh/Portfolio.git
+   cd "Blog web application"
+   ```
 
-```
 2. Install dependencies:
-
-`npm install`
+   ```bash
+   npm install
+   ```
 
 3. Run the application:
+   ```bash
+   node index.js
+   ```
 
-`node index.js `  
+4. Open your browser and visit [http://localhost:3000](http://localhost:3000)
 
-4.  Visit http://localhost:3000 in your browser to start the application.
+---
+
 ## Credit
-This project is one of the capstone projects included in **The Complete Full-Stack Web Development Bootcamp** by **The App Brewery**. The course is delivered by **Angela Yu**.
+
+This project was created as a **capstone project** for the *Complete Full-Stack Web Development Bootcamp* by **The App Brewery**, taught by **Dr. Angela Yu**.  
+While the course provided foundational knowledge, all logic, structure, and implementation in this blog application were developed independently as part of the capstone challenge.
