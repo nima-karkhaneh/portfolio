@@ -4,14 +4,14 @@ import env from "dotenv"
 
 const app = express();
 env.config();
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
 
 app.get("/", (req,res) => {
-        res.render("index.ejs")
+        res.render("index.ejs" , {})
 })
 
 app.post("/submit", async (req, res) =>{

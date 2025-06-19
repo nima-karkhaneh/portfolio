@@ -39,6 +39,11 @@ input::placeholder{
 input:focus::placeholder {
     color: transparent;
 }
+
+/*Making the HTML form invisible when there is weather data to display*/
+.invisible {
+    display: none;
+}
 .search-btn{
     background-color: transparent;
     height: 3rem;

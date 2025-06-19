@@ -11,7 +11,11 @@
     <title>OzWeather</title>
 </head>
 <body>
-<form action="/submit" method="post">
+<!--invisible form when displaying weather data-->
+<form action="/submit" method="post"
+<% if (locals.city) { %>
+class="invisible"
+<% } %>>
     <input type="text" name="city" placeholder="Search for a town" autocomplete="off" required>
     <button class="search-btn" type="submit"><img class="search-icon"  src="./images/search icon.svg" alt=""></button>
 </form>
@@ -37,7 +41,7 @@
 <% } %>
 <script>
     // Adding the error message to the input placeholder
-    const error = "<%= locals.errMsg %>"
+    const error = <%- JSON.stringify(locals.errMsg || "") %>
     if (error){
         document.querySelector("input").setAttribute("placeholder", error);
     }
