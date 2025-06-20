@@ -1,7 +1,7 @@
 
 # Journalog – A Simple Blog Application
 
-## Overview  
+## Overview
 **Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
 
 <p align="center">
