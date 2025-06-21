@@ -24,11 +24,17 @@
             </select>
         </div>
     </form>
-    <% booksArr.forEach((book) => { %>
+    <% booksArr.forEach((book) => {
+        const date = new Date(book.date);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const formattedDate = `${day}-${month}-${year}`;
+    %>
         <div class="book-container">
             <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
             <h2 class="book-title"> <%= book.title%> - By <%= book.author %>  </h2>
-            <p class="date-read">DATE READ: <%= book.date %></p>
+            <p class="date-read">DATE READ: <%= formattedDate %></p>
             <div class="ranking-display">
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
@@ -36,7 +42,7 @@
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
                 <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
             </div>
-            <p class="review"><%= book.review %></p>
+            <p class="review line-break-fix"><%= book.review %></p>
         </div>
         <div id="edit-delete-container">
             <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
@@ -49,16 +55,16 @@
     const date = new Date ();
     const year = date.getFullYear();
     document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
-    const data = JSON.parse('<%- JSON.stringify( starDisplay )%>');
-    data.forEach((d)=>{
-        const id = d.id;
-        const rate = d.rate;
-        const stars = document.querySelectorAll(`.star${id}`);
-        if (stars != null)
-        for (let i = 0; i < rate; i++){
-            stars[i].style.color = "#dabd18b2"
-        }
-    })
+        const ratingData = JSON.parse('<%- JSON.stringify( starDisplay )%>');
+        ratingData.forEach((d)=>{
+            const id = d.id;
+            const rate = d.rate;
+            const stars = document.querySelectorAll(`.star${id}`);
+            if (stars != null)
+            for (let i = 0; i < rate; i++){
+                stars[i].style.color = "#dabd18b2"
+            }
+        })
 </script>
 </body>
 </html>

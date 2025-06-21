@@ -179,6 +179,9 @@ textarea{
     line-height: 2rem;
     font-size: 1.1rem;
 }
+.line-break-fix {
+    white-space: pre-line;
+}
 #edit-delete-container{
     display: flex;
     gap: 20px;
