@@ -227,12 +227,12 @@ Displaying book info and ratings together from two separate tables required care
 **Solution:**  
 I queried both tables on page load and passed them separately into the EJS render:
 ```javascript
-    const books = await db.query("SELECT * FROM library ORDER BY id ASC");
-    const rating = await db.query("SELECT * FROM rating")
-    res.render("books.ejs",{
-                booksArr: books.rows,
-                starDisplay: rating.rows
-            })
+const books = await db.query("SELECT * FROM library ORDER BY id ASC");
+const rating = await db.query("SELECT * FROM rating")
+res.render("books.ejs",{
+            booksgit Arr: books.rows,
+            starDisplay: rating.rows
+        })
 ```
 ### 9. Handling Empty Library Edge Case Gracefully
 **Challenge:**  
