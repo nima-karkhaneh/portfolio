@@ -89,14 +89,14 @@ The database stored dates in YYYY-MM-DD format, but a more readable DD-MM-YYYY f
 **Solution:**  
 I formatted dates inside the EJS template using the JavaScript `Date` object and `padStart` to ensure consistency:
 ```ejs
-    <% booksArr.forEach((book) => {
-        const date = new Date(book.date);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        const formattedDate = `${day}-${month}-${year}`;
-    %>
-    <p class="date-read">DATE READ: <%= formattedDate %></p>
+<% booksArr.forEach((book) => {
+    const date = new Date(book.date);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+%>
+<p class="date-read">DATE READ: <%= formattedDate %></p>
 ```
 ### 3. Optimising Sorting and Page Rendering
 **Challenge:**  
@@ -291,7 +291,6 @@ DB_HOST="localhost"
 DB_DATABASE="The name of your database (e.g., my_project_db)"
 DB_PASSWORD="Your PostgreSQL password"
 DB_PORT="5432"
-PORT="3000"
 
 ```
 5. Run the application:  
