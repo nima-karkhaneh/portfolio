@@ -1,6 +1,34 @@
 # ToDo List Application
+
 ## Overview
-This project is a simple ToDo List application which allows users to securely log in, post their todo list item, edit and delete items.
+This project is a simple ToDo List application that allows users to securely log in, manage their tasks, and perform full CRUD (Create, Read, Update, Delete) operations on their personalised todo items.
+
+## Table of Contents
+- [Overview](#overview)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Dependencies](#dependencies)
+- [Challenges and Solutions](#challenges-and-solutions)
+- [Installation Guide](#installation-guide)
+- [Credit](#credit)
+
+## Screenshots
+<p align="center">
+  <img src="./client/src/assets/authpage-screenshot.png" alt="Home page featuring user authentication" width="600" />
+</p>
+<p align="center"><em>Home page featuring user authentication</em></p>
+
+<p align="center">
+  <img src="./client/src/assets/todoitems-screenshot.png" alt="ToDo items" width="600" />
+</p>
+<p align="center"><em>Example of ToDo items</em></p>
+
+## Features
+* **Secure Authentication:** Users can securely log in. Upon authentication, a JSON Web Token (JWT) is generated and stored in an `httpOnly` and `secure` cookie for added security.
+* **Edit and Delete:** Users can update or remove their existing todo items.
+* **User-Specific Data:** All data is scoped to the authenticated user via backend-authenticated API.
+
 ## Technologies Used
 ### Frontend
 * **ReactJS:** An open-source JavaScript library for building user interfaces
@@ -8,31 +36,108 @@ This project is a simple ToDo List application which allows users to securely lo
 ### Backend
 * **Node.js**: To run JavaScript on the server-side of the application
 ### Database
-* **PostgresSQL**: To create a database for the web application
-## Dependencies Used
+* **PostgreSQL**: To create a database for the web application
+
+## Dependencies
 ### Frontend
 The directory structure of the client side of the application has been created using Vite. The full list of dependencies are as follows;
-* **react:** Created by Vite to enable writing a react application 
-* **react-dom:** Created by Vite to enable writing a react application 
-* **axios:** To enable frontend to make HTTP requests to the backend API of the application
+* **react:** Created by Vite to enable writing a React application 
+* **react-dom:** Created by Vite to enable writing a React application 
+* **axios:** To enable frontend to make http requests to the backend API of the application
 ### Backend
 * **bcrypt:** To hash the passwords before storing them in a database
-* **cookie-parse:** To access the JSON Web Token stored in a cookie
+* **cookie-parser:** To access the JSON Web Token stored in a cookie
 * **cors:** To enable the frontend Vite server to communicate with the backend API
 * **dotenv:** To securely store sensitive information like the database credentials or API keys
 * **express:** To create a backend API
 * **jsonwebtoken:** To generate a JSON Web Token for user authentication/authorisation
-* **pg:** To interact with the PostgresSQL from the backend
-## Features
-* Allows users to securely log in to the application. To achieve this, a JSON Web Token is generated after each user has been authenticated. For added security, tokens are stored in httpOnly and secure cookies and sent to the frontend
-* Allows users to post their todo item
-* Allows users to edit and delete their posts
+* **pg:** To interact with the PostgreSQL from the backend
+
+## Challenges and Solutions
+## Backend
+
+### Securely Storing JWT Without Exposing It to Frontend JS
+
+**Challenge:**  
+Avoid storing JWT tokens in localStorage or accessible client-side storage to prevent XSS attacks.
+
+**Solution:**
+- Store JWT as an `httpOnly` cookie so it’s inaccessible to frontend JavaScript but sent automatically with requests.
+- Use backend middleware to decode the token from the cookie and authorise requests.
+
+### Managing Cross-Origin Cookies and CORS Configuration
+**Challenge:**  
+Enable secure cookies to be sent between frontend (`localhost:5173`) and backend (`localhost:3000`) during development.  
+**Solution:**
+- Configure CORS with `credentials: true` on both backend and frontend requests.
+- Set cookie options to `httpOnly: true`, `secure: true`, and `sameSite: 'none'` to allow cross-site cookies over https.
+
+### Creating Authorisation Middleware
+**Challenge:**  
+Protect routes by verifying the JWT from cookies and attaching user info for use in route handlers.  
+**Solution:**
+- Write `authorise` middleware that verifies JWT, handles errors, and assigns decoded user info to `req.user`.
+- Use this middleware on routes requiring authentication.
+
+### Associating Todos With Users in the Database
+**Challenge:**  
+Ensure todos are linked to the user who created them and prevent unauthorized access.  
+**Solution:**
+- Use a `user_id` foreign key in the `items` table referencing `users.id`.
+- Filter all todo queries by `req.user.id` to only return the logged-in user’s data.
+
+### Password Hashing and Signup Validation
+**Challenge:**  
+Securely hash passwords before storing and prevent duplicate user registration.  
+**Solution:**
+- Use `bcrypt` to hash passwords asynchronously before database insertion.
+- Check if a user already exists by email before allowing signup.
+
+### Handling JWT Expiration
+**Challenge:**  
+Ensure users are logged out or prompted to reauthenticate after token expiration.  
+**Solution:**
+- Set JWT expiry to 1 hour.
+- In middleware, reject requests with expired tokens, forcing re-login.
+
+## Frontend
+
+### Detecting Authentication Status Without Access to JWT Token
+**Challenge:**  
+React cannot read `httpOnly` cookies, so it can’t directly check login status.  
+**Solution:**
+- Call backend `/verify` endpoint with credentials on app load.
+- Set React auth state (`isAuthenticated`, `email`) based on backend response.
+
+### Conditional Data Fetching Based on Authentication
+**Challenge:**  
+Avoid fetching protected data (todos) before authentication is confirmed.  
+**Solution:**
+- Use separate hooks or conditional logic to fetch todos only if authenticated.
+
+### Smooth UI Updates After Login, Logout, and Data Changes
+**Challenge:**  
+Reflect changes like item deletions or user logout immediately in UI without manual page reloads.  
+**Solution:**
+- Update React state (`items`, `isAuthenticated`) after actions to trigger UI re-render.
+- On logout, reload page to clear all states and cookies.
+
+### Handling Cross-Origin Requests with Cookies in Frontend
+**Challenge:**  
+Ensure cookies are sent and received properly during cross-origin API calls.  
+**Solution:**
+- Always use `withCredentials: true` in axios requests.
+- Make sure your backend sets proper CORS headers with `credentials: true` and specific origin.
+
+
+
 ## Installation Guide
 This project is located in the `ToDo List Application` directory of a larger repository called `Portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
 1. Clone the repository:  
 ```bash
 git clone https://github.com/nima-karkhaneh/Portfolio.git
-cd ToDo\ List\ Application/
+cd "ToDo List Application"
+
 
 ```
 2. Change directory to `client`:
@@ -81,7 +186,7 @@ CREATE TABLE items(
 ```
 8. Create a `.env` file in the root of the project and replace the placeholders with your local PostgreSQL credentials and your JWT secret. Here is an example for your `.env` file:
 ```
-DB_USER="Your PostgreSQL username (usually postgress unless you specified another)"
+DB_USER="Your PostgreSQL username (usually postgres unless you specified another)"
 DB_HOST="localhost"
 DB_DATABASE="The name of your database (e.g., my_project_db)"
 DB_PASSWORD="Your PostgreSQL password"
@@ -101,11 +206,16 @@ PORT="3000"
 11. Visit http://localhost:5173 in your browser to start the application.
 
 ## Credit
-This project has followed the following YouTube tutorials as a guide. Authentication and Authorisation with secured cookies has been added as an extra feature.
 
-* PERN Stack Course - Postgres, Express, React, and Node by **The Stoic Programmers**  
+While this project was independently developed, a few online resources were referenced for learning purposes:
 
+1. **PERN Stack Course** by *The Stoic Programmers* – This tutorial series offered a helpful introduction to building a ToDo app using the PERN stack. However, the tutorial stored JWT tokens in `localStorage`, which is insecure. My implementation significantly differs in that it uses `httpOnly` and `secure` cookies for authentication. While some frontend logic and Bootstrap styles are similar, my version features a different dashboard layout, includes user email display, and emphasizes security — which was not the focus of the tutorial.
 
-* 3hrs to Build and DEPLOY an Authenticated TO DO APP! PostGres + React + Node.js + Kinsta by **Code With Ania Kubow**
+2. **3hrs to Build and Deploy an Authenticated TO DO APP!** by *Code With Ania Kubow* – This tutorial demonstrated JWT-based authentication, but stored tokens in cookies accessible from React (i.e., not httpOnly). I used this resource for general structure inspiration but implemented secure cookie handling with `httpOnly` and `secure` flags to prevent client-side access — a key improvement in my version.
+
+3. **The Complete Full-Stack Web Development Bootcamp** by *Dr. Angela Yu* (The App Brewery) – This Udemy course helped me build a solid foundation in React. However, it focused on frontend-only projects and server-rendered apps using EJS. Integrating React with a custom backend and PostgreSQL database was a challenge I pursued independently beyond the scope of the course.
+
+This project reflects my initiative to go beyond tutorials by implementing secure authentication and building a fully functioning full-stack application from the ground up.
+
 
 
