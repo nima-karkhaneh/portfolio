@@ -49,6 +49,14 @@ function App() {
       fetchData()
   },[])
 
+    function updateItemInState (id, newDescription) {
+       setItems(prevItems =>
+           prevItems.map(item =>
+            item.id === id ? { ...item, description: newDescription } : item
+           )
+       )
+    }
+
 
     async function deleteItem(id) {
         try{
@@ -95,6 +103,7 @@ function App() {
                             text={item.description}
                             onDelete={() => deleteItem(item.id)}
                             item={item}
+                            onUpdate={updateItemInState}
                         />
                     })}
                 </ul>

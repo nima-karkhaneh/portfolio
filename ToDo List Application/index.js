@@ -35,7 +35,7 @@ db.connect();
 app.get("/todos", authorise, async (req, res) => {
     try{
         const userID = req.user.id
-        const items = await db.query("SELECT description, items.id FROM items JOIN users ON users.id = items.user_id WHERE user_id = $1;", [userID])
+        const items = await db.query("SELECT description, id FROM items WHERE user_id = $1;", [userID])
         res.json(items.rows)
     }
     catch(err){
@@ -59,15 +59,20 @@ app.post("/submit", authorise,async (req, res) => {
 
 
 // UPDATE AN ITEM
-app.put("/todos/:id", async (req, res) => {
+app.put("/todos/:id", authorise, async (req, res) => {
     try{
         const { description } = req.body
         const { id } = req.params
-        const selectedItem = await db.query("UPDATE items SET description = ($1) WHERE id = ($2)", [description, id]);
-        res.json("Item has been updated successfully!")
+        const userID = req.user.id
+        const selectedItem = await db.query("UPDATE items SET description = ($1) WHERE id = ($2) AND user_id = ($3) RETURNING *", [description, id,userID]);
+        if(selectedItem.rows.length === 0) {
+            return res.status(403).json("Unauthorised to update this item!")
+        }
+        res.json("Update successful!")
     }
     catch(err){
         console.error(err)
+        res.status(500).json("Server error");
     }
 })
 
