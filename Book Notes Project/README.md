@@ -250,11 +250,11 @@ I checked if the query result was empty and rendered an error message:
 
 ## Installation Guide
 ### Book Notes Project
-This project is located in the `Book Notes Project` directory of a larger repository called `Portfolio`. It requires a `.env` file and a PostgreSQL database to run.
+This project is located in the `Book Notes Project` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run.
 To install and use the project, please follow these steps:
 1. Clone the repository  
 ```bash
-git clone https://github.com/nima-karkhaneh/Portfolio.git
+git clone https://github.com/nima-karkhaneh/portfolio.git
 cd "Book Notes Project"
 
 ```

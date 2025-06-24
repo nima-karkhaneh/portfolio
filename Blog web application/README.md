@@ -114,13 +114,13 @@ Applied the CSS rule `white-space: pre-line` to a reusable `.post-text` class. T
 
 ## Installation
 
-This project is located in the `Blog web application` folder of a larger repository named `Portfolio`.
+This project is located in the `Blog web application` folder of a larger repository named `portfolio`.
 
 To run it locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/nima-karkhaneh/Portfolio.git
+   git clone https://github.com/nima-karkhaneh/portfolio.git
    cd "Blog web application"
    ```
 

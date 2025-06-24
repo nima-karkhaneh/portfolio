@@ -132,10 +132,10 @@ Ensure cookies are sent and received properly during cross-origin API calls.
 
 
 ## Installation Guide
-This project is located in the `ToDo List Application` directory of a larger repository called `Portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
+This project is located in the `ToDo List Application` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
 1. Clone the repository:  
 ```bash
-git clone https://github.com/nima-karkhaneh/Portfolio.git
+git clone https://github.com/nima-karkhaneh/portfolio.git
 cd "ToDo List Application"
 
 

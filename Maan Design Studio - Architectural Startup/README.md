@@ -100,12 +100,12 @@ Throughout the development of this architectural startup website, several challe
 ---
 
 ## Installation Guide
-This project is located in the `Maan Design Studio` directory of a larger repository called `Portfolio`. You can add can a `.env` file to the root of the project if you wish to see how the `nodemailer` package works. Otherwise, the application should run on `port 3000`. To run the application, please follow the following steps;
+This project is located in the `Maan Design Studio` directory of a larger repository called `portfolio`. You can add can a `.env` file to the root of the project if you wish to see how the `nodemailer` package works. Otherwise, the application should run on `port 3000`. To run the application, please follow the following steps;
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/nima-karkhaneh/Portfolio.git
+git clone https://github.com/nima-karkhaneh/portfolio.git
 cd "Maan Design Studio - Architectural Startup"
 
 ```
