@@ -107,7 +107,7 @@ To install and use the project, please follow the following steps:
 1. Clone the repository:
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
-cd "Weather application"
+cd weather-application
 
 ```
 2. Install the dependencies:  

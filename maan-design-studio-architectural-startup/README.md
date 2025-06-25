@@ -106,7 +106,7 @@ This project is located in the `Maan Design Studio` directory of a larger reposi
 
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
-cd "Maan Design Studio - Architectural Startup"
+cd maan-design-studio-architectural-startup
 
 ```
 

@@ -136,7 +136,7 @@ This project is located in the `ToDo List Application` directory of a larger rep
 1. Clone the repository:  
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
-cd "ToDo List Application"
+cd todo-list-application
 
 
 ```

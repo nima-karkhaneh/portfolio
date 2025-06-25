@@ -255,7 +255,7 @@ To install and use the project, please follow these steps:
 1. Clone the repository  
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
-cd "Book Notes Project"
+cd book-notes-project
 
 ```
 2. Install dependencies
