@@ -15,12 +15,12 @@ This project is a simple ToDo List application that allows users to securely log
 
 ## Screenshots
 <p align="center">
-  <img src="./client/src/assets/authpage-screenshot.png" alt="Home page featuring user authentication" width="600" />
+  <img src="client/public/authpage-screenshot.png" alt="Home page featuring user authentication" width="600" />
 </p>
 <p align="center"><em>Home page featuring user authentication</em></p>
 
 <p align="center">
-  <img src="./client/src/assets/todoitems-screenshot.png" alt="ToDo items" width="600" />
+  <img src="client/public/todoitems-screenshot.png" alt="ToDo items" width="600" />
 </p>
 <p align="center"><em>Example of ToDo items</em></p>
 
