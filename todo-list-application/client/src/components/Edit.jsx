@@ -35,7 +35,6 @@ function Edit({ item, onUpdate }) {
             const response = await axios.put(`${API_URL_PUT}${item.id}`,{description: editItem} ,{
                 withCredentials: true
             });
-            console.log(response.data)
             onUpdate(item.id,editItem)
         }
         catch(err){

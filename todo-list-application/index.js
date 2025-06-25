@@ -77,10 +77,21 @@ app.put("/todos/:id", authorise, async (req, res) => {
 })
 
 // DELETE AN ITEM
-app.delete("/todos/:id", async (req, res) => {
-    const { id } = req.params;
-    const deletedItem = await db.query("DELETE FROM items WHERE id = ($1)", [id]);
-    res.json("Item was deleted!")
+app.delete("/todos/:id", authorise, async (req, res) => {
+    try{
+        const { id } = req.params;
+        const userID = req.user.id
+        const deletedItem = await db.query("DELETE FROM items WHERE id = ($1) AND user_id = ($2) RETURNING *", [id, userID]);
+        if (deletedItem.rows.length === 0) {
+            return res.status(403).json("User is not authorised for this action!")
+        }
+        res.json("Item was deleted!")
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json("Server error!")
+    }
+
 })
 
 

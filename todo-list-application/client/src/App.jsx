@@ -61,7 +61,9 @@ function App() {
     async function deleteItem(id) {
         try{
             const API_URL_DELETE = import.meta.env.VITE_API_URL_DELETE;
-            await axios.delete(`${API_URL_DELETE}${id}`)
+            await axios.delete(`${API_URL_DELETE}${id}`, {
+                withCredentials: true
+            });
             setItems(items.filter(item => {
                 return item.id !== id
             }))
