@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken"
 import cookieParser from "cookie-parser"
 
 const app =  express()
-const PORT = 3000;
+const port = process.env.PORT || 3000;
 const saltRounds = 10;
 const corsOptions = {
     origin: "http://localhost:5173",
@@ -193,6 +193,6 @@ app.post("/signout", (req, res) => {
 
 
 
-app.listen(PORT, () => {
-    console.log(`server is listening on ${PORT}`)
+app.listen(port, () => {
+    console.log(`server is listening on ${port}`)
 })

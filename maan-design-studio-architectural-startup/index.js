@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 
 const app = express();
 env.config();
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
