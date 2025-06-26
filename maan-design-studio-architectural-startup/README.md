@@ -123,7 +123,7 @@ NODEMAILER_SERVICE="An email service you are using e.g. gmail"
 CLIENT_EMAIL="The email in which the body of the contact form will be sent to"
 NODEMAILER_USER="Your own email e.g. your gmail email"
 NODEMAILER_PASS="Your nodemailer password. If you are using gmail this is called the app password and can be obtained by gmail after your have turned on the two factor authentication and provided the relevant information"
-port="3000"
+
 ```
 
 4. Run the application:

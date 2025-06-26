@@ -192,7 +192,6 @@ DB_DATABASE="The name of your database (e.g., my_project_db)"
 DB_PASSWORD="Your PostgreSQL password"
 DB_PORT="5432"
 JWT_SECRET="Your own created JWT secret"
-PORT="3000"
 
 ```
 9. Run the backend API:
