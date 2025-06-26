@@ -33,13 +33,14 @@ db.connect();
 
 // GET ROUTE
 app.get("/todos", authorise, async (req, res) => {
+    const userID = req.user.id
     try{
-        const userID = req.user.id
         const items = await db.query("SELECT description, id FROM items WHERE user_id = $1;", [userID])
-        res.json(items.rows)
+        res.status(200).json(items.rows)
     }
     catch(err){
-        console.error(err.message)
+        console.error("Error fetching todos:", err.message)
+        res.status(500).json({ error: "Server error. Please try again later." })
     }
 })
 
@@ -47,126 +48,128 @@ app.get("/todos", authorise, async (req, res) => {
 app.post("/submit", authorise,async (req, res) => {
     const { description } = req.body
     const userID = req.user.id
+    if (!description || typeof description !== "string") {
+        return res.status(400).json({ error: "Invalid or missing description." })
+    }
     try{
         const addItem = await db.query("INSERT INTO items (description, user_id) VALUES ($1, $2) RETURNING *;", [description, userID])
-        res.json(addItem.rows[0])
+        res.status(201).json(addItem.rows[0])
     }
     catch(err){
-        console.error(err.message)
-    }
+        console.error("Error inserting todo item:", err.message)
+        res.status(500).json({ error: "Server error. Please try again later." })
 
+    }
 })
 
 
 // UPDATE AN ITEM
 app.put("/todos/:id", authorise, async (req, res) => {
+    const { description } = req.body
+    const { id } = req.params
+    const userID = req.user.id
+    if (!description || typeof description !== "string") {
+        return res.status(400).json({error: "Invalid or missing description."})
+    }
     try{
-        const { description } = req.body
-        const { id } = req.params
-        const userID = req.user.id
         const selectedItem = await db.query("UPDATE items SET description = ($1) WHERE id = ($2) AND user_id = ($3) RETURNING *", [description, id,userID]);
         if(selectedItem.rows.length === 0) {
-            return res.status(403).json("Unauthorised to update this item!")
+            return res.status(403).json({ error:"Unauthorised to update this item!" })
         }
-        res.json("Update successful!")
-    }
+        res.status(200).json({ message: "Todo updated successfully." })
+        }
     catch(err){
-        console.error(err)
-        res.status(500).json("Server error");
+        console.error("Error updating item:", err.message);
+        res.status(500).json({ error: "Server error. Please try again later." })
     }
 })
 
 // DELETE AN ITEM
 app.delete("/todos/:id", authorise, async (req, res) => {
+    const { id } = req.params;
+    const userID = req.user.id
     try{
-        const { id } = req.params;
-        const userID = req.user.id
         const deletedItem = await db.query("DELETE FROM items WHERE id = ($1) AND user_id = ($2) RETURNING *", [id, userID]);
         if (deletedItem.rows.length === 0) {
-            return res.status(403).json("User is not authorised for this action!")
+            return res.status(403).json({ error: "You are not authorized to delete this item." });
         }
-        res.json("Item was deleted!")
+        res.status(200).json({ message: "Todo was deleted successfully." })
     }
     catch (err) {
-        console.error(err);
-        res.status(500).json("Server error!")
+        console.error("Error deleting item:", err.message);
+        res.status(500).json({ error: "Server error. Please try again later." })
     }
-
 })
 
 
 
 // SIGN UP ROUTE
 app.post("/signup", async (req, res) => {
-    const {email, password} = req.body
-    try{
-        const checkUser = await db.query("SELECT * from users  WHERE email = $1", [email])
-        if (checkUser.rows.length > 0){
-            res.json({error: "User already exists, please log in!"})
-        }
-        else{
-            bcrypt.hash(password, saltRounds, async(err, hash) =>{
-                if (err) {
-                    console.error(err.message)
-                }
-                else{
-                    const result = await db.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",[email, hash])
-                    res.json({success: "User signed up successfully, please log in!"})
-                }
-            })
-        }
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
     }
-    catch(err){
-        console.log(err.message)
+    try {
+        const checkUser = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+        if (checkUser.rows.length > 0) {
+            return res.status(409).json({ error: "User already exists. Please log in." });
+        }
+        const hash = await bcrypt.hash(password, saltRounds);
+        await db.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, hash]);
+        res.status(201).json({ success: "User signed up successfully. Please log in." });
     }
-})
+    catch (err) {
+        console.error("Signup error:", err.message);
+        res.status(500).json({ error: "Server error. Please try again later." });
+    }
+});
+
 
 
 // LOGIN ROUTE
-app.post("/login", async(req, res) =>{
-    const {email, password} = req.body
-    try{
-        const user = await db.query("SELECT * FROM users WHERE email = $1" , [email])
-        if (user.rows.length === 0) {
-            res.json({error: "User not found, please sign up first!"})
-        } else {
-            const currentUser = user.rows[0]
-            const currentUserStoredPassword = user.rows[0].password
-            bcrypt.compare(password, currentUserStoredPassword, (err, result) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    if (result) {
-                        const token = jwt.sign( currentUser , process.env.JWT_SECRET, { expiresIn: "1hr" })
-                        res.cookie("authToken", token, {
-                            httpOnly: true,
-                            secure: true,
-                            sameSite: "none",
-                            maxAge: 60 * 60 * 1000,
-                        });
-                        res.status(200).send("Authentication successful!")
-                    } else {
-                        res.json({error: "Incorrect Password, please try again!"})
-                    }
-                }
-            })
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
+    }
+    try {
+        const userResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ error: "User not found, please sign up first!" });
         }
+        const currentUser = userResult.rows[0];
+        const isMatch = await bcrypt.compare(password, currentUser.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: "Incorrect Password, please try again!" });
+        }
+            const payload = { id: currentUser.id, email: currentUser.email };
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+            res.cookie("authToken", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                maxAge: 60 * 60 * 1000,
+            });
+            return res.status(200).json({ message: "Authentication successful." });
     }
-    catch(err){
-        console.log(err.message)
+    catch (err) {
+        console.error("Login error:", err.message);
+        return res.status(500).json({ error: "Server error. Please try again later." });
     }
-})
+});
+
 
 // VERIFY MIDDLEWARE AND ROUTE
 
     function authorise(req, res, next) {
         const token = req.cookies.authToken;
         if (!token) {
-            return res.status(403).json('No token found!');
+            return res.status(403).json({ error: "No token found." });
         }
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                return res.status(403).send('Invalid or expired token');
+                return res.status(403).json({ error: "Invalid or expired token." });
             }
             req.user = decoded;
             next()
