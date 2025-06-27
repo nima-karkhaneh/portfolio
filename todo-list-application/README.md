@@ -209,7 +209,7 @@ JWT_SECRET="Your own created JWT secret"
 
 This project follows a Git-based feature branch workflow to simulate professional team collaboration:
 
-- New features and refactors are developed in dedicated branches (e.g., `edit-todo-noreload`, `backend-refactor-todoapp`).
+- New features and refactors are developed in dedicated branches (e.g., `edit-todo-noreload`, `backend-refactor-todoapp`, `frontend-error-handling`).
 - Changes are committed locally and pushed to the remote repository using `git push origin <branch-name>`.
 - Pull Requests are created on GitHub from these branches and reviewed before merging into `main`.
 - This workflow ensures a stable `main` branch, clean commit history, and demonstrates industry-standard Git practices — even in solo development.
