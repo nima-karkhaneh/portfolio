@@ -51,6 +51,21 @@ li{
   gap:20px;
   height: 100vh;
 }
+.message-container {
+  min-height: 2.5rem;
+  margin-top: 1rem;
+}
+
+.error-message {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.success-message {
+  color: #198754;
+  font-weight: bold;
+}
+
 .auth-options{
   display: flex;
   gap: 10px;
