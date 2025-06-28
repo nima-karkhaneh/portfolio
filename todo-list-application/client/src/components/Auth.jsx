@@ -18,37 +18,63 @@ function Auth(props) {
         setIsLoggedIn(status)
     }
 
-    async function handleSubmit(e, endpoint) {
-        e.preventDefault()
-        if (!isLoggedIn && password !== confirmPassword) {
-            setErr("Confirmation did not match. Please try again!")
-        } else {
-            try {
-                const VITE_API_URL = import.meta.env.VITE_API_URL
-                const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
-                    email: email,
-                    password: password
-                }, {
-                    withCredentials: true
-                })
-                if (response.data.error) {
-                    const { error } = response.data;
-                    setSuccess("")
-                    setErr(error)
-                }  else if (response.data.success) {
-                    setErr("")
-                    const { success } = response.data
-                    setSuccess(success)
-                }  else {
-                    window.location = "/"
-                }
-            }
-            catch(err) {
-                console.error(err)
-            }
-        }
+    function clearError() {
+        setErr("")
     }
 
+    async function handleSubmit(e, endpoint) {
+        e.preventDefault()
+        const trimmedEmail = email.trim();
+        const trimmedPassword = password.trim();
+        const trimmedConfirmPassword = confirmPassword.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Check for empty fields
+        if (!trimmedEmail || !trimmedPassword || (!isLoggedIn && !trimmedConfirmPassword)) {
+            setErr("Email, password, and confirm password are required.");
+            return;
+        }
+
+        // Check email format
+        if (!emailRegex.test(trimmedEmail)) {
+            setErr("Please enter a valid email address.");
+            return;
+        }
+        // Check for the confirmation password
+        if (!isLoggedIn && trimmedPassword !== trimmedConfirmPassword) {
+            setErr("Confirmation did not match. Please try again!")
+            return;
+        }
+        try {
+            const VITE_API_URL = import.meta.env.VITE_API_URL
+            const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
+                email: trimmedEmail,
+                password: trimmedPassword
+            }, {
+                withCredentials: true
+            })
+            if (response.data.success) {
+                setErr("")
+                const { success } = response.data
+                setSuccess(success)
+            }  else {
+                window.location = "/"
+            }
+        }
+        catch (err) {
+            // Axios error responses from backend come here
+            if (err.response && err.response.data && err.response.data.error) {
+                setErr(err.response.data.error); // Display backend-specific error message
+            } else if (err.message) {
+                // Network errors or unexpected errors
+                setErr(err.message);
+            } else {
+                setErr("Something went wrong. Please try again later.");
+            }
+            setSuccess("");
+        }
+
+    }
 
     return(
         <div className="auth-container">
@@ -59,18 +85,21 @@ function Auth(props) {
                     type="email"
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
+                    onFocus={clearError}
                 />
                 <input
                     className="form-control"
                     type="password"
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
+                    onFocus={clearError}
                 />
                 {!isLoggedIn && <input
                         className="form-control"
                         type="password"
                         placeholder="Confirm your password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        onFocus={clearError}
                 />}
                 <button
                     className="btn btn-primary"
@@ -78,8 +107,10 @@ function Auth(props) {
                     onClick={(e) => handleSubmit(e, isLoggedIn? "login" : "signup")}
                 >SUBMIT</button>
             </form>
-            {err && <p>{err}</p>}
-            {success && <p>{success}</p>}
+            <div className="message-container">
+                {err && <p className="error-message">{err}</p>}
+                {success && <p className="success-message">{success}</p>}
+            </div>
             <div className="auth-options">
                 <button className="btn btn-light" onClick={() => viewLogin(false)}>Sign Up</button>
                 <button className="btn btn-success" onClick={() => viewLogin(true) }>Login</button>
