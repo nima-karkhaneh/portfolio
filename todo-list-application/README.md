@@ -209,26 +209,20 @@ JWT_SECRET="Your own created JWT secret"
 
 This project follows a Git-based feature branch workflow to simulate professional team collaboration and maintain a clean, stable codebase—even as a solo developer:
 
-<<<<<<< Updated upstream
-- New features and refactors are developed in dedicated branches (e.g., `edit-todo-noreload`, `backend-refactor-todoapp`, `frontend-error-handling`).
-- Changes are committed locally and pushed to the remote repository using `git push origin <branch-name>`.
-- Pull Requests are created on GitHub from these branches and reviewed before merging into `main`.
-- This workflow ensures a stable `main` branch, clean commit history, and demonstrates industry-standard Git practices — even in solo development.
-=======
-- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `frontend-error-handling`).
+- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `frontend-error-handling`, `edit-todo-noreload`, `backend-refactor-todoapp`).
 - Changes are committed locally with meaningful messages and pushed to the remote repository using `git push origin <branch-name>`.
 - Pull Requests (PRs) are created on GitHub from these branches to merge changes into the `main` branch.
 - As part of the PR process:
-    - The author provides a detailed description of the changes in Markdown format, highlighting key updates and areas for improvement.
-    - Code reviews are performed through inline comments and general feedback on the PR.
-    - Multiple inline comments can be grouped as a single review submission.
-    - A role-playing supervisor review is simulated to provide constructive feedback and approve the PR, demonstrating collaboration skills.
+  - The author provides a detailed description of the changes in Markdown format, highlighting key updates and areas for improvement.
+  - Code reviews are performed through inline comments and general feedback on the PR.
+  - Multiple inline comments can be grouped as a single review submission.
+  - A role-playing supervisor review is simulated to provide constructive feedback and approve the PR, demonstrating collaboration skills.
 - Once approved, the PR is merged into the `main` branch on GitHub with a descriptive merge commit.
 - After merging remotely, the local `main` branch is kept up to date by running `git pull`.
 - Feature branches are preserved to maintain history, but can be deleted after merging if preferred.
->>>>>>> Stashed changes
 
 This workflow ensures a stable `main` branch, clean commit history, and showcases industry-standard Git practices and teamwork—key skills for professional development environments.
+
 
 ## Credit
 
