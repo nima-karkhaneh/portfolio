@@ -1,29 +1,30 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import axios from "axios";
 
+function Auth() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [err, setErr] = useState("");
+    const [success, setSuccess] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-function Auth(props) {
-    const[isLoggedIn, setIsLoggedIn] = useState(false)
-    const[email, setEmail] = useState("")
-    const[password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [err, setErr] = useState("")
-    const [success, setSuccess] = useState("")
-
-
-    function viewLogin(status) {
-        setErr("")
-        setSuccess("")
-        setIsLoggedIn(status)
+    function clearMessages() {
+        setErr("");
+        setSuccess("");
     }
 
-    function clearError() {
-        setErr("")
+    function viewLogin(status) {
+        clearMessages();
+        setIsLoggedIn(status);
     }
 
     async function handleSubmit(e, endpoint) {
-        e.preventDefault()
+        e.preventDefault();
+
+        if (isSubmitting) return; // Prevent multiple submits just in case
+
         const trimmedEmail = email.trim();
         const trimmedPassword = password.trim();
         const trimmedConfirmPassword = confirmPassword.trim();
@@ -40,85 +41,109 @@ function Auth(props) {
             setErr("Please enter a valid email address.");
             return;
         }
+
         // Check for the confirmation password
         if (!isLoggedIn && trimmedPassword !== trimmedConfirmPassword) {
-            setErr("Confirmation did not match. Please try again!")
+            setErr("Confirmation did not match. Please try again!");
             return;
         }
+
         try {
-            const VITE_API_URL = import.meta.env.VITE_API_URL
-            const response = await axios.post(`${VITE_API_URL}/${endpoint}`,{
-                email: trimmedEmail,
-                password: trimmedPassword
-            }, {
-                withCredentials: true
-            })
+            setIsSubmitting(true);
+            const VITE_API_URL = import.meta.env.VITE_API_URL;
+            const response = await axios.post(
+                `${VITE_API_URL}/${endpoint}`,
+                {
+                    email: trimmedEmail,
+                    password: trimmedPassword,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
             if (response.data.success) {
-                setErr("")
-                const { success } = response.data
-                setSuccess(success)
-            }  else {
-                window.location = "/"
+                setErr("");
+                setSuccess(response.data.success);
+            } else {
+                window.location = "/";
             }
-        }
-        catch (err) {
-            // Axios error responses from backend come here
+        } catch (err) {
             if (err.response && err.response.data && err.response.data.error) {
-                setErr(err.response.data.error); // Display backend-specific error message
+                setErr(err.response.data.error);
             } else if (err.message) {
-                // Network errors or unexpected errors
                 setErr(err.message);
             } else {
                 setErr("Something went wrong. Please try again later.");
             }
             setSuccess("");
+        } finally {
+            setIsSubmitting(false);
         }
-
     }
 
-    return(
+    return (
         <div className="auth-container">
-            <h2>{isLoggedIn? "Please log in": "Please sign up"}</h2>
-            <form className="login-form">
+            <h2>{isLoggedIn ? "Please log in" : "Please sign up"}</h2>
+            <form
+                className="login-form"
+                onSubmit={(e) => handleSubmit(e, isLoggedIn ? "login" : "signup")}
+            >
                 <input
                     className="form-control"
                     type="email"
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}
-                    onFocus={clearError}
+                    onFocus={clearMessages}
+                    value={email}
                 />
                 <input
                     className="form-control"
                     type="password"
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
-                    onFocus={clearError}
+                    onFocus={clearMessages}
+                    value={password}
                 />
-                {!isLoggedIn && <input
+                {!isLoggedIn && (
+                    <input
                         className="form-control"
                         type="password"
                         placeholder="Confirm your password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        onFocus={clearError}
-                />}
-                <button
-                    className="btn btn-primary"
-                    type="submit"
-                    onClick={(e) => handleSubmit(e, isLoggedIn? "login" : "signup")}
-                >SUBMIT</button>
+                        onFocus={clearMessages}
+                        value={confirmPassword}
+                    />
+                )}
+                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <>
+              <span
+                  className="spinner-border spinner-border-sm"
+                  style={{ borderWidth: "2px" }}
+                  role="status"
+                  aria-hidden="true"
+              ></span>
+                            <span className="visually-hidden">Loading...</span>
+                        </>
+                    ) : (
+                        "SUBMIT"
+                    )}
+                </button>
             </form>
             <div className="message-container">
                 {err && <p className="error-message">{err}</p>}
                 {success && <p className="success-message">{success}</p>}
             </div>
             <div className="auth-options">
-                <button className="btn btn-light" onClick={() => viewLogin(false)}>Sign Up</button>
-                <button className="btn btn-success" onClick={() => viewLogin(true) }>Login</button>
-
+                <button className="btn btn-light" onClick={() => viewLogin(false)}>
+                    Sign Up
+                </button>
+                <button className="btn btn-success" onClick={() => viewLogin(true)}>
+                    Login
+                </button>
             </div>
-
         </div>
-    )
+    );
 }
 
-export default Auth
+export default Auth;
