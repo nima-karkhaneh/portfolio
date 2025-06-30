@@ -83,7 +83,7 @@ function Auth() {
 
     return (
         <div className="auth-container">
-            <h2>{isLoggedIn ? "Please log in" : "Please sign up"}</h2>
+            <h2>{isLoggedIn ? "Please Log In" : "Please Sign Up"}</h2>
             <form
                 className="login-form"
                 onSubmit={(e) => handleSubmit(e, isLoggedIn ? "login" : "signup")}
@@ -104,7 +104,7 @@ function Auth() {
                     onFocus={clearMessages}
                     value={password}
                 />
-                {!isLoggedIn && (
+                {!isLoggedIn ? (
                     <input
                         className="form-control"
                         type="password"
@@ -113,6 +113,8 @@ function Auth() {
                         onFocus={clearMessages}
                         value={confirmPassword}
                     />
+                ) : (
+                    <div style={{ height: "38px" }}></div> // matches input height
                 )}
                 <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? (
@@ -129,18 +131,26 @@ function Auth() {
                         "SUBMIT"
                     )}
                 </button>
+                <div className="auth-options">
+                    <button
+                        type="button"
+                        className={`btn ${!isLoggedIn ? "btn-success" : "btn-light"}`}
+                        onClick={() => viewLogin(false)}
+                    >
+                        Sign Up
+                    </button>
+                    <button
+                        type="button"
+                        className={`btn ${isLoggedIn ? "btn-success" : "btn-light"}`}
+                        onClick={() => viewLogin(true)}
+                    >
+                        Login
+                    </button>
+                </div>
             </form>
             <div className="message-container">
                 {err && <p className="error-message">{err}</p>}
                 {success && <p className="success-message">{success}</p>}
-            </div>
-            <div className="auth-options">
-                <button className="btn btn-light" onClick={() => viewLogin(false)}>
-                    Sign Up
-                </button>
-                <button className="btn btn-success" onClick={() => viewLogin(true)}>
-                    Login
-                </button>
             </div>
         </div>
     );
