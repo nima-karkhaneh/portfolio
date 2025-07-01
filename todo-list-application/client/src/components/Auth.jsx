@@ -84,70 +84,72 @@ function Auth() {
     return (
         <div className="auth-container">
             <h2>{isLoggedIn ? "Please Log In" : "Please Sign Up"}</h2>
-            <form
-                className="login-form"
-                onSubmit={(e) => handleSubmit(e, isLoggedIn ? "login" : "signup")}
-            >
-                <input
-                    className="form-control"
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={clearMessages}
-                    value={email}
-                />
-                <input
-                    className="form-control"
-                    type="password"
-                    placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    onFocus={clearMessages}
-                    value={password}
-                />
-                {!isLoggedIn ? (
+            <div className="container my-5 mt-0" style={{ maxWidth: "400px" }}>
+                <form
+                    className="login-form"
+                    onSubmit={(e) => handleSubmit(e, isLoggedIn ? "login" : "signup")}
+                >
+                    <input
+                        className="form-control"
+                        type="email"
+                        placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        onFocus={clearMessages}
+                        value={email}
+                    />
                     <input
                         className="form-control"
                         type="password"
-                        placeholder="Confirm your password"
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Password"
+                        onChange={(e) => setPassword(e.target.value)}
                         onFocus={clearMessages}
-                        value={confirmPassword}
+                        value={password}
                     />
-                ) : (
-                    <div style={{ height: "38px" }}></div> // matches input height
-                )}
-                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                        <>
+                    {!isLoggedIn ? (
+                        <input
+                            className="form-control"
+                            type="password"
+                            placeholder="Confirm your password"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onFocus={clearMessages}
+                            value={confirmPassword}
+                        />
+                    ) : (
+                        <div style={{ height: "38px" }}></div> // matches input height
+                    )}
+                    <button className="btn btn-primary  " type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                            <>
               <span
                   className="spinner-border spinner-border-sm"
                   style={{ borderWidth: "2px" }}
                   role="status"
                   aria-hidden="true"
               ></span>
-                            <span className="visually-hidden">Loading...</span>
-                        </>
-                    ) : (
-                        "SUBMIT"
-                    )}
-                </button>
-                <div className="auth-options">
-                    <button
-                        type="button"
-                        className={`btn ${!isLoggedIn ? "btn-success" : "btn-light"}`}
-                        onClick={() => viewLogin(false)}
-                    >
-                        Sign Up
+                                <span className="visually-hidden">Loading...</span>
+                            </>
+                        ) : (
+                            "SUBMIT"
+                        )}
                     </button>
-                    <button
-                        type="button"
-                        className={`btn ${isLoggedIn ? "btn-success" : "btn-light"}`}
-                        onClick={() => viewLogin(true)}
-                    >
-                        Login
-                    </button>
-                </div>
-            </form>
+                    <div className="auth-options">
+                        <button
+                            type="button"
+                            className={`btn ${!isLoggedIn ? "btn-success" : "btn-light"}`}
+                            onClick={() => viewLogin(false)}
+                        >
+                            Sign Up
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn ${isLoggedIn ? "btn-success" : "btn-light"}`}
+                            onClick={() => viewLogin(true)}
+                        >
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
             <div className="message-container">
                 {err && <p className="error-message">{err}</p>}
                 {success && <p className="success-message">{success}</p>}

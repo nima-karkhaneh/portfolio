@@ -1,17 +1,17 @@
-*{
+* {
   padding: 0;
   margin:0;
   border: 0;
   box-sizing: border-box;
 }
-form{
+form {
   display: flex;
   gap: 10px;
 }
-li{
+li {
   list-style: none;
 }
-.list-cont{
+.list-cont {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,32 +19,33 @@ li{
   border-bottom: 1px solid #e2e2e2;
   padding: 0;
 }
-.btn-cont{
+.btn-cont {
   display: flex;
   align-items: center;
   gap: 10px;
   padding-bottom: 10px;
 }
-.modal-header, .modal-footer{
+.modal-header, .modal-footer {
   border: none
 }
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 40px 0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.login-form{
+.login-form {
   display: flex;
   flex-direction: column;
-  width: 300px;
   min-height: 280px;
   background-color: #eeeeee;
   padding: 2rem;
   border: 1px solid #d1d1d1;
   border-radius: 0.5rem;
 }
-.auth-container{
+.auth-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -65,9 +66,22 @@ li{
   font-weight: bold;
 }
 
-.auth-options{
+.auth-options {
   display: flex;
   gap: 10px;
   margin-top: 20px;
   justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px;
 }
+
+@media (max-width: 576px) {
+  .auth-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  .auth-options button {
+    width: 50%;
+  }
+}
+
