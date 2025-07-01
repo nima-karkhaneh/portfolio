@@ -7,7 +7,7 @@ This project is a simple ToDo List application that allows users to securely log
 - [Overview](#overview)
 - [Screenshots](#screenshots)
 - [Features](#features)
-- [Technologies Used](#technologies-used)
+- [Technologies Used](#technologies-used) 
 - [Dependencies](#dependencies)
 - [Challenges and Solutions](#challenges-and-solutions)
 - [Installation Guide](#installation-guide)
@@ -212,7 +212,7 @@ JWT_SECRET="Your own created JWT secret"
 
 This project follows a Git-based feature branch workflow to simulate professional team collaboration and maintain a clean, stable codebase—even as a solo developer:
 
-- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `frontend-error-handling`, `edit-todo-noreload`, `backend-refactor-todoapp`).
+- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `todoapp/frontend-error-handling-refinement`, `todoapp/responsive-design-improvements`, `todoapp/env-refacotr`).
 - Changes are committed locally with meaningful messages and pushed to the remote repository using `git push origin <branch-name>`.
 - Pull Requests (PRs) are created on GitHub from these branches to merge changes into the `main` branch.
 - As part of the PR process:
