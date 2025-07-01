@@ -149,18 +149,21 @@ cd todo-list-application
 
 `npm install`
 
-4. Create a `.env` file in the client directory and fill it out with the following information;
+4. Create a `.env` file in the `client` directory and fill it out with the following values:
+
 
 ```
-VITE_API_URL_POST=http://localhost:3000/submit
-VITE_API_URL_GET=http://localhost:3000/todos/
-VITE_API_URL_DELETE=http://localhost:3000/todos/
-VITE_API_URL_PUT=http://localhost:3000/todos/
 VITE_API_URL=http://localhost:3000
-VITE_API_URL_VERIFY=http://localhost:3000/verify
-VITE_API_URL_SIGNOUT=http://localhost:3000/signout
-
+VITE_API_PATH_TODOS=/todos/
+VITE_API_PATH_SUBMIT=/submit
+VITE_API_PATH_VERIFY=/verify
+VITE_API_PATH_SIGNOUT=/signout
 ```
+
+- `VITE_API_URL` is the base URL of your backend (update this if deploying).
+- The other values are relative API paths that are combined in the frontend code to build complete URLs.
+- This setup allows you to easily switch environments (e.g., production vs. local) without changing your codebase.
+
 5. Change directory to the root directory of the application:
 
 `cd ../`
