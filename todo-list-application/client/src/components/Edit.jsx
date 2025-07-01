@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import {TODOS_URL} from "../api/endpoints.js";
 
 
 function Edit({ item, onUpdate }) {
@@ -31,8 +32,7 @@ function Edit({ item, onUpdate }) {
 
     async function updateItem(){
         try{
-            const API_URL_PUT=import.meta.env.VITE_API_URL_PUT
-            const response = await axios.put(`${API_URL_PUT}${item.id}`,{description: editItem} ,{
+            const response = await axios.put(`${TODOS_URL}${item.id}`,{description: editItem} ,{
                 withCredentials: true
             });
             onUpdate(item.id,editItem)
