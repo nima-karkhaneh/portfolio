@@ -4,6 +4,8 @@ import Input from "./components/Input.jsx"
 import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
+import { TODOS_URL, VERIFY_URL, SIGNOUT_URL } from "./api/endpoints";
+
 
 
 
@@ -15,8 +17,7 @@ function App() {
 
     async function manageAuth() {
             try{
-                const VITE_API_URL_VERIFY = import.meta.env.VITE_API_URL_VERIFY
-                const response = await axios.get(VITE_API_URL_VERIFY, {
+                const response = await axios.get(VERIFY_URL, {
                     withCredentials: true
                 })
                 response.data && setIsAuthenticated(true)
@@ -34,8 +35,7 @@ function App() {
 
     async function fetchData(){
         try{
-            const API_URL_GET = import.meta.env.VITE_API_URL_GET
-            const response = await axios.get(`${API_URL_GET}`, {
+            const response = await axios.get(`${TODOS_URL}`, {
                 withCredentials: true
             })
             const data = response.data
@@ -60,8 +60,7 @@ function App() {
 
     async function deleteItem(id) {
         try{
-            const API_URL_DELETE = import.meta.env.VITE_API_URL_DELETE;
-            await axios.delete(`${API_URL_DELETE}${id}`, {
+            await axios.delete(`${TODOS_URL}${id}`, {
                 withCredentials: true
             });
             setItems(items.filter(item => {
@@ -76,8 +75,7 @@ function App() {
 
     async function signOut() {
         try{
-            const VITE_API_URL_SIGNOUT = import.meta.env.VITE_API_URL_SIGNOUT
-            const response = await axios.post(VITE_API_URL_SIGNOUT, {
+            const response = await axios.post(SIGNOUT_URL, {
             }, {
                 withCredentials: true
             })

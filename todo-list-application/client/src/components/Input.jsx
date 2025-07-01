@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import {SUBMIT_URL} from "../api/endpoints.js";
 
 
 
@@ -14,8 +15,7 @@ function Input(props) {
         e.preventDefault()
         if (inputText) {
             try{
-                const API_URL_POST = import.meta.env.VITE_API_URL_POST
-                await axios.post(API_URL_POST, {
+                await axios.post(SUBMIT_URL, {
                     description: inputText,
                 }, {
                     withCredentials: true
