@@ -20,12 +20,19 @@ function App() {
                 setEmail(response.data.email);
             }
         } catch (err) {
-            console.error("Auth check failed:", err?.response?.data?.error || err.message);
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                console.error("Auth check failed:", backendError);
+            } else {
+                console.error("Auth check error:", err?.message);
+            }
             setIsAuthenticated(false);
-        } finally {
+        }
+        finally {
             setAuthChecked(true);
         }
     }
+
 
     useEffect(() => {
         manageAuth();
@@ -36,9 +43,13 @@ function App() {
             const response = await axios.get(TODOS_URL, { withCredentials: true });
             setItems(response.data);
         } catch (err) {
-            console.log(err)
-            console.error("Failed to fetch todos:", err?.response?.data?.error || err.message);
-            alert(err?.response?.data?.error || "Could not load todos.");
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                alert(backendError);
+            } else {
+                console.error("Fetch todos failed:", err?.message);
+                alert("Could not load your todos. Please try again.");
+            }
         }
     }
 
@@ -61,8 +72,13 @@ function App() {
             await axios.delete(`${TODOS_URL}${id}`, { withCredentials: true });
             setItems(prev => prev.filter(item => item.id !== id));
         } catch (err) {
-            console.error("Delete failed:", err?.response?.data?.error || err.message);
-            alert(err?.response?.data?.error || "Unable to delete item.");
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                alert(backendError);
+            } else {
+                console.error("Delete failed:", err?.message);
+                alert("Could not delete the item.");
+            }
         }
     }
 
@@ -71,8 +87,13 @@ function App() {
             await axios.post(SIGNOUT_URL, {}, { withCredentials: true });
             window.location = "/";
         } catch (err) {
-            console.error("Signout error:", err?.response?.data?.error || err.message);
-            alert("Could not sign out. Try again.");
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                alert(backendError);
+            } else {
+                console.error("Sign out failed:", err?.message);
+                alert("Could not sign out. Please try again.");
+            }
         }
     }
 
@@ -88,17 +109,22 @@ function App() {
                         signOut={signOut}
                         email={email}
                     />
-                    <ul className="container mt-0">
-                        {items.map(item => (
-                            <ListItems
-                                key={item.id}
-                                text={item.description}
-                                onDelete={() => deleteItem(item.id)}
-                                item={item}
-                                onUpdate={updateItemInState}
-                            />
-                        ))}
-                    </ul>
+                    {items.length === 0 ? (
+                        <p className="text-center text-muted mt-5">You don't have any todo items yet.</p>
+                    ) : (
+                        <ul className="container mt-0">
+                            {items.map(item => (
+                                <ListItems
+                                    key={item.id}
+                                    text={item.description}
+                                    onDelete={() => deleteItem(item.id)}
+                                    item={item}
+                                    onUpdate={updateItemInState}
+                                />
+                            ))}
+                        </ul>
+                    )}
+
                 </div>}
         </>
     );

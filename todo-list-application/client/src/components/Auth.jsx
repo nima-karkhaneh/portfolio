@@ -52,18 +52,28 @@ function Auth() {
                 { email: trimmedEmail, password: trimmedPassword },
                 { withCredentials: true }
             );
-
             if (response.data.success) {
                 setSuccess(response.data.success);
                 setErr("");
+                if (!isLoggedIn) {
+                    setEmail("");
+                    setPassword("");
+                    setConfirmPassword("");
+                }
             } else {
                 window.location = "/";
             }
         } catch (err) {
-            const errorMsg = err?.response?.data?.error || err.message || "Something went wrong. Please try again.";
-            setErr(errorMsg);
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                setErr(backendError);
+            } else {
+                console.error("Auth error:", err?.message);
+                setErr("Something went wrong. Please try again.");
+            }
             setSuccess("");
-        } finally {
+        }
+        finally {
             setIsSubmitting(false);
         }
     }
