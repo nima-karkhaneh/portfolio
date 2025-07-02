@@ -29,19 +29,26 @@ function Edit({ item, onUpdate }) {
         const { value } = e.target
         setEditItem(value)
     }
-
-    async function updateItem(){
-        try{
-            const response = await axios.put(`${TODOS_URL}${item.id}`,{description: editItem} ,{
+    async function updateItem() {
+        try {
+            const response = await axios.put(`${TODOS_URL}${item.id}`, {
+                description: editItem
+            }, {
                 withCredentials: true
             });
-            onUpdate(item.id,editItem)
-        }
-        catch(err){
-            console.log(err.message)
+            onUpdate(item.id, editItem);
+        } catch (err) {
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                alert(backendError);
+            } else {
+                console.error("Update failed:", err?.message); // for debugging
+                alert("Something went wrong while updating.");
+            }
         }
 
     }
+
     return(
         <>
             <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target={`#id${item.id}`}>

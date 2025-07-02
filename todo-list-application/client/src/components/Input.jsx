@@ -11,26 +11,30 @@ function Input(props) {
         setInputText(value)
     }
 
-    async function addItem(e) {
-        e.preventDefault()
-        if (inputText) {
-            try{
-                await axios.post(SUBMIT_URL, {
-                    description: inputText,
-                }, {
-                    withCredentials: true
-                });
-                {props.getData()}
-                setInputText("")
-            }
-            catch(err){
-                console.log(err)
+async function addItem(e) {
+    e.preventDefault();
+    if (inputText.trim()) {
+        try {
+            await axios.post(SUBMIT_URL, {
+                description: inputText.trim(),
+            }, {
+                withCredentials: true
+            });
+            props.getData();
+            setInputText("");
+        } catch (err) {
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                alert(backendError);
+            } else {
+                console.error("Add item error:", err?.message);
+                alert("Could not add your todo item. Please try again.");
             }
         }
-        else{
-            alert("Please add your Todo Item!")
-        }
+    } else {
+        alert("Please add your Todo Item!");
     }
+}
 
     return(
         <>

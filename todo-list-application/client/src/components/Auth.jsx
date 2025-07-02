@@ -22,27 +22,23 @@ function Auth() {
 
     async function handleSubmit(e, endpoint) {
         e.preventDefault();
-
-        if (isSubmitting) return; // Prevent multiple submits just in case
+        if (isSubmitting) return;
 
         const trimmedEmail = email.trim();
         const trimmedPassword = password.trim();
         const trimmedConfirmPassword = confirmPassword.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        // Check for empty fields
         if (!trimmedEmail || !trimmedPassword || (!isLoggedIn && !trimmedConfirmPassword)) {
             setErr("Email, password, and confirm password are required.");
             return;
         }
 
-        // Check email format
         if (!emailRegex.test(trimmedEmail)) {
             setErr("Please enter a valid email address.");
             return;
         }
 
-        // Check for the confirmation password
         if (!isLoggedIn && trimmedPassword !== trimmedConfirmPassword) {
             setErr("Confirmation did not match. Please try again!");
             return;
@@ -53,30 +49,31 @@ function Auth() {
             const VITE_API_URL = import.meta.env.VITE_API_URL;
             const response = await axios.post(
                 `${VITE_API_URL}/${endpoint}`,
-                {
-                    email: trimmedEmail,
-                    password: trimmedPassword,
-                },
-                {
-                    withCredentials: true,
-                }
+                { email: trimmedEmail, password: trimmedPassword },
+                { withCredentials: true }
             );
             if (response.data.success) {
-                setErr("");
                 setSuccess(response.data.success);
+                setErr("");
+                if (!isLoggedIn) {
+                    setEmail("");
+                    setPassword("");
+                    setConfirmPassword("");
+                }
             } else {
                 window.location = "/";
             }
         } catch (err) {
-            if (err.response && err.response.data && err.response.data.error) {
-                setErr(err.response.data.error);
-            } else if (err.message) {
-                setErr(err.message);
+            const backendError = err?.response?.data?.error;
+            if (backendError) {
+                setErr(backendError);
             } else {
-                setErr("Something went wrong. Please try again later.");
+                console.error("Auth error:", err?.message);
+                setErr("Something went wrong. Please try again.");
             }
             setSuccess("");
-        } finally {
+        }
+        finally {
             setIsSubmitting(false);
         }
     }
@@ -115,17 +112,17 @@ function Auth() {
                             value={confirmPassword}
                         />
                     ) : (
-                        <div style={{ height: "38px" }}></div> // matches input height
+                        <div style={{ height: "38px" }}></div>
                     )}
-                    <button className="btn btn-primary  " type="submit" disabled={isSubmitting}>
+                    <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? (
                             <>
-              <span
-                  className="spinner-border spinner-border-sm"
-                  style={{ borderWidth: "2px" }}
-                  role="status"
-                  aria-hidden="true"
-              ></span>
+                                <span
+                                    className="spinner-border spinner-border-sm"
+                                    style={{ borderWidth: "2px" }}
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
                                 <span className="visually-hidden">Loading...</span>
                             </>
                         ) : (
