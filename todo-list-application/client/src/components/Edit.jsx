@@ -31,12 +31,13 @@ function Edit({ item, onUpdate }) {
     }
     async function updateItem() {
         try {
+            const trimmedDescription = editItem.trim();
             const response = await axios.put(`${TODOS_URL}${item.id}`, {
-                description: editItem
+                description: trimmedDescription
             }, {
                 withCredentials: true
             });
-            onUpdate(item.id, editItem);
+            onUpdate(item.id, trimmedDescription);
         } catch (err) {
             const backendError = err?.response?.data?.error;
             if (backendError) {
