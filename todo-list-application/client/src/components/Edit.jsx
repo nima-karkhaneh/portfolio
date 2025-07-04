@@ -80,9 +80,10 @@ function Edit({ item, onUpdate }) {
                                 onFocus={() => setEditItem(item.description)}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                        e.preventDefault(); // prevents accidental form submission or newline
+                                        e.preventDefault();
                                         updateItem();
                                         document.getElementById(`close-${item.id}`)?.click(); // closes modal
+                                        document.activeElement?.blur();
                                     }
                                 }}
                                 value={editItem}
