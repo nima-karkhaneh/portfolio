@@ -31,13 +31,12 @@ function Edit({ item, onUpdate }) {
     }
     async function updateItem() {
         try {
-            const trimmedDescription = editItem.trim();
             const response = await axios.put(`${TODOS_URL}${item.id}`, {
-                description: trimmedDescription
+                description: editItem
             }, {
                 withCredentials: true
             });
-            onUpdate(item.id, trimmedDescription);
+            onUpdate(item.id, editItem);
         } catch (err) {
             const backendError = err?.response?.data?.error;
             if (backendError) {
@@ -81,9 +80,10 @@ function Edit({ item, onUpdate }) {
                                 onFocus={() => setEditItem(item.description)}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                        e.preventDefault(); // prevents accidental form submission or newline
+                                        e.preventDefault();
                                         updateItem();
                                         document.getElementById(`close-${item.id}`)?.click(); // closes modal
+                                        document.activeElement?.blur();
                                     }
                                 }}
                                 value={editItem}
