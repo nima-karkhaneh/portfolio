@@ -213,7 +213,8 @@ JWT_SECRET="Your own created JWT secret"
 This project follows a Git-based feature branch workflow to simulate professional team collaboration and maintain a clean, stable codebase—even as a solo developer:
 
 - New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `todoapp/frontend-error-handling-refinement`, `todoapp/responsive-design-improvements`, `todoapp/env-refacotr`).
-- Changes are committed locally with meaningful messages and pushed to the remote repository using `git push origin <branch-name>`.
+- Changes are committed locally with meaningful messages and pushed to the remote repository using `git push origin <branch-name>`.  
+- In ` todoapp/backend-validation-ui-tweak` branch, I practiced `git rebase -i` to clean up my commit history before pushing. This included rewording one of the commits to ensure a professional, readable commit log. The rebase was done prior to merging the branch into `main`, following industry-standard Git hygiene practices.
 - Pull Requests (PRs) are created on GitHub from these branches to merge changes into the `main` branch.
 - As part of the PR process:
   - The author provides a detailed description of the changes in Markdown format, highlighting key updates and areas for improvement.
