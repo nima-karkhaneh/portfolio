@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function Auth() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -9,6 +10,7 @@ function Auth() {
     const [err, setErr] = useState("");
     const [success, setSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate()
 
     function clearMessages() {
         setErr("");
@@ -61,7 +63,7 @@ function Auth() {
                     setConfirmPassword("");
                 }
             } else {
-                window.location = "/";
+                navigate("/");
             }
         } catch (err) {
             const backendError = err?.response?.data?.error;

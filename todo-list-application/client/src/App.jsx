@@ -5,12 +5,14 @@ import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
 import { TODOS_URL, VERIFY_URL, SIGNOUT_URL } from "./api/endpoints";
+import {useNavigate} from "react-router-dom";
 
 function App() {
     const [items, setItems] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authChecked, setAuthChecked] = useState(false);
     const [email, setEmail] = useState("");
+    const navigate = useNavigate();
 
     async function manageAuth() {
         try {
@@ -85,7 +87,7 @@ function App() {
     async function signOut() {
         try {
             await axios.post(SIGNOUT_URL, {}, { withCredentials: true });
-            window.location = "/";
+            navigate("/");
         } catch (err) {
             const backendError = err?.response?.data?.error;
             if (backendError) {
