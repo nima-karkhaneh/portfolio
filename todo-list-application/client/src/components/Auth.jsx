@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+
 
 function Auth(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,7 +10,7 @@ function Auth(props) {
     const [err, setErr] = useState("");
     const [success, setSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const navigate = useNavigate()
+
 
     function clearMessages() {
         setErr("");
