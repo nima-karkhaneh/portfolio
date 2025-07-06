@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
-function Auth() {
+function Auth(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -62,8 +62,9 @@ function Auth() {
                     setPassword("");
                     setConfirmPassword("");
                 }
-            } else {
-                navigate("/");
+                if (isLoggedIn) {
+                    props.onAuthSuccess();
+                }
             }
         } catch (err) {
             const backendError = err?.response?.data?.error;

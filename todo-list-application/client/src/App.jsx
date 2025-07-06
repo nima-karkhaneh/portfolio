@@ -5,7 +5,7 @@ import ListItems from "./components/ListItems.jsx";
 import Auth from "./components/Auth.jsx";
 import axios from "axios";
 import { TODOS_URL, VERIFY_URL, SIGNOUT_URL } from "./api/endpoints";
-import {useNavigate} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 
 function App() {
     const [items, setItems] = useState([]);
@@ -13,6 +13,7 @@ function App() {
     const [authChecked, setAuthChecked] = useState(false);
     const [email, setEmail] = useState("");
     const navigate = useNavigate();
+
 
     async function manageAuth() {
         try {
@@ -35,10 +36,14 @@ function App() {
         }
     }
 
-
     useEffect(() => {
         manageAuth();
     }, []);
+
+    async function handleAuthSuccess() {
+        await manageAuth();
+        navigate("/");
+    }
 
     async function fetchData() {
         try {
@@ -87,7 +92,8 @@ function App() {
     async function signOut() {
         try {
             await axios.post(SIGNOUT_URL, {}, { withCredentials: true });
-            navigate("/");
+            setIsAuthenticated(false)
+            navigate("/auth");
         } catch (err) {
             const backendError = err?.response?.data?.error;
             if (backendError) {
@@ -102,34 +108,49 @@ function App() {
     if (!authChecked) return <p>Loading...</p>;
 
     return (
-        <>
-            {!isAuthenticated && <Auth />}
-            {isAuthenticated &&
-                <div>
-                    <Input
-                        getData={fetchData}
-                        signOut={signOut}
-                        email={email}
-                    />
-                    {items.length === 0 ? (
-                        <p className="text-center text-muted mt-5">You don't have any todo items yet.</p>
+        <Routes>
+            <Route
+                path="/auth"
+                element={
+                    isAuthenticated ? (
+                        <Navigate to="/" replace />
                     ) : (
-                        <ul className="container mt-0">
-                            {items.map(item => (
-                                <ListItems
-                                    key={item.id}
-                                    text={item.description}
-                                    onDelete={() => deleteItem(item.id)}
-                                    item={item}
-                                    onUpdate={updateItemInState}
-                                />
-                            ))}
-                        </ul>
-                    )}
-
-                </div>}
-        </>
+                        <Auth onAuthSuccess={handleAuthSuccess} />
+                    )
+                }
+            />
+            <Route
+                path="/"
+                element={
+                    isAuthenticated ? (
+                        <>
+                            <Input getData={fetchData} signOut={signOut} email={email} />
+                            {items.length === 0 ? (
+                                <p className="text-center text-muted mt-5">You don't have any todo items yet.</p>
+                            ) : (
+                                <ul className="container mt-0">
+                                    {items.map(item => (
+                                        <ListItems
+                                            key={item.id}
+                                            text={item.description}
+                                            onDelete={() => deleteItem(item.id)}
+                                            item={item}
+                                            onUpdate={updateItemInState}
+                                        />
+                                    ))}
+                                </ul>
+                            )}
+                        </>
+                    ) : (
+                        <Navigate to="/auth" replace />
+                    )
+                }
+            />
+        </Routes>
     );
 }
 
 export default App;
+
+
+

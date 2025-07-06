@@ -155,7 +155,7 @@ app.post("/login", async (req, res) => {
             sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 60 * 60 * 1000,
         });
-            return res.status(200).json({ message: "Authentication successful." });
+            return res.status(200).json({ success: "Authentication successful." });
     }
     catch (err) {
         console.error("Login error:", err.message);
