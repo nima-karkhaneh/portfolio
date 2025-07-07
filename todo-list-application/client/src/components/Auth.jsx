@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function Auth() {
+
+function Auth(props) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -9,6 +10,7 @@ function Auth() {
     const [err, setErr] = useState("");
     const [success, setSuccess] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     function clearMessages() {
         setErr("");
@@ -60,8 +62,9 @@ function Auth() {
                     setPassword("");
                     setConfirmPassword("");
                 }
-            } else {
-                window.location = "/";
+                if (isLoggedIn) {
+                    props.onAuthSuccess();
+                }
             }
         } catch (err) {
             const backendError = err?.response?.data?.error;
