@@ -1,7 +1,9 @@
 # ToDo List Application
 
 ## Overview
-This project is a simple ToDo List application that allows users to securely log in, manage their tasks, and perform full CRUD (Create, Read, Update, Delete) operations on their personalised todo items.
+This is a secure, full-stack ToDo List application built using the PERN stack (PostgreSQL, Express, React, Node.js). It allows users to sign up, log in, and manage personalised todo items through a smooth and responsive single-page interface.
+
+The app uses **React Router** for SPA (Single Page Application) behavior — meaning users can navigate between routes (login, dashboard, etc.) without full page reloads. JWT authentication is handled securely via `httpOnly` cookies.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -32,8 +34,9 @@ This project is a simple ToDo List application that allows users to securely log
 
 ## Technologies Used
 ### Frontend
-* **ReactJS:** An open-source JavaScript library for building user interfaces
-* **Bootstrap:** An open-source CSS framework designed for responsive, mobile first development
+* **ReactJS:** Component-based JavaScript library for building the user interface
+* **React Router:** Enables client-side routing and SPA behavior
+* **Bootstrap:** CSS framework for responsive and mobile-first design
 ### Backend
 * **Node.js**: To run JavaScript on the server-side of the application
 ### Database
@@ -43,7 +46,8 @@ This project is a simple ToDo List application that allows users to securely log
 ### Frontend
 The directory structure of the client side of the application has been created using Vite. The full list of dependencies are as follows;
 * **react:** Created by Vite to enable writing a React application 
-* **react-dom:** Created by Vite to enable writing a React application 
+* **react-dom:** Created by Vite to enable writing a React application
+* **react-router-dom:** To enable navigation and routing in React apps without reloading the page.
 * **axios:** To enable frontend to make http requests to the backend API of the application
 ### Backend
 * **bcrypt:** To hash the passwords before storing them in a database
@@ -67,36 +71,46 @@ Avoid storing JWT tokens in localStorage or accessible client-side storage to pr
 - Use backend middleware to decode the token from the cookie and authorise requests.
 
 ### Managing Cross-Origin Cookies and CORS Configuration
+
 **Challenge:**  
 Enable secure cookies to be sent between frontend (`localhost:5173`) and backend (`localhost:3000`) during development.  
+
 **Solution:**
 - Configure CORS with `credentials: true` on both backend and frontend requests.
 - Set cookie options to `httpOnly: true`, `secure: true`, and `sameSite: 'none'` to allow cross-site cookies over https.
 
 ### Creating Authorisation Middleware
+
 **Challenge:**  
 Protect routes by verifying the JWT from cookies and attaching user info for use in route handlers.  
+
 **Solution:**
 - Write `authorise` middleware that verifies JWT, handles errors, and assigns decoded user info to `req.user`.
 - Use this middleware on routes requiring authentication.
 
 ### Associating Todos With Users in the Database
+
 **Challenge:**  
 Ensure todos are linked to the user who created them and prevent unauthorized access.  
+
 **Solution:**
 - Use a `user_id` foreign key in the `items` table referencing `users.id`.
 - Filter all todo queries by `req.user.id` to only return the logged-in user’s data.
 
 ### Password Hashing and Signup Validation
+
 **Challenge:**  
 Securely hash passwords before storing and prevent duplicate user registration.  
+
 **Solution:**
 - Use `bcrypt` to hash passwords asynchronously before database insertion.
 - Check if a user already exists by email before allowing signup.
 
 ### Handling JWT Expiration
+
 **Challenge:**  
 Ensure users are logged out or prompted to reauthenticate after token expiration.  
+
 **Solution:**
 - Set JWT expiry to 1 hour.
 - In middleware, reject requests with expired tokens, forcing re-login.
@@ -104,33 +118,49 @@ Ensure users are logged out or prompted to reauthenticate after token expiration
 ## Frontend
 
 ### Detecting Authentication Status Without Access to JWT Token
+
 **Challenge:**  
 React cannot read `httpOnly` cookies, so it can’t directly check login status.  
+
 **Solution:**
 - Call backend `/verify` endpoint with credentials on app load.
 - Set React auth state (`isAuthenticated`, `email`) based on backend response.
 
 ### Conditional Data Fetching Based on Authentication
+
 **Challenge:**  
 Avoid fetching protected data (todos) before authentication is confirmed.  
+
 **Solution:**
 - Use separate hooks or conditional logic to fetch todos only if authenticated.
 
 ### Smooth UI Updates After Login, Logout, and Data Changes
+
 **Challenge:**  
-Reflect changes like item deletions or user logout immediately in UI without manual page reloads.  
+Ensure the UI reflects changes (like login, logout, or item updates) without requiring full page reloads.
+
 **Solution:**
-- Update React state (`items`, `isAuthenticated`) after actions to trigger UI re-render.
-- On logout, reload page to clear all states and cookies.
+- Used `React Router`’s `<Navigate />` and `useNavigate()` to handle routing after login and logout, replacing previous `window.location` calls.
+- Updated React state (`items`, `isAuthenticated`) directly after authentication or data changes to trigger re-renders and reflect the latest state.
 
 ### Handling Cross-Origin Requests with Cookies in Frontend
+
 **Challenge:**  
 Ensure cookies are sent and received properly during cross-origin API calls.  
+
 **Solution:**
 - Always use `withCredentials: true` in axios requests.
 - Make sure your backend sets proper CORS headers with `credentials: true` and specific origin.
 
+### Migrating to React Router for SPA Behavior
 
+**Challenge:**  
+The original version relied on `window.location` reloads, which broke the single-page experience and made the UI feel clunky.
+
+**Solution:**
+- Integrated `react-router-dom` to manage routing between login and dashboard views.
+- Used conditional rendering with `<Navigate />` and state-based route guards to protect authenticated pages.
+- Enabled seamless user flow without page reloads, improving user experience and aligning with modern SPA standards.
 
 ## Installation Guide
 This project is located in the `ToDo List Application` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
@@ -138,8 +168,6 @@ This project is located in the `ToDo List Application` directory of a larger rep
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
 cd todo-list-application
-
-
 ```
 2. Change directory to `client`:
 
@@ -209,7 +237,6 @@ JWT_SECRET="Your own created JWT secret"
 11. Visit http://localhost:5173 in your browser to start the application.
 
 ## Development Workflow
-
 This project follows a Git-based feature branch workflow to simulate professional team collaboration and maintain a clean, stable codebase—even as a solo developer:
 
 - New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `todoapp/frontend-error-handling-refinement`, `todoapp/responsive-design-improvements`, `todoapp/env-refacotr`).
@@ -229,7 +256,6 @@ This workflow ensures a stable `main` branch, clean commit history, and showcase
 
 
 ## Credit
-
 While this project was independently developed, a few online resources were referenced for learning purposes:
 
 1. **PERN Stack Course** by *The Stoic Programmers* – This tutorial series offered a helpful introduction to building a ToDo app using the PERN stack. However, the tutorial stored JWT tokens in `localStorage`, which is insecure. My implementation significantly differs in that it uses `httpOnly` and `secure` cookies for authentication. While some frontend logic and Bootstrap styles are similar, my version features a different dashboard layout, includes user email display, and emphasizes security — which was not the focus of the tutorial.
