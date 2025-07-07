@@ -20,7 +20,9 @@ app.use(express.urlencoded({extended:true}));
 // GET routes
 
 app.get("/", (req,res)=>{
-    res.sendFile(__dirname + "/views/index.html");
+    res.render("index.ejs", {
+        errors: []
+    });
 })
 app.get("/founder", (req,res)=>{
     res.sendFile(__dirname+"/views/founder.html")

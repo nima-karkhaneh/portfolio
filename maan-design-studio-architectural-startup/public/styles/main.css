@@ -526,6 +526,26 @@ small{
     100%   { transform:rotate(360deg);}
 }
 
+/*Toast containers*/
+.toast {
+    min-width: 250px;
+    margin-bottom: 10px;
+    background-color: #b91c1c;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    opacity: 0.95;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.toast.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+
 /*Media Queries*/
 
 @media(max-width: 770px) {

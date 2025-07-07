@@ -17,6 +17,8 @@
     <script src="/script.js" defer></script>
 </head>
 <body>
+<!--Form errors-->
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="instagram" viewBox="0 0 26.458333 26.458333">
         <path
@@ -104,5 +106,15 @@
 <footer>
     <div></div>
 </footer>
+
+<% if (errors && errors.length > 0) { %>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            <% errors.forEach(error => { %>
+            showToast("<%= error.msg %>");
+            <% }); %>
+        });
+    </script>
+<% } %>
 </body>
 </html>
