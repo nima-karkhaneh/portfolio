@@ -4,6 +4,8 @@ import nodemailer from "nodemailer"
 import favicon from "serve-favicon"
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { body, validationResult } from "express-validator";
+
 
 
 const app = express();
@@ -52,33 +54,52 @@ app.get("/unsuccess", (req,res)=>{
     res.sendFile(__dirname + "/views/unsuccess-page.html")
 })
 
-// POST route
+// POST route and Middleware validators
+app.post("/submit",
+    [
+        body("firstname").trim().escape().notEmpty().withMessage("First name is required."),
+        body("lastname").trim().escape().notEmpty().withMessage("Last name is required."),
+        body("email").trim().isEmail().withMessage("Invalid email address."),
+        body("phone").trim().notEmpty().withMessage("Phone number is required."),
+        body("text").trim().escape().notEmpty().withMessage("Message cannot be empty.")
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
 
-app.post("/submit", (req,res)=>{
-    const transporter = nodemailer.createTransport({
-        service: process.env.NODEMAILER_SERVICE,
-        auth:{
-            user: process.env.NODEMAILER_USER,
-            pass: process.env.NODEMAILER_PASS
+        if (!errors.isEmpty()) {
+            // Return to index with error messages
+            return res.status(400).render("index.ejs", {
+                errors: errors.array()
+            });
         }
-    });
 
-    const mailOptions = {
-        to: process.env.CLIENT_EMAIL,
-        subject: `Message from: ${req.body.firstname} ${req.body.lastname} with an email address ${req.body.email} and phone No. ${req.body.phone}`,
-        text: req.body.text
+        // Proceed to send email
+        const transporter = nodemailer.createTransport({
+            service: process.env.NODEMAILER_SERVICE,
+            auth: {
+                user: process.env.NODEMAILER_USER,
+                pass: process.env.NODEMAILER_PASS
+            }
+        });
+
+        const mailOptions = {
+            to: process.env.CLIENT_EMAIL,
+            subject: `Message from: ${req.body.firstname} ${req.body.lastname} | Email: ${req.body.email} | Phone: ${req.body.phone}`,
+            text: req.body.text
+        };
+
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err.message);
+                return res.sendFile(__dirname + "/views/unsuccess-page.html");
+            } else {
+                console.log(info.response);
+                return res.sendFile(__dirname + "/views/success-page.html");
+            }
+        });
     }
+);
 
-    transporter.sendMail(mailOptions, (err, info)=>{
-        if(err){
-            console.log(err.message)
-            res.sendFile(__dirname + "/views/unsuccess-page.html")
-        } else {
-            console.log(info.response)
-            res.sendFile(__dirname + "/views/success-page.html")
-        }
-    });
-});
 
 
 app.listen(port, ()=>{
