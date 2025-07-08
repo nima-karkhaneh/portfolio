@@ -5,6 +5,8 @@ import favicon from "serve-favicon"
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { body, validationResult } from "express-validator";
+import session from "express-session"
+import { protectSuccessPage, protectUnsuccessPage } from "./middleware/routeProtection.js";
 
 
 
@@ -17,6 +19,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(favicon(__dirname + "/public/images/favicon.ico"))
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 60 * 60 * 1000
+    }
+}));
 
 
 // GET routes
@@ -47,10 +61,10 @@ app.get("/nulla", (req,res)=>{
 
 // for debugging only
 
-app.get("/success", (req,res)=>{
+app.get("/success", protectSuccessPage, (req,res)=>{
    res.sendFile(__dirname + "/views/success-page.html" )
 })
-app.get("/unsuccess", (req,res)=>{
+app.get("/unsuccess", protectUnsuccessPage, (req,res)=>{
     res.sendFile(__dirname + "/views/unsuccess-page.html")
 })
 
@@ -91,10 +105,16 @@ app.post("/submit",
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err.message);
-                return res.sendFile(__dirname + "/views/unsuccess-page.html");
+                req.session.allowUnsuccessPage = true;
+                req.session.save(() => {
+                    return res.redirect("/unsuccess");
+                });
             } else {
                 console.log(info.response);
-                return res.sendFile(__dirname + "/views/success-page.html");
+                req.session.allowSuccessPage = true;
+                req.session.save(() => {
+                    return res.redirect("/success");
+                });
             }
         });
     }
