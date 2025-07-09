@@ -1,20 +1,62 @@
-
-# Maan Design Studio - An Architectural Startup
+# Maan Design Studio - Architectural Startup Website
 
 ## Overview
-**Maan Design Studio** is a modern, responsive web application built for an architectural startup. The site showcases the founder’s expertise, available services, and a portfolio of past projects. It features a clean layout, intuitive navigation, and a fully functional contact form that sends messages directly via email. Designed with UI/UX best practices in mind, this project demonstrates a complete frontend and backend integration tailored to a professional design business.
+**Maan Design Studio** is a modern, full-stack web application designed for an architectural startup. It showcases the founder’s philosophy, service offerings, and past projects in a clean and responsive layout. The app includes a fully functional contact form powered by Nodemailer and integrates frontend and backend validation with session-based protection for sensitive routes.
+
+This project demonstrates UI/UX design, backend integration, session management, and user feedback through dynamic toast messages — all built using vanilla technologies and Node.js.
+
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Challenges & Solutions](#challenges--solutions)
+- [Installation & Setup](#installation--setup)
+- [Development Workflow](#development-workflow)
+- [Author](#author)
+- [License](#license)
 
 ---
 
 ## Features
-- Responsive design that adapts seamlessly across desktop, tablet, and mobile devices
-- Contact form with backend email functionality powered by Nodemailer
-- Dynamic portfolio gallery displayed using Bootstrap carousel
-- Animated text and interactive hamburger menu for enhanced user experience
-- Automatic updating footer year via JavaScript
-- Page loading spinner and form submission loader for smooth UX feedback
-- Secure handling of sensitive credentials through environment variables
-- Optimised images and logo scaling for consistent and professional appearance
+
+-  **Fully responsive** layout for mobile, tablet, and desktop
+- **Contact form** with input validation, sanitization, and email delivery
+- **Dynamic toast notifications** for real-time form feedback
+- **Protected success/error routes** using `express-session`
+- **Custom 403 Forbidden logic** to prevent URL access after form submission
+- **Page and button loaders** for smooth UX
+- **Accessible hamburger menu** with fly-out animation
+- **Automatic year update** in footer
+- **Optimised assets** including scalable vector logos and standardised image sizes
+
+---
+
+## Technologies Used
+
+### Frontend
+- **HTML5 & CSS3**
+- **Vanilla JavaScript**
+- **Bootstrap (for portfolio carousel)**
+- **Fetch API** (replacing EJS-based form handling)
+
+### Backend
+- **Node.js**
+- **Express.js**
+- **Nodemailer**
+- **express-validator**
+- **express-session**
+- **dotenv**
+- **serve-favicon**
+
+---
+
+## Implementation Notes
+
+This project originally used **EJS** to render the main contact form and handle validation errors by re-rendering the entire page. However, this created UX issues: the form would scroll out of view and reset, making toast messages less useful.
+
+To fix this, the project now uses **vanilla HTML** and handles form submission with the **Fetch API**, allowing real-time inline feedback (toast messages) without reloading the entire page. This refactor dramatically improves user experience.
 
 ---
 
@@ -31,110 +73,99 @@
 <p align="center"><em>Portfolio page.</em></p>
 
 <p align="center">
-  <img src="public/images/carousel-screenshot.png" alt="Portfolio page" width="600" />
+  <img src="public/images/carousel-screenshot.png" alt="Carousel" width="600" />
 </p>
-<p align="center"><em>Portfolio carousel.</em></p>
+<p align="center"><em>Bootstrap-powered image carousel.</em></p>
 
 <p align="center">
   <img src="public/images/contact-form-screenshot.png" alt="Contact form" width="600" />
 </p>
-<p align="center"><em>Contact form section with validation and submission feedback.</em></p>
+<p align="center"><em>Contact form with error messages and loaders.</em></p>
 
 ---
 
-## Technologies Used
-### Frontend
-* **HTML:** To structure the content of the website
-* **CSS:** To style the content of the website including a responsive design
-* **Bootstrap:** To add specific styles and extra functionality to the website
-* **JavaScript:** To add functionality to the website
+## Challenges & Solutions
 
-### Backend
-* **NodeJS:** To run JavaScript on the server-side of the application
-
-## Dependencies Used
-* **dotenv:** To store sensitive information like nodemailer's username and password securely
-* **express:** To create a web server on the backend of the application
-* **nodemailer:** To handle the contact section of the application
-* **serve-faviocn:** To serve the favicon for the application
-
-## Challenges and Solutions
-Throughout the development of this architectural startup website, several challenges arose that required thoughtful solutions to ensure a responsive, user friendly, and visually appealing experience. Below is a summary of key technical and design challenges and how they were addressed:
-
-* **Responsive Design with Flexbox and Media Queries**  
-  Implemented responsive layouts using Flexbox and media queries. For larger screens used `flex-direction: row`, while smaller screens switched to `flex-direction: column`, improving usability across devices.
-
-* **Image Overflow Control**  
-  Resolved layout issues by using `max-width: 30%` instead of `width: 30%`, ensuring images remained within their parent container without overflowing, regardless of screen size.
-
-* **Animated Text Entrance for Enhanced UX**  
-  Used CSS animations with a delay to animate text sliding in from off-screen, creating a more engaging and dynamic visual experience.
-
-* **Client Portfolio Display with Bootstrap Carousel**  
-  Utilised Bootstrap's built-in carousel component to showcase client portfolio images in a sleek, swipeable gallery.
-
-* **Fly-out Hamburger Menu with JavaScript**  
-  Built a custom responsive hamburger menu using vanilla JavaScript, enhance navigation on mobile and smaller screens with smooth open/close animations.
-
-* **Dynamic Footer Year with JavaScript**  
-  Used JavaScript to automatically generate and update the current year in the site footer, eliminating the need for manual edits in future years.
-
-* **Page Loader Spinner for Improved UX**  
-  Created a custom loading spinner using vanilla JavaScript to display before each page loads, enhancing perceived performance and user engagement.
-
-* **Form Submit Loader for UX Feedback**  
-  Added a loader spinner to the contact form's submit button using vanilla JavaScript, providing visual feedback during the form submission process.
-
-* **Backend Form Handling with Nodemailer**  
-  Used the Nodemailer npm package to handle contact form submissions and send emails reliably from the backend.
-
-* **Error Handling for Form Submission**  
-  Implemented robust error handling on form submission. The backend returns a success or error page depending on the result, ensuring users are properly informed.
-
-* **Logo Scaling With Inkscape For Header Integration**  
-  Used Inkscapte to resize and optimise the client-provided logo, ensuring it fits seamlessly within the website header while maintaining a visual quality.
-
-* **Image Standardisation**  
-  Ensured consistent image dimensions across the site to prevent distortion or blurring, especially during responsive scaling.
+| Challenge | Solution |
+|----------|----------|
+| Page reloads on validation errors caused poor UX | Switched to Fetch API with dynamic toasts |
+| Manually typed `/success` or `/unsuccess` URLs bypassed logic | Added session-based route protection |
+| Spinner stayed active after failed submission | Implemented timeout + reset logic |
+| Phone input accepted any string | Added regex validation on both frontend and backend |
+| Favicon wasn’t loading in all browsers | Added `serve-favicon` middleware |
+| Logo didn't scale well on small screens | Resized with Inkscape and used SVG format |
+| Footer year needed manual update | Automated using JavaScript |
 
 ---
 
-## Installation Guide
-This project is located in the `Maan Design Studio` directory of a larger repository called `portfolio`. You can add can a `.env` file to the root of the project if you wish to see how the `nodemailer` package works. Otherwise, the application should run on `port 3000`. To run the application, please follow the following steps;
+## Additional Technical Notes
 
-1. Clone the repository:
+- **Responsive Design with Flexbox and Media Queries**: Used `flex-direction: row` for wide screens, and `column` for smaller screens to maintain layout integrity.
+- **Image Overflow Control**: Used `max-width` instead of `width` to ensure images stayed within bounds.
+- **Animated Text Entrance**: Added delayed slide-in animations for enhanced UX.
+- **Fly-out Hamburger Menu**: Implemented using vanilla JS for smooth mobile navigation.
+- **Form Submit Loader**: Spinner added to the submit button to give users real-time feedback.
+- **Image Standardisation**: Ensured image consistency across portfolio cards and carousel items.
+
+---
+
+## Installation & Setup
+
+1. **Clone the repo**
 
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
 cd maan-design-studio-architectural-startup
-
 ```
+2. **Install dependencies**  
 
-2. Install the dependencies:
+`npm install`
 
-```bash
-npm install
-```
+3. **(Optional) Add a .env file**  
 
-3. (optional) Create a `.env` in the root of the project and fill out the `nodemailer` placeholders with your own credentials. Here is an example of a `.env` file:
+  ```dotenv 
+  NODEMAILER_SERVICE="gmail"
+  CLIENT_EMAIL="recipient@email.com"
+  NODEMAILER_USER="your@email.com"
+  NODEMAILER_PASS="yourAppPassword"
+  SESSION_SECRET="yourRandomSessionSecret"
+  ```
+**Note**: Use Random.org or another secure generator for your session secret. Gmail requires 2FA to generate app passwords.
 
-```
-NODEMAILER_SERVICE="An email service you are using e.g. gmail"
-CLIENT_EMAIL="The email in which the body of the contact form will be sent to"
-NODEMAILER_USER="Your own email e.g. your gmail email"
-NODEMAILER_PASS="Your nodemailer password. If you are using gmail this is called the app password and can be obtained by gmail after your have turned on the two factor authentication and provided the relevant information"
+4. **Start the server**  
 
-```
+`node index.js`
 
-4. Run the application:
-
-```bash
-node index.js
-```
-
-5. Visit http://localhost:3000 in your browser to start the application.
+5. **View in browser**  
+Visit `http://localhost:3000`
 
 ---
 
-## Credit
-This project was developed independently by **Nima Karkhaneh** as part of a professional portfolio demonstrating frontend and backend web development skills.
+## Development Workflow
+
+- Feature branches are created for new features or fixes with descriptive names (e.g. `maandesign/backend-validation-sanitisation`)
+- Commits are meaningful and granular.
+- Branches are pushed to remote and merged via Pull Requests.
+- Code reviews and testing are done before merging to `main`.
+- After merging, `main` is kept up to date locally with `git pull`
+- Rebase is used for cleaning up commit history before merging when needed
+
+___
+
+## Author
+This project was built by **Nima Karkhaneh** as part of a professional portfolio to demonstrate frontend and backend proficiency in real-world applications.
+
+---
+
+## License
+
+This project is licensed under a customised [MIT License](./LICENSE).
+
+You are free to clone and explore the code for educational or personal use.  
+Attribution is required. Commercial use or redistribution without permission is not allowed.  
+Pull requests and contributions are welcome.
+
+
+
+
+
