@@ -28,7 +28,10 @@ function showToast(message, duration = 3000) {
 
     setTimeout(() => {
         toast.classList.add('hide');
-        toast.addEventListener('transitionend', () => toast.remove());
+        toast.addEventListener('transitionend', () => {
+            toast.remove();
+            resetButton();
+        });
     }, duration);
 }
 
@@ -46,14 +49,16 @@ window.addEventListener("load", ()=>{
 // Bottom button spinner after form submission
 function smallSpinner (){
     const spin = document.querySelector(".btm-btn");
-    spin.innerHTML = " <div class=\"sml-spinner\"></div>";
+    spin.innerHTML = "<div class=\"sml-spinner\"></div>";
     spin.style.backgroundColor = "rgb(227, 223, 214)";
+    spin.disabled = true;
 }
 
 function resetButton() {
     const spin = document.querySelector(".btm-btn");
     spin.textContent = "Submit";
-    spin.style.backgroundColor = "rgb(255, 255, 255)";
+    spin.removeAttribute("style");
+    spin.disabled = false;
 }
 
 

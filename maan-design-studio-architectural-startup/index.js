@@ -76,7 +76,7 @@ app.post("/submit",
         body("firstname").trim().escape().notEmpty().withMessage("First name is required."),
         body("lastname").trim().escape().notEmpty().withMessage("Last name is required."),
         body("email").trim().isEmail().withMessage("Invalid email address."),
-        body("phone").trim().notEmpty().withMessage("Phone number is required."),
+        body("phone").trim().notEmpty().withMessage("Phone number is required.").matches(/^[0-9+\-\s()]{7,15}$/).withMessage("Invalid phone number format."),
         body("text").trim().escape().notEmpty().withMessage("Message cannot be empty.")
     ],
     (req, res) => {
