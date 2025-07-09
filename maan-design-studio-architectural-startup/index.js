@@ -18,7 +18,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(favicon(__dirname + "/public/images/favicon.ico"))
 app.use(express.static("public"));
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended:true }));
+app.use(express.json());
+
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -81,13 +83,9 @@ app.post("/submit",
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            // Return to index with error messages
-            return res.status(400).render("index.ejs", {
-                errors: errors.array()
-            });
+            return res.status(400).json({ errors: errors.array() }); // Send errors as JSON
         }
 
-        // Proceed to send email
         const transporter = nodemailer.createTransport({
             service: process.env.NODEMAILER_SERVICE,
             auth: {
@@ -106,19 +104,16 @@ app.post("/submit",
             if (err) {
                 console.log(err.message);
                 req.session.allowUnsuccessPage = true;
-                req.session.save(() => {
-                    return res.redirect("/unsuccess");
-                });
+                return res.redirect("/unsuccess");
             } else {
                 console.log(info.response);
                 req.session.allowSuccessPage = true;
-                req.session.save(() => {
-                    return res.redirect("/success");
-                });
+                return res.redirect("/success");
             }
         });
     }
 );
+
 
 
 
