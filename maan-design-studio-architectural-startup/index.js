@@ -35,13 +35,8 @@ app.use(session({
     }
 }));
 
-
-// GET routes
-
-app.get("/", (req,res)=>{
-    res.render("index.ejs", {
-        errors: []
-    });
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "index.html"))
 })
 app.get("/founder", (req,res)=>{
     res.sendFile(path.join(__dirname, "views", "founder.html"))
