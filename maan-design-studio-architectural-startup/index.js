@@ -2,6 +2,7 @@ import express from "express";
 import env from "dotenv"
 import nodemailer from "nodemailer"
 import favicon from "serve-favicon"
+import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { body, validationResult } from "express-validator";
@@ -43,36 +44,39 @@ app.get("/", (req,res)=>{
     });
 })
 app.get("/founder", (req,res)=>{
-    res.sendFile(__dirname+"/views/founder.html")
+    res.sendFile(path.join(__dirname, "views", "founder.html"))
 })
 app.get("/services",(req,res)=>{
-    res.sendFile(__dirname +"/views/services.html")
+    res.sendFile(path.join(__dirname, "views", "services.html"))
 })
 app.get("/portfolio", (req,res)=>{
-    res.sendFile(__dirname + "/views/portfolio.html")
+    res.sendFile(path.join(__dirname, "views", "portfolio.html"))
 })
 app.get("/state-st", (req,res)=>{
-    res.sendFile(__dirname + "/views/state-st.html")
+    res.sendFile(path.join(__dirname, "views", "state-st.html"))
 })
 app.get("/kensington-st", (req,res)=>{
-    res.sendFile(__dirname + "/views/kensington-st.html")
+    res.sendFile(path.join(__dirname, "views", "kensington-st.html"))
 })
 app.get("/nulla", (req,res)=>{
-    res.sendFile(__dirname + "/views/nulla.html")
+    res.sendFile(path.join(__dirname, "views", "nulla.html"))
 })
 
 // for debugging only
 
 app.get("/success", protectSuccessPage, (req,res)=>{
-   res.sendFile(__dirname + "/views/success-page.html" )
+   res.sendFile(path.join(__dirname, "views", "success-page.html"))
 })
 app.get("/unsuccess", protectUnsuccessPage, (req,res)=>{
-    res.sendFile(__dirname + "/views/unsuccess-page.html")
+    res.sendFile(path.join(__dirname, "views", "unsuccess-page.html"))
 })
 
-app.get("/forbidden", (req, res) => {
-    res.sendFile(__dirname + "/views/403-forbidden-page.html")
-})
+if (process.env.NODE_ENV !== "production") {
+    app.get("/forbidden", (req, res) => {
+        res.sendFile(path.join(__dirname, "views", "403-forbidden-page.html"));
+    });
+}
+
 
 // POST route and Middleware validators
 app.post("/submit",
@@ -108,11 +112,17 @@ app.post("/submit",
             if (err) {
                 console.log(err.message);
                 req.session.allowUnsuccessPage = true;
-                return res.redirect("/unsuccess");
+                req.session.save(() => {
+                    res.json( { redirectTo: "/unsuccess" });
+                });
             } else {
                 console.log(info.response);
                 req.session.allowSuccessPage = true;
-                return res.redirect("/success");
+                req.session.allowSuccessPage = true;
+                req.session.save(() => {
+                    res.json({ redirectTo: "/success" });
+                });
+
             }
         });
     }

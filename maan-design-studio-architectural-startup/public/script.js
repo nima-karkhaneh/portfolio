@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!form) return;
 
     form.addEventListener("submit", async (e) => {
-        e.preventDefault(); // Stop the default form submission
+        e.preventDefault();
         smallSpinner();
 
         const formData = new FormData(form);
@@ -82,20 +82,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials: "include"
             });
 
-            if (response.redirected) {
-                window.location.href = response.url; // Handle redirect to success or unsuccess
-            } else if (response.status === 400) {
-                const result = await response.json();
+            const result = await response.json();
+
+            if (response.ok && result.redirectTo) {
+                window.location.href = result.redirectTo;
+            } else if (response.status === 400 && result.errors) {
                 result.errors.forEach(err => showToast(err.msg));
                 resetButton();
             } else {
                 showToast("Something went wrong. Please try again.");
                 resetButton();
             }
-
         } catch (err) {
             console.error("Submission error:", err);
             showToast("Submission failed. Check your connection.");
