@@ -70,6 +70,10 @@ app.get("/unsuccess", protectUnsuccessPage, (req,res)=>{
     res.sendFile(__dirname + "/views/unsuccess-page.html")
 })
 
+app.get("/forbidden", (req, res) => {
+    res.sendFile(__dirname + "/views/403-forbidden-page.html")
+})
+
 // POST route and Middleware validators
 app.post("/submit",
     [

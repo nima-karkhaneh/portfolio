@@ -448,7 +448,7 @@ small{
     flex-direction: column;
     align-items: center;
 }
-.response-page-cont button{
+.back-to-home-btn{
     margin-top: 100px;
     border: 2px solid dimgray;
     border-radius: 5px;
@@ -553,6 +553,37 @@ small{
 .toast.hide {
     opacity: 0;
     transform: translateX(100%);
+}
+
+
+
+/*403 page styling*/
+
+#page-403-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.page-403-main {
+    text-align: center;
+    padding: 20px;
+}
+
+#page-403-cont h1{
+    font-family: roboto, sans-serif;
+    font-weight: 400;
+    text-align: center;
+    font-size: 2rem;
+}
+#page-403-cont p{
+    font-family: roboto, sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.btn-403 {
+    margin-top: 30px;
 }
 
 
