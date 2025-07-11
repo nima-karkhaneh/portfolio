@@ -279,7 +279,7 @@ footer div{
 
 /*Founder page styling*/
 
-#atf-founder{
+#founder-page-cont{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -291,7 +291,7 @@ footer div{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 120px;
+    margin-top: 100px;
     flex-grow: 1;
 }
 .founder-img {
@@ -307,33 +307,31 @@ footer div{
 
 /*Services page styling*/
 
-#atf-services{
+#services-page-cont{
     display: flex;
     flex-direction: column;
     min-height: 100%;
 }
-#atf-services .card{
-    background-color: inherit;
-    border: none;
-    height: 50%;
-    margin-top: 150px;
-}
-#atf-services h2{
-    font-size: 1.5rem;
-}
-#atf-services .card-body{
-    margin-top: 10px;
-}
-.card-text{
-    line-height: normal;
-}
 .services-card-cont{
     display: flex;
     flex-grow: 1;
-    padding: 20px;
+    padding: 7rem 1rem 1rem 1rem;
     justify-content: space-around;
     gap: 20px;
 }
+.services-card-cont .card{
+    border: none;
+}
+.services-card-cont .card-body{
+    padding: 20px 0 0 0;
+}
+.services-card-cont .card-title{
+    font-size: 1.5rem;
+}
+.services-card-cont .card-text{
+    line-height: normal;
+}
+
 .services-img{
     filter:grayscale(1);
 }
@@ -630,17 +628,15 @@ small{
         justify-content: center;
     }
     .services-card-cont{
-        margin-top: 110px;
         flex-direction: column;
-        gap: 40px;
         align-items: center;
         justify-content: center;
     }
-    #atf-services .card {
+    .card {
         margin: 0;
     }
 
-    #atf-services h2, p {
+    #services-page-cont h2, p {
         text-align: center;
     }
     .portfolio-cont{
@@ -700,7 +696,7 @@ small{
         display: block;
         margin: 0 auto;
     }
-    #atf-services .card-text{
+    #services-page-cont .card-text{
         padding: 0 70px;
     }
     .portfolio-cont{
