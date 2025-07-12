@@ -1,4 +1,4 @@
-/*RESET*/
+/*Resetting styles consistently across different browsers*/
 
 *{
     border: 0;
@@ -6,12 +6,48 @@
     padding: 0;
     box-sizing: border-box;
 }
-html, body{
+
+html, body {
     height: 100dvh;
-    overflow-x:hidden;
+    overflow-x: hidden;
     color: #2d2d2d;
     background-color: white;
+    font-family: Arial, sans-serif;
 }
+
+/* Shared reset styles for inputs, textarea, button, select */
+
+input,
+textarea,
+button,
+select {
+    font: inherit;
+    font-size: 0.9rem;
+    color: inherit;
+    background-color: white;
+    border: 1px solid #ccc;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+
+/* Larger font size for all buttons */
+
+button {
+    font-size: 1rem;
+}
+
+/*Smaller font size for placeholders*/
+
+textarea::placeholder,
+input::placeholder {
+    color: #888;
+    font-family: inherit;
+    font-size: 0.8rem;
+}
+
 
 /*Avoiding bootstrap overwriting the anchor tags*/
 
@@ -157,9 +193,6 @@ article{
     background-color: rgb(227, 223, 214);
 }
 .top-btn{
-    font-family: "Nunito Sans",sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
     text-transform: uppercase;
     padding: 15px;
     border: 1px solid dimgray;
@@ -220,17 +253,11 @@ input{
 }
 textarea{
     margin: 20px 0;
-    font-family: Arial,sans-serif;
     border-radius: 5px;
     padding: 5px;
     min-width: 100%;
 }
-textarea::placeholder{
-    font-family: Arial,sans-serif;
-    color: rgb(118, 118, 118);
-}
 .btm-btn{
-    font-size: 1rem;
     width: 80px;
     padding: 10px;
     border-radius: 10px;
@@ -238,8 +265,6 @@ textarea::placeholder{
     border: 1px solid dimgray;
     background-color: white;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
 }
 .btm-btn:hover{
     background-color: rgb(227, 223, 214);
@@ -341,7 +366,7 @@ footer div{
 
 /*Portfolio styling*/
 
-#atf-portfolio{
+#portfolio-page-cont{
     min-height: 100%;
     display: flex;
     flex-direction: column;
@@ -361,12 +386,12 @@ footer div{
     filter: grayscale(0);
 }
 
-#atf-portfolio .card{
+#portfolio-page-cont .card{
     width: 30rem;
     padding: 20px;
 }
 
-#atf-portfolio h2{
+#portfolio-page-cont h2{
     font-size: 1.4rem;
     text-align: center;
     margin-top: 30px;
@@ -702,7 +727,7 @@ small{
     .portfolio-cont{
         gap: 0;
     }
-    #atf-portfolio .card{
+    #portfolio-page-cont .card{
         padding: 50px 95px;
     }
     #state .container, #kensington .container, #nulla .container{
