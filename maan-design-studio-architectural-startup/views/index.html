@@ -17,32 +17,15 @@
     <script src="/script.js" defer></script>
 </head>
 <body>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:none">
-    <symbol id="instagram" viewBox="0 0 26.458333 26.458333">
-        <path
-                d="m 16.949219,20.632812 c -1.5,0 -2.695313,1.21875 -2.695313,2.695313 0,1.5 1.195313,2.695312 2.695313,2.695312 1.476562,0 2.695312,-1.195312 2.695312,-2.695312 0,-1.476563 -1.21875,-2.695313 -2.695312,-2.695313 z m 0,4.453125 c -0.960938,0 -1.757813,-0.773437 -1.757813,-1.757812 0,-0.960938 0.773438,-1.734375 1.757813,-1.734375 0.960937,0 1.734375,0.773437 1.734375,1.734375 0,0.984375 -0.773438,1.757812 -1.734375,1.757812 z m 3.421875,-4.546875 c 0,-0.351562 -0.28125,-0.632812 -0.632813,-0.632812 -0.351562,0 -0.632812,0.28125 -0.632812,0.632812 0,0.351563 0.28125,0.632813 0.632812,0.632813 0.351563,0 0.632813,-0.28125 0.632813,-0.632813 z m 1.78125,0.632813 c -0.04687,-0.84375 -0.234375,-1.59375 -0.84375,-2.203125 -0.609375,-0.609375 -1.359375,-0.796875 -2.203125,-0.84375 -0.867188,-0.04687 -3.46875,-0.04687 -4.335938,0 -0.84375,0.04687 -1.570312,0.234375 -2.203125,0.84375 -0.609375,0.609375 -0.796875,1.359375 -0.84375,2.203125 -0.04687,0.867187 -0.04687,3.46875 0,4.335937 0.04687,0.84375 0.234375,1.570313 0.84375,2.203125 0.632813,0.609375 1.359375,0.796875 2.203125,0.84375 0.867188,0.04687 3.46875,0.04687 4.335938,0 0.84375,-0.04687 1.59375,-0.234375 2.203125,-0.84375 0.609375,-0.632812 0.796875,-1.359375 0.84375,-2.203125 0.04687,-0.867187 0.04687,-3.46875 0,-4.335937 z m -1.125,5.25 c -0.164063,0.46875 -0.539063,0.820312 -0.984375,1.007812 -0.703125,0.28125 -2.34375,0.210938 -3.09375,0.210938 -0.773438,0 -2.414063,0.07031 -3.09375,-0.210938 -0.46875,-0.1875 -0.820313,-0.539062 -1.007813,-1.007812 -0.28125,-0.679688 -0.210937,-2.320313 -0.210937,-3.09375 0,-0.75 -0.07031,-2.390625 0.210937,-3.09375 0.1875,-0.445313 0.539063,-0.796875 1.007813,-0.984375 0.679687,-0.28125 2.320312,-0.210938 3.09375,-0.210938 0.75,0 2.390625,-0.07031 3.09375,0.210938 0.445312,0.164062 0.796875,0.539062 0.984375,0.984375 0.28125,0.703125 0.210937,2.34375 0.210937,3.09375 0,0.773437 0.07031,2.414062 -0.210937,3.09375 z"
-                id="text1"
-                style="font-family:'Font Awesome 5 Free';-inkscape-font-specification:'Font Awesome 5 Free';white-space:pre;fill:#646464;stroke-width:1000.38"
-                transform="matrix(1.0583333,0,0,1.0583333,-4.696354,-11.472168)"
-                aria-label="" />
-    </symbol>
-    <symbol id="menu" viewBox="0 0 26.458333 26.458333">
-        <path
-                d="m 28.761719,28.925781 h 9.75 c 0.1875,0 0.375,-0.164062 0.375,-0.375 v -0.9375 c 0,-0.1875 -0.1875,-0.375 -0.375,-0.375 h -9.75 c -0.210938,0 -0.375,0.1875 -0.375,0.375 v 0.9375 c 0,0.210938 0.164062,0.375 0.375,0.375 z m 0,3.75 h 9.75 c 0.1875,0 0.375,-0.164062 0.375,-0.375 v -0.9375 c 0,-0.1875 -0.1875,-0.375 -0.375,-0.375 h -9.75 c -0.210938,0 -0.375,0.1875 -0.375,0.375 v 0.9375 c 0,0.210938 0.164062,0.375 0.375,0.375 z m 0,3.75 h 9.75 c 0.1875,0 0.375,-0.164062 0.375,-0.375 v -0.9375 c 0,-0.1875 -0.1875,-0.375 -0.375,-0.375 h -9.75 c -0.210938,0 -0.375,0.1875 -0.375,0.375 v 0.9375 c 0,0.210938 0.164062,0.375 0.375,0.375 z"
-                id="text1"
-                style="font-family:'Font Awesome 5 Free';-inkscape-font-specification:'Font Awesome 5 Free';white-space:pre;stroke-width:1000.38"
-                transform="matrix(2.1166666,0,0,2.1166666,-57.968554,-54.148632)"
-                aria-label="" />
-    </symbol>
-</svg>
-<!--Preloader for each page-->
+<!--Form errors-->
+<div id="toast-container"></div>
 <div class="spinner-cont">
     <div class="spinner"></div>
 </div>
 <header>
     <a href="/"><img class="logo" src="/images/logo.svg" alt="logo"></a>
     <nav>
-        <a href="#"><svg class="ham-menu-img"><use xlink:href="#menu"></use></svg></a>
+        <a href="#"><svg class="ham-menu-img"><use xlink:href="/images/icons.svg#menu"></use></svg></a>
     </nav>
 </header>
 <!--flyout menu-->
@@ -81,20 +64,20 @@
 <section id="btm-section">
     <div class="btm-left-cont">
         <h2>Have a project in mind?<br>Let's talk!</h2>
-        <form action="/submit" method="post" onsubmit="smallSpinner()">
+        <form id="contact-form">
             <div class="input-container">
-                <input type="text" name="firstname" placeholder="First Name" autocomplete="off" required>
-                <input type="text" name="lastname" placeholder="Last Name" autocomplete="off" required>
-                <input type="email" name="email" placeholder="Your email address" autocomplete="off" required>
-                <input type="text" name="phone" placeholder="Phone" autocomplete="off" required>
+                <input type="text" name="firstname" placeholder="First Name" autocomplete="off">
+                <input type="text" name="lastname" placeholder="Last Name" autocomplete="off">
+                <input type="email" name="email" placeholder="Your email address" autocomplete="off">
+                <input type="text" name="phone" placeholder="Phone" autocomplete="off">
             </div>
-            <textarea name="text" placeholder="Your message" id="textarea" cols="80" rows="10" required></textarea>
+            <textarea name="text" placeholder="Your message" id="textarea" cols="50" rows="10"></textarea>
             <div>
                 <button class="btm-btn" type="submit">Submit</button>
             </div>
         </form>
         <div class="btm-info">
-            <a href="https://www.instagram.com/studiomaandesign?igsh=MWE0ZXZ1eHZkNXZ2ZQ%3D%3D&utm_source=qr"><svg class="instagram-icon"><use xlink:href="#instagram"></use></svg></a>
+            <a href="https://www.instagram.com/studiomaandesign?igsh=MWE0ZXZ1eHZkNXZ2ZQ%3D%3D&utm_source=qr"><svg class="instagram-icon"><use xlink:href="/images/icons.svg#instagram"></use></svg></a>
             <p><spam>Get in touch</spam><br><spam>Whatsapp</spam><br><spam>+15712238640</spam><br><spam>info@maandesignstudio.com</spam>
             </p>
         </div>
