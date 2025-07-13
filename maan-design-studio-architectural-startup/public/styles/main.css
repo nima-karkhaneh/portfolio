@@ -452,21 +452,21 @@ small{
 
 /*Post form submission pages styling (success and unsuccess pages)*/
 
-.response-page-nav{
+.success-unsuccess-page-nav{
     background-color: white;
     justify-content: center;
 }
 .logo-cont{
     margin: 0;
 }
-.response-page-cont{
+.success-unsuccess-page-cont{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100%;
 }
-.response-content{
+.success-unsuccess-content{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -480,13 +480,13 @@ small{
     background-color: dimgray;
     color: whitesmoke;
 }
-.response-page-cont h1{
+.success-unsuccess-page-cont h1{
     font-family: roboto,sans-serif;
     font-weight: 300;
     text-align: center;
     font-size: 3rem;
 }
-.response-page-cont p{
+.success-unsuccess-page-cont p{
     font-family: roboto, sans-serif;
     font-weight: 300;
 }
