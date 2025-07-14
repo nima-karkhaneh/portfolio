@@ -38,9 +38,6 @@ app.use(session({
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "index.html"))
 })
-app.get("/founder", (req,res)=>{
-    res.sendFile(path.join(__dirname, "views", "founder.html"))
-})
 app.get("/services",(req,res)=>{
     res.sendFile(path.join(__dirname, "views", "services.html"))
 })
@@ -126,6 +123,10 @@ app.post("/submit",
 
 
 
-app.listen(port, ()=>{
-    console.log(`server is listening on port http://localhost:${port}`)
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+} else {
+    app.listen(port);
+}

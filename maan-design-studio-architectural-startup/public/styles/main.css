@@ -49,9 +49,9 @@ input::placeholder {
 }
 
 
-/*Avoiding bootstrap overwriting the anchor tags*/
+/*Avoiding bootstrap overiding the anchor tags*/
 
-a{
+a:not(.top-btn, .back-to-home-btn) {
     text-decoration: none !important;
     color: inherit !important;
 }
@@ -96,6 +96,12 @@ header a{
 }
 .logo{
     height: 100%;
+}
+.ham-menu-btn{
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+
 }
 .ham-menu-img{
     width: 1.5rem;
@@ -194,15 +200,18 @@ article{
 }
 .top-btn{
     text-transform: uppercase;
+    text-decoration: none;
     padding: 15px;
     border: 1px solid dimgray;
     border-radius: 10px;
     background-color: white;
     cursor: pointer;
     color: #3b3b3b;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 .top-btn:hover{
-    background-color: #0d6efd;
+    background-color: #3b3b3b;
+    border: #3b3b3b;
     color: whitesmoke;
 }
 #mid-section{
@@ -300,34 +309,6 @@ footer{
 footer div{
     color: #9d9d9d;
     text-align: center;
-}
-
-/*Founder page styling*/
-
-#founder-page-cont{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100%;
-}
-.founder{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
-    flex-grow: 1;
-}
-.founder-img {
-    width: 300px;
-    border-radius: 10px;
-}
-.founder-description{
-    font-size: 1.1rem;
-    max-width: 800px;
-    margin-top: 10px;
-    padding: 20px;
 }
 
 /*Services page styling*/
@@ -479,6 +460,7 @@ small{
     cursor: pointer;
     background-color: dimgray;
     color: whitesmoke;
+    text-decoration: none;
 }
 .success-unsuccess-page-cont h1{
     font-family: roboto,sans-serif;

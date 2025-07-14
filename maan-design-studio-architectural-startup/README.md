@@ -11,11 +11,16 @@ This project demonstrates UI/UX design, backend integration, session management,
 - [Overview](#overview)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
+- [Implementation Notes](#implementation-notes)
+- [Screenshots](#screenshots)
 - [Challenges & Solutions](#challenges--solutions)
+- [Additional Technical Notes](#additional-technical-notes)
 - [Installation & Setup](#installation--setup)
 - [Development Workflow](#development-workflow)
+- [Performance & Optimisation](#performance--optimisation)
 - [Author](#author)
 - [License](#license)
+
 
 ---
 
@@ -63,24 +68,25 @@ To fix this, the project now uses **vanilla HTML** and handles form submission w
 ## Screenshots
 
 <p align="center">
-  <img src="public/images/home-screenshot.png" alt="Home page" width="600" />
+  <img src="public/images/home-screenshot.png" alt="Home page" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
 </p>
 <p align="center"><em>Home page showcasing the startup introduction.</em></p>
 
 <p align="center">
-  <img src="public/images/portfolio-screenshot.png" alt="Portfolio page" width="600" />
+  <img src="public/images/portfolio-screenshot.png" alt="Portfolio page" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
 </p>
 <p align="center"><em>Portfolio page.</em></p>
 
 <p align="center">
-  <img src="public/images/carousel-screenshot.png" alt="Carousel" width="600" />
+  <img src="public/images/carousel-screenshot.png" alt="Carousel" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
 </p>
 <p align="center"><em>Bootstrap-powered image carousel.</em></p>
 
 <p align="center">
-  <img src="public/images/contact-form-screenshot.png" alt="Contact form" width="600" />
+  <img src="public/images/contact-form-screenshot.png" alt="Contact form" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
 </p>
 <p align="center"><em>Contact form with error messages and loaders.</em></p>
+
 
 ---
 
@@ -149,6 +155,14 @@ Visit `http://localhost:3000`
 - Code reviews and testing are done before merging to `main`.
 - After merging, `main` is kept up to date locally with `git pull`
 - Rebase is used for cleaning up commit history before merging when needed
+___
+
+## Performance & Optimisation
+
+- Avoided including the full Font Awesome library to reduce unnecessary bloat.
+- Extracted only the required SVG icons and created an optimised SVG sprite in Inkscape instead.
+- This approach significantly reduces page load size and improves rendering performance.
+- Leveraged Bootstrap CDN for core styling to minimise redundant dependencies.
 
 ___
 
