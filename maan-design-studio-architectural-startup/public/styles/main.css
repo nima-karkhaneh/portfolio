@@ -84,18 +84,16 @@ header{
     position: fixed;
     width: 100%;
     z-index: 2;
-}
-header nav{
-    margin-right: 4rem;
+    padding: 0 40px 0 20px;
 }
 header a{
-    height: 3rem;
     display: flex;
     align-items: center;
-    margin-left: 47px;
+    height: 60%;
 }
 .logo{
     height: 100%;
+    padding: 0;
 }
 .ham-menu-btn{
     border: none;
@@ -140,7 +138,7 @@ header a{
 
 /*Applying this class to off-screen-menu dynamically using JS*/
 
-.active{
+.off-screen-menu.active{
     left: 0;
 }
 
@@ -148,13 +146,13 @@ header a{
     display: flex;
     flex-direction: column;
     min-height: 100%;
+    padding-top: 5rem;
 }
 #top-section h1{
     font-family: "Source Serif 4", serif;
     font-weight: 500;
     font-size: 2.2rem;
-    padding: 20px;
-    margin:110px 0 40px 30px;
+    padding: 40px 20px;
 }
 
 /*Top image and the associated paragraph*/
@@ -274,9 +272,8 @@ textarea{
     border: 1px solid dimgray;
     background-color: white;
     cursor: pointer;
-}
-.btm-btn:hover{
-    background-color: rgb(227, 223, 214);
+    display: flex;
+    justify-content: center;
 }
 .btm-info{
     display: flex;
@@ -434,26 +431,25 @@ small{
 /*Post form submission pages styling (success and unsuccess pages)*/
 
 .success-unsuccess-page-nav{
-    background-color: white;
     justify-content: center;
-}
-.logo-cont{
-    margin: 0;
 }
 .success-unsuccess-page-cont{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 30px;
     min-height: 100%;
 }
 .success-unsuccess-content{
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
+    padding: 0 10px 0 10px;
+    /*border: 3px solid hotpink;*/
 }
 .back-to-home-btn{
-    margin-top: 100px;
     border: 2px solid dimgray;
     border-radius: 5px;
     padding: 10px;
@@ -461,30 +457,32 @@ small{
     background-color: dimgray;
     color: whitesmoke;
     text-decoration: none;
+    margin-top: 20px;
 }
 .success-unsuccess-page-cont h1{
     font-family: roboto,sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     text-align: center;
-    font-size: 3rem;
 }
 .success-unsuccess-page-cont p{
     font-family: roboto, sans-serif;
     font-weight: 300;
+    text-align: center;
+    margin: 0;
+
 }
 .check-mark{
     fill: dimgray;
     margin: 30px 0;
-    width: 10rem;
-    height: 10rem;
+    width: 5rem;
+    height: 5rem;
 }
 .x-mark{
     background-color: dimgray;
     padding: 10px;
-    height: 7rem;
-    width: 7rem;
+    height: 4rem;
+    width: 4rem;
     border-radius: 50%;
-    margin: 80px 0;
 }
 
 /*// Preloader spinner on each page*/
@@ -504,7 +502,7 @@ small{
     width: 5rem;
     height: 5rem;
     border: 8px solid #e6e6e6;
-    border-top-color: #0d6efd;
+    border-top-color: dimgray;
     border-radius: 50%;
     animation-name: spinning-circle;
     animation-duration: 1s;
@@ -554,27 +552,27 @@ small{
     transform: translateX(0);
 }
 
-@keyframes toast-in {
-    to {
+@keyframes toast-in{
+    to{
         opacity: 1;
         transform: translateX(0);
     }
 }
 
-.toast.hide {
+.toast.hide{
     opacity: 0;
     transform: translateX(100%);
 }
 
 /*403 page styling*/
 
-#page-403-cont {
+#page-403-cont{
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.page-403-main {
+.page-403-main{
     text-align: center;
     padding: 20px;
 }
@@ -583,23 +581,25 @@ small{
     font-family: roboto, sans-serif;
     font-weight: 400;
     text-align: center;
-    font-size: 2rem;
 }
 #page-403-cont p{
     font-family: roboto, sans-serif;
     font-weight: 300;
     font-size: 1rem;
 }
-
-.btn-403 {
+.btn-403{
     margin-top: 30px;
 }
-
-
 
 /*Media Queries*/
 
 @media(max-width: 770px) {
+    header{
+        padding: 0 20px;
+    }
+    .logo{
+        height: 80%;
+    }
     #top-img-container {
         flex-direction: column;
         align-items: center;
@@ -627,6 +627,11 @@ small{
     #top-section h2, #mid-section h2 {
         text-align: center;
         margin-top: 20px;
+    }
+    .top-btn:hover {
+        color: #3b3b3b;
+        border: 1px solid dimgray;
+        background-color: white;
     }
     .btm-img {
         display: none;
@@ -714,5 +719,8 @@ small{
     }
     #state .container, #kensington .container, #nulla .container{
         max-width: 90%;
+    }
+    .success-unsuccess-content h1{
+        font-size: 1.5rem;
     }
 }

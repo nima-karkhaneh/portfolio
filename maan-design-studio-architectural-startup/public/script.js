@@ -50,14 +50,12 @@ window.addEventListener("load", ()=>{
 function smallSpinner (){
     const spin = document.querySelector(".btm-btn");
     spin.innerHTML = "<div class=\"sml-spinner\"></div>";
-    spin.style.backgroundColor = "rgb(227, 223, 214)";
     spin.disabled = true;
 }
 
 function resetButton() {
     const spin = document.querySelector(".btm-btn");
     spin.textContent = "Submit";
-    spin.removeAttribute("style");
     spin.disabled = false;
 }
 

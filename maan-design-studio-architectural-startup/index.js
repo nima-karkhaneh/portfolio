@@ -83,7 +83,7 @@ app.post("/submit",
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() }); // Send errors as JSON
+            return res.status(400).json({ errors: errors.array() });
         }
 
         const transporter = nodemailer.createTransport({
@@ -102,23 +102,26 @@ app.post("/submit",
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
-                console.log(err.message);
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(err.message);
+                }
                 req.session.allowUnsuccessPage = true;
                 req.session.save(() => {
-                    res.json( { redirectTo: "/unsuccess" });
+                    res.json({ redirectTo: "/unsuccess" });
                 });
             } else {
-                console.log(info.response);
-                req.session.allowSuccessPage = true;
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(info.response);
+                }
                 req.session.allowSuccessPage = true;
                 req.session.save(() => {
                     res.json({ redirectTo: "/success" });
                 });
-
             }
         });
     }
 );
+
 
 
 
