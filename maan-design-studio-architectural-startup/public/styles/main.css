@@ -93,12 +93,13 @@ header a{
 }
 .logo{
     height: 100%;
-    padding: 0;
 }
 .ham-menu-btn{
     border: none;
     background-color: inherit;
     cursor: pointer;
+    display: flex;
+
 
 }
 .ham-menu-img{
@@ -120,7 +121,6 @@ header a{
     left: -2000px;
     transition: 0.4s ease-in-out;
     background-color: rgba(227, 226, 226, 0.90);
-    border-radius: 10px;
     z-index: 2;
 }
 .off-screen-menu li{
