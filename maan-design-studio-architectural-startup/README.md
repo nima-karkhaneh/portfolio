@@ -68,22 +68,22 @@ To fix this, the project now uses **vanilla HTML** and handles form submission w
 ## Screenshots
 
 <p align="center">
-  <img src="public/images/home-screenshot.png" alt="Home page" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
+  <img src="./README-screenshots/home-screenshot.png" alt="Home page" width="600"/>
 </p>
 <p align="center"><em>Home page showcasing the startup introduction.</em></p>
 
 <p align="center">
-  <img src="public/images/portfolio-screenshot.png" alt="Portfolio page" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
+  <img src="./README-screenshots/portfolio-screenshot.png" alt="Portfolio page" width="600"/>
 </p>
 <p align="center"><em>Portfolio page.</em></p>
 
 <p align="center">
-  <img src="public/images/carousel-screenshot.png" alt="Carousel" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
+  <img src="./README-screenshots/carousel-screenshot.png" alt="Carousel" width="600"/>
 </p>
 <p align="center"><em>Bootstrap-powered image carousel.</em></p>
 
 <p align="center">
-  <img src="public/images/contact-form-screenshot.png" alt="Contact form" width="600" style="border: 2px solid #ccc; border-radius: 6px;" />
+  <img src="./README-screenshots/contact-form-screenshot.png" alt="Contact form" width="600"/>
 </p>
 <p align="center"><em>Contact form with error messages and loaders.</em></p>
 
