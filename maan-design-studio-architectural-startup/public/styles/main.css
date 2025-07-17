@@ -323,6 +323,7 @@ footer div{
     gap: 20px;
 }
 .services-card-cont .card{
+    width: 25rem;
     border: none;
 }
 .services-card-cont .card-body{
@@ -334,9 +335,9 @@ footer div{
 .services-card-cont .card-text{
     line-height: normal;
 }
-
 .services-img{
     filter:grayscale(1);
+    width: 25rem;
 }
 .services-img:hover {
     filter: grayscale(0);
