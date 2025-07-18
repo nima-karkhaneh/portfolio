@@ -1,4 +1,6 @@
 import express from "express";
+import validator from "./validation-middleware/validator.js";
+import {validationResult} from "express-validator";
 
 
 const app = express();
@@ -43,8 +45,14 @@ app.get("/posts", (req,res) =>{
 
 // Submitting a new post
 
-app.post("/submit", (req,res) =>{
-    const now = new Date();
+app.post("/submit", validator, (req,res) =>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).render("new-posts.ejs" , {
+            errors: errors.array(),
+            postData: req.body
+        })
+    }
     const post = {
         id: posts.length+1,
         author: req.body.author,
