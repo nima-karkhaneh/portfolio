@@ -54,7 +54,7 @@ app.post("/submit", validator, (req,res) =>{
         })
     }
     const post = {
-        id: posts.length+1,
+        id: posts.length + 1,
         author: req.body.author,
         title: req.body.title,
         text: req.body.text,
@@ -75,19 +75,34 @@ app.get("/edit/:postID", (req,res)=>{
 
 // Editing/Updating a specific post
 
-app.post("/edit/:postID", (req,res)=>{
-    const foundPost = posts.find((p) => p.id === parseInt(req.params.postID));
+app.post("/edit/:postID", validator, (req, res) => {
     const foundIndex = posts.findIndex((p) => p.id === parseInt(req.params.postID));
+    if (foundIndex === -1) return res.status(404).send("Post not found.");
+
+    const foundPost = posts[foundIndex];
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).render("edit-posts.ejs", {
+            errors: errors.array(),
+            postData: req.body,
+            foundPost,
+        });
+    }
+
     const updatedPost = {
-        id: foundIndex+1,
+        id: foundPost.id,
         author: req.body.author || foundPost.author,
         title: req.body.title || foundPost.title,
         text: req.body.text || foundPost.text,
-        date: getFormattedDate()
-    }
+        date: getFormattedDate(),
+    };
+
     posts[foundIndex] = updatedPost;
-    res.redirect("/posts")
-})
+
+    res.redirect("/posts");
+});
+
 
 // Deleting a specific post
 
