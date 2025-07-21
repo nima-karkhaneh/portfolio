@@ -28,7 +28,9 @@ const posts= [];
 // GET routes
 
 app.get("/", (req,res)=>{
-    res.render("home.ejs");
+    res.render("home.ejs", {
+        posts
+    });
 })
 app.get("/new-posts", (req,res)=>{
     res.render("new-posts.ejs")

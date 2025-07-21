@@ -17,9 +17,17 @@
     <h2>WELCOME TO YOUR</h2>
     <h1>Daily&nbsp;Online&nbsp;Journal</h1>
     <p>Journaling can reduce daily stress and anxiety</p>
-    <a href="/posts"><button>View Your Posts</button></a>
+    <button id="viewPostsBtn">View Your Posts</button>
+    <p id="noPostsMessage" class="no-post-msg">
+        Your journal is empty. Click + to begin.
+    </p>
 </div>
 <%- include("partials/footer.ejs") %>
 </main>
+<script>
+    window.postsCount = <%= posts.length %> || 0;
+    console.log(postsCount)
+</script>
+
 </body>
 </html>

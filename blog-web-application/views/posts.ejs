@@ -15,7 +15,6 @@
 <%- include("partials/header.ejs") %>
 <div class="posts-container">
     <div class="posts-content <%= locals.posts.length === 0 ? "no-scroll" : "" %>">
-        <% if (locals.posts.length > 0) { %>
         <h2 class="title">Your Posts</h2>
         <% posts.reverse().forEach((post) => { %>
             <h2 class="posts-title"><%= post.title %></h2>
@@ -26,9 +25,6 @@
             <a class="delete" href="/posts/delete/<%= post.id %>">Delete</a>
             <div class="separator"></div>
         <% }) %>
-        <% } else { %>
-        <h2 class="no-post">You have no posts yet. Please add your first post using the plus icon above.</h2>
-       <% } %>
     </div>
 </div>
 <%- include("partials/footer.ejs") %>
