@@ -47,6 +47,7 @@ app.get("/posts", (req,res) =>{
 
 app.post("/submit", validator, (req,res) =>{
     const errors = validationResult(req);
+    console.log(errors)
     if (!errors.isEmpty()) {
         return res.status(400).render("new-posts.ejs" , {
             errors: errors.array(),

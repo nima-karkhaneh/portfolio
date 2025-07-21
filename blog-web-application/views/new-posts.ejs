@@ -15,9 +15,43 @@
 <%- include("partials/header.ejs") %>
 <form action="/submit" method="post">
     <h2>New Post</h2>
-    <input type="text" name="author" placeholder="Author" autocomplete="off">
-    <input type="text" name="title" placeholder="Title" autocomplete="off">
-    <textarea name="text" id="" cols="60" rows="20" autocomplete="off" placeholder="Your blog"></textarea>
+    <input
+            type="text"
+            name="author"
+            placeholder="Author"
+            autocomplete="off"
+            value="<%= locals.postData?.author || "" %>"
+    >
+    <% if (locals.errors) { %>
+        <% const err = errors.find(e => e.path === "author"); %>
+        <% if (err) { %>
+            <p class="form-error"><%= err.msg %></p>
+        <% } %>
+    <% } %>
+    <input type="text"
+           name="title"
+           placeholder="Title"
+           autocomplete="off"
+           value="<%= locals.postData?.title || "" %>"
+    >
+    <% if (locals.errors) { %>
+        <% const err = errors.find(e => e.path === "title"); %>
+        <% if (err) { %>
+            <p class="form-error"><%= err.msg %></p>
+        <% } %>
+    <% } %>
+    <textarea name="text"
+              cols="60"
+              rows="20"
+              autocomplete="off"
+              placeholder="Your blog"
+    ><%= locals.postData?.text || "" %></textarea>
+    <% if (locals.errors) { %>
+        <% const err = errors.find(e => e.path === "text"); %>
+        <% if (err) { %>
+            <p class="form-error"><%= err.msg %></p>
+        <% } %>
+    <% } %>
     <button type="submit">Submit</button>
 </form>
 <%- include("partials/footer.ejs") %>
