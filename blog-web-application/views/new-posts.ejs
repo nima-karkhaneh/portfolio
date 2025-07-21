@@ -13,47 +13,44 @@
 <body>
 <main>
 <%- include("partials/header.ejs") %>
-<form action="/submit" method="post">
-    <h2>New Post</h2>
-    <input
-            type="text"
-            name="author"
-            placeholder="Author"
-            autocomplete="off"
-            value="<%= locals.postData?.author || "" %>"
-    >
-    <% if (locals.errors) { %>
-        <% const err = errors.find(e => e.path === "author"); %>
-        <% if (err) { %>
-            <p class="form-error"><%= err.msg %></p>
+    <!--    Validation error helper-->
+    <% function getError(field) {
+        if (!locals.errors) return null;
+        const err = locals.errors.find(e => e.path === field);
+        return err ? err.msg : null;
+    } %>
+    <form action="/submit" method="post">
+        <h2>New Post</h2>
+        <input
+                type="text"
+                name="author"
+                placeholder="Author"
+                autocomplete="off"
+                value="<%= locals.postData?.author || "" %>"
+        >
+        <% if (getError('author')) { %>
+            <p class="form-error"><%= getError('author') %></p>
         <% } %>
-    <% } %>
-    <input type="text"
-           name="title"
-           placeholder="Title"
-           autocomplete="off"
-           value="<%= locals.postData?.title || "" %>"
-    >
-    <% if (locals.errors) { %>
-        <% const err = errors.find(e => e.path === "title"); %>
-        <% if (err) { %>
-            <p class="form-error"><%= err.msg %></p>
+        <input type="text"
+               name="title"
+               placeholder="Title"
+               autocomplete="off"
+               value="<%= locals.postData?.title || "" %>"
+        >
+        <% if (getError('title')) { %>
+            <p class="form-error"><%= getError('title') %></p>
         <% } %>
-    <% } %>
-    <textarea name="text"
-              cols="60"
-              rows="20"
-              autocomplete="off"
-              placeholder="Your blog"
-    ><%= locals.postData?.text || "" %></textarea>
-    <% if (locals.errors) { %>
-        <% const err = errors.find(e => e.path === "text"); %>
-        <% if (err) { %>
-            <p class="form-error"><%= err.msg %></p>
+        <textarea name="text"
+                  cols="60"
+                  rows="20"
+                  autocomplete="off"
+                  placeholder="Your blog"
+        ><%= locals.postData?.text || "" %></textarea>
+        <% if (getError('text')) { %>
+            <p class="form-error"><%= getError('text') %></p>
         <% } %>
-    <% } %>
-    <button type="submit">Submit</button>
-</form>
+        <button type="submit">Submit</button>
+    </form>
 <%- include("partials/footer.ejs") %>
 </main>
 </body>

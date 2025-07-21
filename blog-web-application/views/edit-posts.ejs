@@ -13,14 +13,44 @@
 <body>
 <main>
 <%- include("partials/header.ejs") %>
-<form action="/edit/<%= foundPost.id %>" method="post">
-    <h2>Edit your post</h2>
-    <input type="text" name="author" placeholder="Author" autocomplete="off" required value="<%= foundPost.author %>">
-    <input type="text" name="title" placeholder="Title" autocomplete="off" required value="<%= foundPost.title%>">
-    <textarea name="text" id="" cols="60" rows="20" autocomplete="off" placeholder="Your blog"><%= foundPost.text %></textarea>
-    <button type="submit">Submit</button>
-</form>
-<%- include("partials/footer.ejs") %>
+<!--    Validation error helper-->
+    <% function getError(field) {
+        if (!locals.errors) return null;
+        const err = locals.errors.find(e => e.path === field);
+        return err ? err.msg : null;
+     } %>
+    <form action="/edit/<%= foundPost.id %>" method="post">
+        <h2>Edit your post</h2>
+        <input
+                type="text"
+                name="author"
+                placeholder="Author"
+                autocomplete="off"
+                value="<%= locals.postData?.author || foundPost.author %>">
+        <% if (getError('author')) { %>
+            <p class="form-error"><%= getError('author') %></p>
+        <% } %>
+        <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                autocomplete="off"
+                value="<%= locals.postData?.title || foundPost.title %>">
+        <% if (getError('title')) { %>
+            <p class="form-error"><%= getError('title') %></p>
+        <% } %>
+        <textarea
+                name="text"
+                cols="60"
+                rows="20"
+                autocomplete="off"
+                placeholder="Your blog"><%= locals.postData?.text || foundPost.text %></textarea>
+        <% if (getError('text')) { %>
+            <p class="form-error"><%= getError('text') %></p>
+        <% } %>
+        <button type="submit">Submit</button>
+    </form>
+    <%- include("partials/footer.ejs") %>
 </main>
 </body>
 </html>
