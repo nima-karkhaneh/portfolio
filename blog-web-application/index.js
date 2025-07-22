@@ -33,14 +33,20 @@ app.get("/", (req,res)=>{
         noPosts: req.query.noPosts
     });
 })
+
 app.get("/new-posts", (req,res)=>{
     res.render("new-posts.ejs")
 })
-app.get("/posts", (req,res) =>{
+
+app.get("/posts", (req, res) => {
+    if (posts.length === 0) {
+        return res.redirect("/?noPosts=true");
+    }
     res.render("posts.ejs", {
-        posts: posts
-    })
-})
+        posts,
+    });
+});
+
 
 // Submitting a new post
 
