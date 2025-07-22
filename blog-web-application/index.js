@@ -29,7 +29,8 @@ const posts= [];
 
 app.get("/", (req,res)=>{
     res.render("home.ejs", {
-        posts
+        posts,
+        noPosts: req.query.noPosts
     });
 })
 app.get("/new-posts", (req,res)=>{
@@ -106,7 +107,10 @@ app.post("/edit/:postID", validator, (req, res) => {
 
 app.get("/posts/delete/:postID", (req,res)=> {
     const foundIndex = posts.findIndex((p) => p.id === parseInt(req.params.postID));
-    posts.splice(foundIndex, 1);
+    if (foundIndex !== -1) posts.splice(foundIndex, 1);
+    if (posts.length === 0) {
+        return res.redirect("/?noPosts=true")
+    }
     res.redirect("/posts")
 })
 

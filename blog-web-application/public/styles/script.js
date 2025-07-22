@@ -19,3 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Clear query params from URL without reloading the page
+    if (window.location.search.includes("noPosts=true")) {
+        const url = new URL(window.location);
+        url.search = ""; // remove all query params
+        window.history.replaceState({}, document.title, url);
+    }
+});
+

@@ -18,7 +18,7 @@
     <h1>Daily&nbsp;Online&nbsp;Journal</h1>
     <p>Journaling can reduce daily stress and anxiety</p>
     <button id="viewPostsBtn">View Your Posts</button>
-    <p id="noPostsMessage" class="no-post-msg">
+    <p id="noPostsMessage" class="no-post-msg <%= noPosts? "visible" : "" %>">
         Your journal is empty. Click + to begin.
     </p>
 </div>
