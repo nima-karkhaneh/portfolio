@@ -47,6 +47,10 @@ app.get("/posts", (req, res) => {
     });
 });
 
+app.get("/not-found", (req, res) => {
+    res.render("404.ejs")
+})
+
 
 // Submitting a new post
 
