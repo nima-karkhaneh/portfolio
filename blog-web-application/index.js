@@ -47,9 +47,9 @@ app.get("/posts", (req, res) => {
     });
 });
 
-app.get("/not-found", (req, res) => {
-    res.render("404.ejs")
-})
+// app.get("/not-found", (req, res) => {
+//     res.render("404.ejs")
+// })
 
 
 // Submitting a new post
@@ -76,7 +76,12 @@ app.post("/submit", validator, (req,res) =>{
 // Getting a specific post
 
 app.get("/edit/:postID", (req,res)=>{
-    const foundPost = posts.find((p) => p.id === parseInt(req.params.postID));
+    const postID = Number(req.params.postID)
+    const foundPost = posts.find(p => p.id === postID);
+    if (isNaN(postID) || postID <= 0 || !foundPost)
+    {
+        return res.status(404).render("404.ejs")
+    }
     res.render("edit-posts.ejs",{
         foundPost: foundPost
     });
@@ -85,8 +90,9 @@ app.get("/edit/:postID", (req,res)=>{
 // Editing/Updating a specific post
 
 app.post("/edit/:postID", validator, (req, res) => {
-    const foundIndex = posts.findIndex((p) => p.id === parseInt(req.params.postID));
-    if (foundIndex === -1) return res.status(404).send("Post not found.");
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID );
+    if (isNaN(postID) || postID <= 0 || foundIndex === -1) return res.status(404).render("404.ejs");
 
     const foundPost = posts[foundIndex];
 
@@ -116,12 +122,20 @@ app.post("/edit/:postID", validator, (req, res) => {
 // Deleting a specific post
 
 app.get("/posts/delete/:postID", (req,res)=> {
-    const foundIndex = posts.findIndex((p) => p.id === parseInt(req.params.postID));
-    if (foundIndex !== -1) posts.splice(foundIndex, 1);
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID);
+    if (isNaN(postID) || postID <= 0 || foundIndex === -1) {
+        return res.status(404).render("404.ejs");
+    }
+    posts.splice(foundIndex, 1);
     if (posts.length === 0) {
-        return res.redirect("/?noPosts=true")
+        return res.redirect("/?noPosts=true");
     }
     res.redirect("/posts")
+})
+
+app.use((req, res) => {
+    res.status(400).render("404.ejs")
 })
 
 
