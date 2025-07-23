@@ -135,7 +135,7 @@ app.get("/posts/delete/:postID", (req,res)=> {
 })
 
 app.use((req, res) => {
-    res.status(400).render("404.ejs")
+    res.status(404).render("404.ejs")
 })
 
 
