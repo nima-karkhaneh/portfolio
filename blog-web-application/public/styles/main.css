@@ -4,12 +4,39 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+
 html, body{
-    height: 100dvh;
-    font-family: "Raleway", sans-serif;
+    height: 100vh;
     color: whitesmoke;
+    font-family: Arial, sans-serif;
 
 }
+
+input,
+textarea,
+button,
+select {
+    font: inherit;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    color: black;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+textarea {
+    resize: none;
+}
+
+
 main {
     background-image: url("../images/ren-hosoya-xYI_dcYIQas-unsplash (1).jpg");
     background-size: cover;
@@ -85,6 +112,11 @@ footer{
     text-align: center;
     width: 100%;
 }
+.form-cont {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
 form{
     display: flex;
     flex-direction: column;
@@ -92,8 +124,7 @@ form{
     padding: 30px;
     background-color: whitesmoke;
     border-radius: 5px;
-    margin-top: 30px;
-    flex-grow: 1;
+    width: 500px;
 }
 form h2{
     color: dimgray;
@@ -101,17 +132,11 @@ form h2{
     text-align: center;
     margin-bottom: 10px;
 }
-input{
-    border: 1px solid dimgray;
+input, textarea{
     padding: 5px;
     border-radius: 5px;
 }
-textarea{
-    border: 1px solid dimgray;
-    font-family: Arial, sans-serif;
-    padding: 5px;
-    border-radius: 5px;
-}
+
 form button{
     border: 1px solid dimgray;
     width: 80px;
