@@ -21,7 +21,7 @@
     } %>
     <div class="form-cont">
         <form action="/submit" method="post">
-            <h2>New Post</h2>
+            <h1 class="form-title">New Post</h1>
             <input
                     type="text"
                     name="author"
@@ -42,7 +42,7 @@
                 <p class="form-error"><%= getError('title') %></p>
             <% } %>
             <textarea name="text"
-                      rows="15"
+                      rows="12"
                       autocomplete="off"
                       placeholder="Your blog"
             ><%= locals.postData?.text || "" %></textarea>

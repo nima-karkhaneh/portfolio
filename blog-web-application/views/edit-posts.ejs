@@ -21,7 +21,7 @@
      } %>
     <div class="form-cont">
     <form action="/edit/<%= foundPost.id %>" method="post">
-            <h2>Edit your post</h2>
+            <h1 class="form-title">Edit your post</h1>
             <input
                     type="text"
                     name="author"
@@ -42,8 +42,7 @@
             <% } %>
             <textarea
                     name="text"
-                    cols="60"
-                    rows="20"
+                    rows="12"
                     autocomplete="off"
                     placeholder="Your blog"><%= locals.postData?.text || foundPost.text %></textarea>
             <% if (getError('text')) { %>
