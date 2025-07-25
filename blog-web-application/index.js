@@ -74,19 +74,6 @@ app.post("/submit", validator, (req,res) =>{
     res.redirect("/posts")
 })
 
-// Getting a specific post
-
-// app.get("/edit/:postID", (req,res)=>{
-//     const postID = Number(req.params.postID)
-//     const foundPost = posts.find(p => p.id === postID);
-//     if (isNaN(postID) || postID <= 0 || !foundPost)
-//     {
-//         return res.status(404).render("404.ejs")
-//     }
-//     res.render("edit-posts.ejs",{
-//         foundPost: foundPost
-//     });
-// })
 
 // Editing/Updating a specific post
 
@@ -118,22 +105,25 @@ app.put("/posts/:postID", validator, (req, res) => {
 
 // Deleting a specific post
 
-app.get("/posts/delete/:postID", (req,res)=> {
+app.delete("/posts/:postID", (req,res)=> {
     const postID = Number(req.params.postID)
     const foundIndex = posts.findIndex(p => p.id === postID);
     if (isNaN(postID) || postID <= 0 || foundIndex === -1) {
-        return res.status(404).render("404.ejs");
+        return res.status(404).json( {error: "Post not found."} );
     }
+
     posts.splice(foundIndex, 1);
-    if (posts.length === 0) {
-        return res.redirect("/?noPosts=true");
-    }
-    res.redirect("/posts")
+    const noPosts = posts.length === 0;
+
+    res.status(200).json({
+        message: "Post deleted successfully.",
+        noPosts
+    })
 })
 
-// app.use((req, res) => {
-//     res.status(404).render("404.ejs")
-// })
+app.use((req, res) => {
+    res.status(404).render("404.ejs")
+})
 
 
 app.listen(port, () => {
