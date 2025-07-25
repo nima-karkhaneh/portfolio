@@ -46,6 +46,8 @@
 ## Dependencies
 - **express:** Web framework for handling routes and server logic
 - **ejs:** Template engine for rendering HTML with embedded JavaScript
+- **express-validator**: Middleware for validating and sanitising user input
+
 
 ---
 
@@ -111,6 +113,68 @@ Applied the CSS rule `white-space: pre-line` to a reusable `.post-text` class. T
   white-space: pre-line;
 }
 ```
+---
+
+## Recent Improvements
+
+### Font Stack Refinement
+**Problem:** Fonts appeared inconsistently, leading to a poor and unpredictable user experience.
+
+**Solution:** Adopted a consistent font strategy across the app:
+- Set `Roboto, sans-serif` globally for form inputs, paragraphs, and default body text.
+- Used `Raleway` for headings and buttons to preserve design intent.
+- Added fallbacks (`sans-serif`, `serif`) to ensure graceful degradation.
+
+---
+
+### Layout & Styling Consistency Across Pages
+**Problem:** Typography and spacing varied between pages, creating an inconsistent look—especially when transitioning from homepage to form pages.
+
+**Solution:**
+- Replaced standalone `<h2>` tags with a single `<h1>` per page, using semantic HTML.
+- Introduced utility classes like `.welcome-txt`, `.posts-page-title`, `.form-title` for consistent font size, weight, and spacing.
+- Unified margins, paddings, and responsive breakpoints across all views using custom CSS and media queries.
+
+---
+
+### Enhanced Validation and Error Handling
+**Problem:** Users received generic or no feedback on invalid form submissions. Status codes were also incorrectly assigned (e.g., using 400 instead of 404).
+
+**Solution:**
+- Added backend validation using `express-validator` for new and edited posts.
+- Displayed error messages dynamically on the frontend using EJS and `.form-error` styling.
+- Updated error middleware to return accurate HTTP status codes and cleaner responses.
+
+---
+
+### Smooth UX After Post Deletion
+**Problem:** After deleting the last post, the app displayed a blank container or preserved query parameters (`?deleted=true`), which looked broken or confusing.
+
+**Solution:**
+- Implemented a conditional message (`.no-post-msg`) that fades in only when there are no posts.
+- Cleared URL query parameters after deletion to avoid stale UI states.
+- Polished spacing and transitions for visual clarity.
+
+---
+
+### Custom 404 Error Page
+**Problem:** Visiting an unknown route rendered a plain, unstyled error or default Express message, disrupting the user experience.
+
+**Solution:**
+- Added a custom `/404` route with a visually styled EJS template.
+- Centered content using Flexbox (`.content-404`) and applied readable, responsive typography (`.txt-404`).
+
+---
+
+### Refactored CSS for Maintainability
+**Problem:** The stylesheet contained redundant vendor-specific rules (e.g., `appearance: none`, `-webkit-appearance`), which added noise and had minimal modern effect.
+
+**Solution:**
+- Reviewed cross-browser support and removed unnecessary rules after testing on Firefox, Chrome, and Safari.
+- Centralised font declarations and reduced duplication (e.g., reusing `Raleway`, `Roboto` where needed).
+- Organised styles logically by component: home page, forms, posts, error views, and media queries.
+
+---
 
 ## Installation
 
