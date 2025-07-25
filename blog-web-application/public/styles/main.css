@@ -10,45 +10,33 @@
 html, body {
     height: 100dvh;
     color: whitesmoke;
-    font-family: Arial, sans-serif;
+    font-family: Roboto,Arial,sans-serif;
 
 }
 
 input,
 textarea,
-button,
-select {
-    font-family: Roboto, sans-serif;
+button {
+    font-family: inherit;
     font-size: 1rem;
     border: 1px solid #ccc;
     color: black;
     background-color: white;
     outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 }
-
 
 /*Global styling*/
 
 a {
-    font-family: Roboto, sans-serif, sans-serif;
     text-decoration: none;
 }
 
-h1 {
-    font-family: Raleway, sans-serif;
-    font-weight: 500;
-}
-
-h2 {
+h1, h2 {
     font-family: Raleway, sans-serif;
     font-weight: 500;
 }
 
 p {
-    font-family: Roboto, sans-serif, sans-serif;
     font-size: 1.2rem;
     margin-top: 10px;
     font-weight: 300;
