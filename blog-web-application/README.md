@@ -53,16 +53,7 @@
 
 ## Challenges & Solutions
 
-### 1. Conditional Scrollbar Display  
-**Challenge:**  
-The posts container always showed a vertical scrollbar, even when there were no posts — creating unnecessary visual clutter.  
-
-**Solution:**  
-Used conditional logic in the EJS template to apply a `.no-scroll` class only when there were no posts. This class toggled the `overflow-y` CSS property in the stylesheet, preventing the scrollbar from appearing unless needed.
-
----
-
-### 2. Simplifying Date Formatting  
+### 1. Simplifying Date Formatting  
 **Challenge:**  
 JavaScript’s default `Date()` output included verbose timezone info (e.g., `GMT+1000` and full timezone names), making the UI look cluttered.  
 
@@ -71,7 +62,7 @@ Formatted the date on the backend using `toLocaleDateString()` and `toLocaleTime
 
 ---
 
-### 3. Implementing Post Editing with Prefilled Form Values  
+### 2. Implementing Post Editing with Prefilled Form Values  
 **Challenge:**  
 Allowing users to edit a post by pre-populating the form with the current post content.  
 
@@ -80,7 +71,7 @@ Used dynamic routing (`/edit/:postID`) to fetch the selected post by ID. Passed 
 
 ---
 
-### 4. Deleting a Specific Post by ID  
+### 3. Deleting a Specific Post by ID  
 **Challenge:**  
 Enable reliable and efficient deletion of a single post using its unique identifier.  
 
@@ -89,7 +80,7 @@ Created a dynamic GET route (`/posts/delete/:postID`) to locate the post in the 
 
 ---
 
-### 5. Reusing Header and Footer with Partials  
+### 4. Reusing Header and Footer with Partials  
 **Challenge:**  
 Avoid code duplication and maintain consistency across multiple views.  
 
@@ -98,7 +89,7 @@ Abstracted the header and footer into partial EJS files (`partials/header.ejs` a
 
 ---
 
-### 6. Preserving Line Breaks in User-Submitted Posts
+### 5. Preserving Line Breaks in User-Submitted Posts
 **Challenge:**  
 When users wrote multi-line posts using a `<textarea>`, any line breaks (e.g. pressing Enter) were ignored when rendering the post on the page. This caused all the text to appear as one continuous block, making posts hard to read.
 
