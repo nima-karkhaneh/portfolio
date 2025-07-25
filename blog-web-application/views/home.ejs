@@ -13,13 +13,21 @@
 <body>
 <main>
 <%- include("partials/header.ejs") %>
-<div class="content">
-    <h2>WELCOME TO YOUR</h2>
-    <h1>Daily&nbsp;Online&nbsp;Journal</h1>
-    <p>Journaling can reduce daily stress and anxiety</p>
-    <a href="/posts"><button>View Your Posts</button></a>
+<div class="home-page-container">
+    <p class="welcome-txt">WELCOME TO YOUR</p>
+    <h1 class="home-page-title">Daily&nbsp;Online&nbsp;Journal</h1>
+    <p class="fact-text">Journaling can reduce daily stress and anxiety</p>
+    <a id="viewPostsBtn" class="btn">View Your Posts</a>
+    <p id="noPostsMessage" class="no-post-msg <%= noPosts? "visible" : "" %>">
+        Your journal is empty. Click + to begin.
+    </p>
 </div>
 <%- include("partials/footer.ejs") %>
 </main>
+<script>
+    window.postsCount = <%= posts.length %> || 0;
+    console.log(postsCount)
+</script>
+
 </body>
 </html>

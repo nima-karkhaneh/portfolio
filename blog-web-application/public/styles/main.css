@@ -1,71 +1,103 @@
-*{
+/*RESET/Cross browser compatibility*/
+
+* {
     border: 0;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
-html, body{
-    height: 100vh;
-    font-family: "Raleway", sans-serif;
+
+html, body {
+    height: 100dvh;
     color: whitesmoke;
-    background-image: url("../images/ren-hosoya-xYI_dcYIQas-unsplash (1).jpg");
-    background-size: cover;
-    background-position: center;
+    font-family: Roboto,Arial,sans-serif;
+
 }
-header{
+
+input,
+textarea,
+button {
+    font-family: inherit;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    color: black;
+    background-color: white;
+    outline: none;
+}
+
+/*Global styling*/
+
+a {
+    text-decoration: none;
+}
+
+h1, h2 {
+    font-family: Raleway, sans-serif;
+    font-weight: 500;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+
+/*home page styling*/
+
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0 0 0;
     width: 100%;
+    height: 4rem;
+    padding: 0 15px 0 5px;
 }
-a{
-    color: inherit;
-    text-decoration: none;
+.logo {
+    height: 70%;
 }
-.logo{
-    height: 3rem;
+.add-icon {
+    height: 30%;
 }
-.add{
-    height: 1.5rem;
-    margin-right: 30px;
-}
-header a{
+header a {
+    font-family: Raleway, sans-serif;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-size: 1.5rem;
+    color: whitesmoke;
+    height: 100%;
 }
-main{
+main {
     display: flex;
     flex-direction: column;
     min-height: 100%;
     align-items: center;
+    background-image: url("../images/ren-hosoya-xYI_dcYIQas-unsplash (1).jpg");
+    background-size: cover;
+    background-position: center;
 }
-.content{
+.home-page-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-h2{
-    font-size: 2rem;
+.welcome-txt {
+    font-family: Raleway, sans-serif;
+    font-size: 2.5rem;
     margin-bottom: 30px;
     font-weight: 400;
 }
-h1{
-    font-family: "Alice", serif;
+.home-page-title {
+    font-family: Alice, serif;
     font-size: 4.5rem;
     font-weight: 400;
 }
-p{
-    font-size: 1.3rem;
-    margin-top: 10px;
-    font-weight: 300;
-}
-button{
+.btn {
+    color: black;
     padding: 20px;
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-size: 1rem;
     border-radius: 20px;
@@ -73,55 +105,59 @@ button{
     background-color: whitesmoke;
     margin-top: 50px;
 }
-footer{
+footer {
+    font-family: Roboto, sans-serif;
     font-size: 0.8rem;
     padding: 20px;
     text-align: center;
     width: 100%;
 }
-form{
+
+/*new/edit posts styling*/
+
+.form-cont {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+form {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 30px;
     background-color: whitesmoke;
     border-radius: 5px;
-    margin-top: 30px;
-    flex-grow: 1;
+    width: 500px;
 }
-form h2{
+.form-title {
     color: dimgray;
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 10px;
 }
-input{
-    border: 1px solid dimgray;
+input, textarea {
     padding: 5px;
     border-radius: 5px;
 }
-textarea{
-    border: 1px solid dimgray;
-    font-family: Arial, sans-serif;
-    padding: 5px;
-    border-radius: 5px;
-}
-form button{
+form button {
     border: 1px solid dimgray;
     width: 80px;
     padding: 10px;
     border-radius: 10px;
     margin-top: 10px;
+    cursor: pointer;
 }
-.posts-container{
+
+/*posts styling*/
+
+.posts-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 4rem;
     width: 80%;
 }
-.posts-content{
+.posts-content {
     max-height: 800px;
     background-color: whitesmoke;
     border-radius: 5px;
@@ -129,89 +165,138 @@ form button{
     overflow-y: scroll;
     color: black;
 }
-.posts-content h2, .posts-content p{
-    padding: 5px;
-}
-.title{
+.posts-page-title {
     display: flex;
     justify-content: center;
-    font-size: 3.5rem;
+    font-size: 2.7rem;
     margin: 20px auto;
 }
-.posts-title{
-    margin-bottom: 0;
+.posts-title {
+    font-size: 1.7rem;
+    padding: 5px;
 }
 .post-text {
     white-space: pre-line;
+    padding: 5px;
 }
-.no-post{
-    text-align: center;
-    font-size: 1.8rem;
-    margin: 0 auto;
-
-}
-
-/*Hiding the scroll bar when there is no post*/
-.posts-content.no-scroll {
-    overflow-y: hidden;
-}
-.author, .date{
+.author, .date {
     font-size: 0.8rem;
 }
-.edit, .delete{
-    padding: 0;
-    border-radius: 0;
-    border: 0;
+.date {
+    margin-top: 5px;
+}
+.edit, .delete {
+    display: inline-block;
     height: 100%;
     margin-top: 15px;
     color: whitesmoke;
+    padding: 8px;
+    border-radius: 5px;
 }
-.separator{
+.separator {
     border-top: 1px solid #c0c0c0;
     margin: 30px auto;
 }
-.posts-content a{
-    padding: 8px;
-    border-radius: 5px;
-    display: inline-block;
-}
-.edit{
+.edit {
     background-color:#ffc107 ;
 }
-.delete{
+.delete {
     background-color: #dc3545;
     margin-left: 5px;
 }
 
+/*No posts error message styling*/
+
+.no-post-msg {
+    opacity: 0;
+    text-align: center;
+    transition: opacity 0.4s ease;
+    padding: 40px 20px 20px 20px;
+}
+.no-post-msg.visible {
+    opacity: 1;
+}
+
+
+/*Validation errors*/
+
+.form-error {
+    color: red;
+    margin-top: 0;
+    font-size: 0.9em;
+}
+
+/*404 Page*/
+
+.content-404 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+.txt-404 {
+    font-size: 3rem;
+    text-align: center;
+}
+
+
 /*Media Queries*/
 
 @media (max-width:740px) {
-        h1{
-            font-size: 2rem;
-        }
-    .content h2{
-            font-size: 1.2rem;
-        }
-    .content p{
-            font-size: 1rem;
-            text-align: center;
-        }
-        header a{
-            font-size: 1rem;
-        }
-        button{
-            font-size: 0.8rem;
-        }
-        footer{
-            font-size: 0.7rem;
-        }
-        form{
-            max-width: 300px;
-        }
-        .title{
-            font-size: 2.5rem;
-        }
-        .posts-title{
-            font-size: 1.5rem;
-        }
+    header a{
+        font-size: 1rem;
     }
+
+    /*home page*/
+
+    .welcome-txt {
+        font-size: 1.4rem;
+    }
+    .home-page-title {
+        font-size: 2rem;
+    }
+    .fact-text {
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    .btn {
+        font-size: 0.8rem;
+    }
+    footer{
+        font-size: 0.7rem;
+    }
+
+    /*Add-edit page*/
+
+    form{
+        max-width: 300px;
+    }
+    .form-title {
+        font-size: 2rem;
+    }
+    input, textarea {
+        font-size: 0.9rem;
+    }
+    ::placeholder {
+        font-size: 0.8rem;
+    }
+
+    /*Posts page*/
+
+    .posts-page-title {
+       font-size: 2.1rem;
+    }
+    .posts-title {
+        font-size: 1.3rem;
+    }
+    .post-text{
+        font-size: 0.9rem;
+        }
+
+    /*404 page*/
+
+    .txt-404 {
+        font-size: 2rem;
+    }
+}

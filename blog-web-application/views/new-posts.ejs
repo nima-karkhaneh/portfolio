@@ -13,13 +13,45 @@
 <body>
 <main>
 <%- include("partials/header.ejs") %>
-<form action="/submit" method="post">
-    <h2>New Post</h2>
-    <input type="text" name="author" placeholder="Author" autocomplete="off" required>
-    <input type="text" name="title" placeholder="Title" autocomplete="off" required>
-    <textarea name="text" id="" cols="60" rows="20" autocomplete="off" placeholder="Your blog"></textarea>
-    <button type="submit">Submit</button>
-</form>
+    <!--    Validation error helper-->
+    <% function getError(field) {
+        if (!locals.errors) return null;
+        const err = locals.errors.find(e => e.path === field);
+        return err ? err.msg : null;
+    } %>
+    <div class="form-cont">
+        <form action="/submit" method="post">
+            <h1 class="form-title">New Post</h1>
+            <input
+                    type="text"
+                    name="author"
+                    placeholder="Author"
+                    autocomplete="off"
+                    value="<%= locals.postData?.author || "" %>"
+            >
+            <% if (getError('author')) { %>
+                <p class="form-error"><%= getError('author') %></p>
+            <% } %>
+            <input type="text"
+                   name="title"
+                   placeholder="Title"
+                   autocomplete="off"
+                   value="<%= locals.postData?.title || "" %>"
+            >
+            <% if (getError('title')) { %>
+                <p class="form-error"><%= getError('title') %></p>
+            <% } %>
+            <textarea name="text"
+                      rows="12"
+                      autocomplete="off"
+                      placeholder="Your blog"
+            ><%= locals.postData?.text || "" %></textarea>
+            <% if (getError('text')) { %>
+                <p class="form-error"><%= getError('text') %></p>
+            <% } %>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 <%- include("partials/footer.ejs") %>
 </main>
 </body>
