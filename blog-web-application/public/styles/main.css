@@ -185,7 +185,8 @@ form button {
 .date {
     margin-top: 5px;
 }
-.edit, .delete {
+.edit-btn, .delete-btn {
+    cursor: pointer;
     display: inline-block;
     height: 100%;
     margin-top: 15px;
@@ -197,10 +198,10 @@ form button {
     border-top: 1px solid #c0c0c0;
     margin: 30px auto;
 }
-.edit {
+.edit-btn {
     background-color:#ffc107 ;
 }
-.delete {
+.delete-btn {
     background-color: #dc3545;
     margin-left: 5px;
 }

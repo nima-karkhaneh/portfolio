@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Removing noPosts query parameter for a clean reload
 document.addEventListener('DOMContentLoaded', () => {
     // Clear query params from URL without reloading the page
     if (window.location.search.includes("noPosts=true")) {
@@ -28,4 +29,39 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState({}, document.title, url);
     }
 });
+
+// Delete functionality
+
+const deleteButton = document.querySelectorAll(".delete-btn")
+deleteButton.forEach(button => {
+        button.addEventListener("click", async (e) => {
+            const postID = e.target.dataset.id;
+            try {
+                const response = await fetch(`posts/${postID}`, {
+                    method: "delete",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                })
+
+                if (!response.ok) {
+                    const err = await response.json()
+                    alert(err.error || "Failed to delete post.");
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.noPosts) {
+                    window.location.href = "/?noPosts=true"
+                } else {
+                    window.location.reload()
+                }
+
+            } catch(err) {
+                console.log(err.message)
+                alert("Something went wrong while deleting the post")
+
+            }
+        });
+    });
 
