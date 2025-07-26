@@ -20,7 +20,7 @@
         return err ? err.msg : null;
      } %>
     <div class="form-cont">
-    <form id="edit-form">
+    <form id="edit-form" data-id="<%= foundPost.id %>">
             <h1 class="form-title">Edit your post</h1>
             <input
                     type="text"
