@@ -36,6 +36,9 @@ const deleteButton = document.querySelectorAll(".delete-btn")
 deleteButton.forEach(button => {
         button.addEventListener("click", async (e) => {
             const postID = e.target.dataset.id;
+            const confirmDelete = confirm("Are you sure you want to delete this post?")
+            if (!confirmDelete) return
+
             try {
                 const response = await fetch(`posts/${postID}`, {
                     method: "delete",

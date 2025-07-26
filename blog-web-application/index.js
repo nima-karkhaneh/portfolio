@@ -48,9 +48,16 @@ app.get("/posts", (req, res) => {
     });
 });
 
-// app.get("/not-found", (req, res) => {
-//     res.render("404.ejs")
-// })
+app.get("/edit/:postID", (req, res) => {
+    const postID = Number(req.params.postID);
+    const foundPost = posts.find(p => p.id === postID);
+
+    if (!foundPost) return res.status(404).render("404.ejs")
+
+    res.render("edit-posts.ejs", {
+        foundPost,
+    })
+})
 
 
 // Submitting a new post
@@ -73,6 +80,8 @@ app.post("/submit", validator, (req,res) =>{
     posts.push(post);
     res.redirect("/posts")
 })
+
+
 
 
 // Editing/Updating a specific post
