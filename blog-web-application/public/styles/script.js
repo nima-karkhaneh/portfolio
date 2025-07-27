@@ -61,8 +61,6 @@ if (editForm) {
             }
 
             const result = await response.json();
-            console.log(result)
-            alert("Post updated successfully.");
             window.location.href = "/posts"
 
         } catch(err) {
