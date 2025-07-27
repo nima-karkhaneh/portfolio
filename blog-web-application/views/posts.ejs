@@ -21,8 +21,8 @@
             <p class="post-text"><%= post.text %></p>
             <p class="author"><%= `By : ${post.author}` %></p>
             <p class="date"><%=post.date%></p>
-            <a class="edit" href="/edit/<%= post.id %>">Edit</a>
-            <a class="delete" href="/posts/delete/<%= post.id %>">Delete</a>
+            <a class="edit-btn" href="/edit/<%= post.id %>">Edit</a>
+            <button class="delete-btn" data-id="<%= post.id %>">Delete</button>
             <div class="separator"></div>
         <% }) %>
     </div>

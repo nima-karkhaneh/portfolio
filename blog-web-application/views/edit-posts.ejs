@@ -20,14 +20,14 @@
         return err ? err.msg : null;
      } %>
     <div class="form-cont">
-    <form action="/edit/<%= foundPost.id %>" method="post">
+    <form id="edit-form" data-id="<%= foundPost.id %>">
             <h1 class="form-title">Edit your post</h1>
             <input
                     type="text"
                     name="author"
                     placeholder="Author"
                     autocomplete="off"
-                    value="<%= locals.postData?.author || foundPost.author %>">
+                    value="<%= foundPost.author %>">
             <% if (getError('author')) { %>
                 <p class="form-error"><%= getError('author') %></p>
             <% } %>
@@ -36,7 +36,7 @@
                     name="title"
                     placeholder="Title"
                     autocomplete="off"
-                    value="<%= locals.postData?.title || foundPost.title %>">
+                    value="<%= foundPost.title %>">
             <% if (getError('title')) { %>
                 <p class="form-error"><%= getError('title') %></p>
             <% } %>
@@ -44,7 +44,7 @@
                     name="text"
                     rows="12"
                     autocomplete="off"
-                    placeholder="Your blog"><%= locals.postData?.text || foundPost.text %></textarea>
+                    placeholder="Your blog"><%= foundPost.text %></textarea>
             <% if (getError('text')) { %>
                 <p class="form-error"><%= getError('text') %></p>
             <% } %>

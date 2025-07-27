@@ -6,9 +6,10 @@ import {validationResult} from "express-validator";
 const app = express();
 const port = process.env.PORT || 3000
 
-
+app.use(express.json())
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
+
 
 function getFormattedDate() {
     const now = new Date();
@@ -47,9 +48,16 @@ app.get("/posts", (req, res) => {
     });
 });
 
-// app.get("/not-found", (req, res) => {
-//     res.render("404.ejs")
-// })
+app.get("/edit/:postID", (req, res) => {
+    const postID = Number(req.params.postID);
+    const foundPost = posts.find(p => p.id === postID);
+
+    if (!foundPost) return res.status(404).render("404.ejs")
+
+    res.render("edit-posts.ejs", {
+        foundPost,
+    })
+})
 
 
 // Submitting a new post
@@ -73,65 +81,53 @@ app.post("/submit", validator, (req,res) =>{
     res.redirect("/posts")
 })
 
-// Getting a specific post
 
-app.get("/edit/:postID", (req,res)=>{
-    const postID = Number(req.params.postID)
-    const foundPost = posts.find(p => p.id === postID);
-    if (isNaN(postID) || postID <= 0 || !foundPost)
-    {
-        return res.status(404).render("404.ejs")
-    }
-    res.render("edit-posts.ejs",{
-        foundPost: foundPost
-    });
-})
+
 
 // Editing/Updating a specific post
 
-app.post("/edit/:postID", validator, (req, res) => {
+app.put("/posts/:postID", validator, (req, res) => {
     const postID = Number(req.params.postID)
     const foundIndex = posts.findIndex(p => p.id === postID );
-    if (isNaN(postID) || postID <= 0 || foundIndex === -1) return res.status(404).render("404.ejs");
+    if (isNaN(postID) || postID <= 0 || foundIndex === -1) return res.status(404).json({ error: "Post not found."} )
 
-    const foundPost = posts[foundIndex];
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).render("edit-posts.ejs", {
-            errors: errors.array(),
-            postData: req.body,
-            foundPost,
-        });
+        return res.status(400).json( {errors: errors.array()} )
     }
 
+    const foundPost = posts[foundIndex];
+
     const updatedPost = {
-        id: foundPost.id,
+        ...foundPost,
         author: req.body.author || foundPost.author,
         title: req.body.title || foundPost.title,
         text: req.body.text || foundPost.text,
-        date: getFormattedDate(),
-    };
+        date: getFormattedDate()
+    }
 
     posts[foundIndex] = updatedPost;
-
-    res.redirect("/posts");
+    res.status(200).json( { message: "Post updated", post: updatedPost })
 });
 
 
 // Deleting a specific post
 
-app.get("/posts/delete/:postID", (req,res)=> {
+app.delete("/posts/:postID", (req,res)=> {
     const postID = Number(req.params.postID)
     const foundIndex = posts.findIndex(p => p.id === postID);
     if (isNaN(postID) || postID <= 0 || foundIndex === -1) {
-        return res.status(404).render("404.ejs");
+        return res.status(404).json( {error: "Post not found."} );
     }
+
     posts.splice(foundIndex, 1);
-    if (posts.length === 0) {
-        return res.redirect("/?noPosts=true");
-    }
-    res.redirect("/posts")
+    const noPosts = posts.length === 0;
+
+    res.status(200).json({
+        message: "Post deleted successfully.",
+        noPosts
+    })
 })
 
 app.use((req, res) => {
