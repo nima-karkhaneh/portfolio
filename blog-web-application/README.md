@@ -158,12 +158,32 @@ Applied the CSS rule `white-space: pre-line` to a reusable `.post-text` class. T
 ---
 
 ### Refactored CSS for Maintainability
-**Problem:** The stylesheet contained redundant vendor-specific rules (e.g., `appearance: none`, `-webkit-appearance`), which added noise and had minimal modern effect.
+**Problem:**
+The stylesheet contained redundant vendor-specific rules (e.g., `appearance: none`, `-webkit-appearance`), which added noise and had minimal modern effect.
 
 **Solution:**
 - Reviewed cross-browser support and removed unnecessary rules after testing on Firefox, Chrome, and Safari.
 - Centralised font declarations and reduced duplication (e.g., reusing `Raleway`, `Roboto` where needed).
 - Organised styles logically by component: home page, forms, posts, error views, and media queries.
+
+---
+
+### Refactored Edit and Delete Routes to Follow RESTful API Standards
+
+**Problem:**
+Previously, post editing and deletion were handled via `POST` requests with non-RESTful endpoints (e.g. `/posts/delete/:postID`). This limited scalability and clarity.
+
+**Solution:**
+- Replaced the `GET` delete and `POST` edit logic with proper `PUT` and `DELETE` routes:
+   - `PUT /posts/:postID`
+   - `DELETE /posts/:postID`
+- Switched from classic HTML form submissions to the **Fetch API** for asynchronous request handling.
+- Ensured updated posts and deletions dynamically refresh the UI or redirect users.
+- Centralised all logic into the `/script.js` file to keep markup clean and behavior consistent.
+
+**Benefits:**
+- Aligns with RESTful architecture principles.
+- Separates concerns between backend logic and frontend rendering.
 
 ---
 

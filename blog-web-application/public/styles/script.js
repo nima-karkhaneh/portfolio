@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const noPostsMsg = document.getElementById('noPostsMessage');
 
     btn?.addEventListener('click', (e) => {
-        if (window.postsCount > 0) {
+        if (postsCount > 0) {
             window.location.href = '/posts';
         } else {
             e.preventDefault();

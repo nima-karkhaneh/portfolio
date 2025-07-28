@@ -31,9 +31,8 @@
 <%- include("partials/footer.ejs") %>
 </main>
 <script>
-    window.postsCount = <%= posts.length %> || 0;
-    console.log(postsCount)
+    // Variable used in script.js to either show posts or an error message based on length or 0
+    let postsCount = <%= posts.length %> || 0;
 </script>
-
 </body>
 </html>
