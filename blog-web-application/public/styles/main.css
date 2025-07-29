@@ -173,12 +173,9 @@ form button {
 }
 .posts-title {
     font-size: 1.7rem;
-    padding: 5px;
 }
 .post-text {
     white-space: pre-line;
-    padding: 5px;
-    margin-top: 0;
 }
 .post-text.preview {
     white-space: normal;
