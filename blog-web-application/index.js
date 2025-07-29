@@ -43,8 +43,10 @@ app.get("/posts", (req, res) => {
     if (posts.length === 0) {
         return res.redirect("/?noPosts=true");
     }
+    const reversedPosts = [...posts].reverse()
+
     res.render("posts.ejs", {
-        posts,
+        posts: reversedPosts,
     });
 });
 

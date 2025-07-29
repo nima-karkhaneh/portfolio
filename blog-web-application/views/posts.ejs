@@ -22,7 +22,7 @@
 <div class="posts-container">
     <div class="posts-content">
         <h1 class="posts-page-title">Your Blogs</h1>
-        <% posts.reverse().forEach((post) => { %>
+        <% posts.forEach((post) => { %>
             <h2 class="posts-title"><%= post.title %></h2>
             <% if (post.text.length > 100) { %>
                 <p class="post-text preview">
