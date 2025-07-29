@@ -48,6 +48,10 @@ app.get("/posts", (req, res) => {
     });
 });
 
+app.get("/posts/:postID", (req, res) => {
+    res.render("view-post.ejs")
+})
+
 app.get("/edit/:postID", (req, res) => {
     const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
