@@ -173,6 +173,14 @@ form button {
 }
 .posts-title {
     font-size: 1.7rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.small-leaf-icon {
+    height: 1.5rem;
+    background-color: #afafaf;
+    border-radius: 5px;
 }
 .post-text {
     white-space: pre-line;
@@ -180,19 +188,22 @@ form button {
 .post-text.preview {
     white-space: normal;
 }
+small {
+    font-size: 0.9rem;
+}
 .author, .date {
     font-size: 0.9rem;
 }
 .date {
     margin-top: 5px;
 }
-
 .separator {
     border-top: 1px solid #c0c0c0;
     margin: 30px auto;
 }
 
 /*view-post styling*/
+
 .single-post-container {
     color: black;
     padding-top: 5rem;
@@ -204,14 +215,15 @@ form button {
     padding: 20px;
     border-radius: 5px;
 }
-.post-meta {
+.post-author-and-date {
     font-size: 0.9rem;
+    padding-top: 10px;
 }
 .view-post-btns-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    padding-top: 15px;
 }
 .edit-btn, .delete-btn, .back-to-blogs-btn {
     cursor: pointer;
