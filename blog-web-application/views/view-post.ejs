@@ -13,31 +13,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alice&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles/main.css">
+    <title>View post</title>
     <script src="/styles/script.js" defer></script>
-    <title>JournaLog - Posts</title>
 </head>
 <body>
 <main>
-<%- include("partials/header.ejs") %>
-<div class="posts-container">
-    <div class="posts-content">
-        <h1 class="posts-page-title">Your Blogs</h1>
-        <% posts.forEach((post) => { %>
-            <h2 class="posts-title"><%= post.title %></h2>
-            <% if (post.text.length > 100) { %>
-                <p class="post-text preview">
-                    <%= post.text.length > 100 ? post.text.slice(0,100).trim() + "...": post.text  %><small><a href="/posts/<%= post.id %>">Read more</a></small>
-                </p>
-            <% } else { %>
-                <p class="post-text preview"><%= post.text %></p>
-            <% } %>
-            <p class="author"><%= `By : ${post.author}` %></p>
-            <p class="date"><%=post.date%></p>
-            <div class="separator"></div>
-        <% }) %>
+    <%- include("partials/header.ejs") %>
+    <div class="single-post-container">
+        <div class="single-post-content">
+            <h1 class="post-title"><%= foundPost.title %></h1>
+            <p class="post-text"><%= foundPost.text %></p>
+            <p class="post-meta">By: <%= foundPost.author %> on <%= foundPost.date %></p>
+            <a class="edit-btn" href="/edit/<%= foundPost.id %>">Edit</a>
+            <button class="delete-btn" data-id="<%= foundPost.id %>">Delete</button>
+        </div>
     </div>
-</div>
-<%- include("partials/footer.ejs") %>
+    <%- include("partials/footer.ejs") %>
 </main>
 </body>
 </html>

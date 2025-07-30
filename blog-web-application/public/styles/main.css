@@ -173,14 +173,15 @@ form button {
 }
 .posts-title {
     font-size: 1.7rem;
-    padding: 5px;
 }
 .post-text {
     white-space: pre-line;
-    padding: 5px;
+}
+.post-text.preview {
+    white-space: normal;
 }
 .author, .date {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 .date {
     margin-top: 5px;
@@ -197,6 +198,22 @@ form button {
 .separator {
     border-top: 1px solid #c0c0c0;
     margin: 30px auto;
+}
+
+/*view-post styling*/
+.single-post-container {
+    color: black;
+    padding-top: 5rem;
+    flex-grow: 1;
+    width: 80%;
+}
+.single-post-content {
+    background-color: whitesmoke;
+    padding: 20px;
+    border-radius: 5px;
+}
+.post-meta {
+    font-size: 0.9rem;
 }
 .edit-btn {
     background-color:#ffc107 ;

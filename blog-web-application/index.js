@@ -43,10 +43,31 @@ app.get("/posts", (req, res) => {
     if (posts.length === 0) {
         return res.redirect("/?noPosts=true");
     }
+    const reversedPosts = [...posts].reverse()
+
     res.render("posts.ejs", {
-        posts,
+        posts: reversedPosts,
     });
 });
+
+
+// Getting a single post by postID
+app.get("/posts/:postID", (req, res) => {
+    const postID = Number(req.params.postID);
+    if (isNaN(postID) || postID <= 0) {
+        return res.status(404).render("404.ejs")
+    }
+    const foundPost = posts.find(p => p.id === postID);
+    if (!foundPost) {
+        return res.status(404).render("404.ejs")
+    }
+    res.render("view-post.ejs", {
+        foundPost,
+    })
+})
+
+
+// Getting a specific post for editing
 
 app.get("/edit/:postID", (req, res) => {
     const postID = Number(req.params.postID);

@@ -61,7 +61,7 @@ if (editForm) {
             }
 
             const result = await response.json();
-            window.location.href = "/posts"
+            window.location.href = `/posts/${postID}`
 
         } catch(err) {
             console.error(err.message);
@@ -82,7 +82,7 @@ deleteButton.forEach(button => {
             if (!confirmDelete) return
 
             try {
-                const response = await fetch(`posts/${postID}`, {
+                const response = await fetch(`/posts/${postID}`, {
                     method: "delete",
                     headers: {
                         "Content-Type": "application/json"
@@ -99,7 +99,7 @@ deleteButton.forEach(button => {
                 if (result.noPosts) {
                     window.location.href = "/?noPosts=true"
                 } else {
-                    window.location.reload()
+                    window.location.href= "/posts"
                 }
 
             } catch(err) {
