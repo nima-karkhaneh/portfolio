@@ -154,7 +154,7 @@ form button {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    padding-top: 5rem;
     width: 80%;
 }
 .posts-content {
@@ -186,15 +186,7 @@ form button {
 .date {
     margin-top: 5px;
 }
-.edit-btn, .delete-btn {
-    cursor: pointer;
-    display: inline-block;
-    height: 100%;
-    margin-top: 15px;
-    color: whitesmoke;
-    padding: 8px;
-    border-radius: 5px;
-}
+
 .separator {
     border-top: 1px solid #c0c0c0;
     margin: 30px auto;
@@ -215,12 +207,29 @@ form button {
 .post-meta {
     font-size: 0.9rem;
 }
+.view-post-btns-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+.edit-btn, .delete-btn, .back-to-blogs-btn {
+    cursor: pointer;
+    height: 100%;
+    color: whitesmoke;
+    padding: 8px;
+    border-radius: 5px;
+}
 .edit-btn {
     background-color:#ffc107 ;
 }
 .delete-btn {
     background-color: #dc3545;
     margin-left: 5px;
+}
+.back-to-blogs-btn {
+    background-color:#0d6efd ;
+    text-align: center;
 }
 
 /*No posts error message styling*/

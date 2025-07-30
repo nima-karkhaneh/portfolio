@@ -1,5 +1,5 @@
 
-# Journalog – A Simple Blog Application
+# Journalog – A Full-Featured Blog Application
 
 ## Overview
 **Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
@@ -27,6 +27,9 @@
 - Posts are timestamped and ordered newest-first
 - Clean and responsive layout with partials (header & footer)
 - Preserves line breaks from user input (multi-line post formatting)
+- Truncates long posts on the homepage with a `Read more` link
+- View full post on its own page (`/posts/:id`)
+- RESTful architecture using proper HTTP verbs
 - Intuitive interface for post editing and deletion
 
 ---
@@ -53,7 +56,25 @@
 
 ## Challenges & Solutions
 
-### 1. Simplifying Date Formatting  
+### 1. Truncating Long Posts
+**Challenge:**  
+Long posts made the homepage cluttered and harder to scan.
+
+**Solution:**  
+Truncated posts to 100 characters using `slice()`, then added a `Read more` anchor tag to link to the full post. Posts shorter than 100 characters omit the link.
+
+```ejs
+  <% if (post.text.length > 100) { %>
+    <p class="post-text preview">
+        <%= post.text.length > 100 ? post.text.slice(0,100).trim() + "...": post.text  %><small><a href="/posts/<%= post.id %>">Read more</a></small>
+    </p>
+    <% } else { %>
+        <p class="post-text preview"><%= post.text %></p>
+    <% } %>
+```
+---
+
+### 2. Simplifying Date Formatting
 **Challenge:**  
 JavaScript’s default `Date()` output included verbose timezone info (e.g., `GMT+1000` and full timezone names), making the UI look cluttered.  
 
@@ -184,6 +205,31 @@ Previously, post editing and deletion were handled via `POST` requests with non-
 **Benefits:**
 - Aligns with RESTful architecture principles.
 - Separates concerns between backend logic and frontend rendering.
+
+---
+
+### Building a Dedicated Post View Page
+
+**Problem:**  
+Needed a way to view full post content when navigating from `Read more`.
+
+**Solution:**
+- Added a dynamic `GET` route: `/posts/:postID`
+- Created a `view-post.ejs` template to display full post content
+- Applied the `.post-text` class with `white-space: pre-line` for preserving formatting and improving readability
+- Moved **Edit** and **Delete** buttons to this page to declutter the homepage
+
+---
+
+### Added "Back to Blogs" Button on Full Post View
+
+**Problem:**  
+Users who landed directly on a full post (e.g. via shared link) had no intuitive way to return to the list of posts.
+
+**Solution:**
+- Introduced a Blogs anchor button on the view-post.ejs page.
+- Used a flex container (`.view-post-btns-container`) with `justify-content: space-between` to position it opposite the Edit/Delete controls.
+- Improved usability by reducing steps to navigate between views.
 
 ---
 
