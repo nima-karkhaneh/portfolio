@@ -1,5 +1,5 @@
 import express from "express";
-import validator from "./validation-middleware/validator.js";
+import { postIDValidator, postValidator } from "./validation-middleware/validator.js";
 import {validationResult} from "express-validator";
 
 
@@ -52,12 +52,15 @@ app.get("/posts", (req, res) => {
 
 
 // Getting a single post by postID
-app.get("/posts/:postID", (req, res) => {
-    const postID = Number(req.params.postID);
-    if (isNaN(postID) || postID <= 0) {
-        return res.status(404).render("404.ejs")
+app.get("/posts/:postID", postIDValidator, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
+
+    const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
+
     if (!foundPost) {
         return res.status(404).render("404.ejs")
     }
@@ -69,7 +72,12 @@ app.get("/posts/:postID", (req, res) => {
 
 // Getting a specific post for editing
 
-app.get("/edit/:postID", (req, res) => {
+app.get("/edit/:postID", postIDValidator, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array()})
+    }
+
     const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
 
@@ -83,7 +91,7 @@ app.get("/edit/:postID", (req, res) => {
 
 // Submitting a new post
 
-app.post("/submit", validator, (req,res) =>{
+app.post("/submit", postValidator, (req,res) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).render("new-posts.ejs" , {
@@ -107,15 +115,17 @@ app.post("/submit", validator, (req,res) =>{
 
 // Editing/Updating a specific post
 
-app.put("/posts/:postID", validator, (req, res) => {
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID );
-    if (isNaN(postID) || postID <= 0 || foundIndex === -1) return res.status(404).json({ error: "Post not found."} )
-
-
+app.put("/posts/:postID", [...postIDValidator, postIDValidator], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json( {errors: errors.array()} )
+        return res.status(400).json( { errors: errors.array() } )
+    }
+
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID );
+
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found." })
     }
 
     const foundPost = posts[foundIndex];
@@ -135,13 +145,18 @@ app.put("/posts/:postID", validator, (req, res) => {
 
 // Deleting a specific post
 
-app.delete("/posts/:postID", (req,res)=> {
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID);
-    if (isNaN(postID) || postID <= 0 || foundIndex === -1) {
-        return res.status(404).json( {error: "Post not found."} );
+app.delete("/posts/:postID", postIDValidator, (req,res)=> {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID)
+
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found."})
+    }
     posts.splice(foundIndex, 1);
     const noPosts = posts.length === 0;
 
