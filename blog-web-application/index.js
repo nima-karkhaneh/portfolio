@@ -115,55 +115,67 @@ app.post("/submit", postValidator, (req,res) =>{
 
 // Editing/Updating a specific post
 
-app.put("/posts/:postID", [...postIDValidator, postIDValidator], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json( { errors: errors.array() } )
+app.put("/posts/:postID", [...postIDValidator, postValidator], (req, res) => {
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json( { errors: errors.array() } )
+        }
+
+        const postID = Number(req.params.postID)
+        const foundIndex = posts.findIndex(p => p.id === postID );
+
+        if (foundIndex === -1) {
+            return res.status(404).json({ error: "Post not found." })
+        }
+
+        const foundPost = posts[foundIndex];
+
+        const updatedPost = {
+            ...foundPost,
+            author: req.body.author || foundPost.author,
+            title: req.body.title || foundPost.title,
+            text: req.body.text || foundPost.text,
+            date: getFormattedDate()
+        }
+
+        posts[foundIndex] = updatedPost;
+        res.status(200).json( { message: "Post updated", post: updatedPost })
     }
-
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID );
-
-    if (foundIndex === -1) {
-        return res.status(404).json({ error: "Post not found." })
+    catch (err) {
+        console.error(err.message)
+        res.status(500).json({ error: "Internal server error."})
     }
-
-    const foundPost = posts[foundIndex];
-
-    const updatedPost = {
-        ...foundPost,
-        author: req.body.author || foundPost.author,
-        title: req.body.title || foundPost.title,
-        text: req.body.text || foundPost.text,
-        date: getFormattedDate()
-    }
-
-    posts[foundIndex] = updatedPost;
-    res.status(200).json( { message: "Post updated", post: updatedPost })
 });
 
 
 // Deleting a specific post
 
 app.delete("/posts/:postID", postIDValidator, (req,res)=> {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() })
+        }
+
+        const postID = Number(req.params.postID)
+        const foundIndex = posts.findIndex(p => p.id === postID)
+
+        if (foundIndex === -1) {
+            return res.status(404).json({ error: "Post not found."})
+        }
+        posts.splice(foundIndex, 1);
+        const noPosts = posts.length === 0;
+
+        res.status(200).json({
+            message: "Post deleted successfully.",
+            noPosts
+        })
     }
-
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID)
-
-    if (foundIndex === -1) {
-        return res.status(404).json({ error: "Post not found."})
+    catch (err) {
+        console.error(err.message)
+        res.status(500).json({ error: "Internal server error." })
     }
-    posts.splice(foundIndex, 1);
-    const noPosts = posts.length === 0;
-
-    res.status(200).json({
-        message: "Post deleted successfully.",
-        noPosts
-    })
 })
 
 app.use((req, res) => {
