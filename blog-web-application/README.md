@@ -1,28 +1,13 @@
-
 # Journalog – A Full-Featured Blog Application
 
 ## Overview
+
 **Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
 
 ## Screenshots
-<p align="center">
-  <img src="public/images/home-screenshot.png" alt="Journalog homepage" width="600" />
-</p>
-<p align="center"><em>Main posts page showing blog entries.</em></p>
-
-<p align="center">
-  <img src="public/images/no-posts-screenshot.png" alt="Journalog no-posts" width="600" />
-</p>
-<p align="center"><em>View when no posts are created.</em></p>
-
-<p align="center">
-  <img src="public/images/posts-screenshot.png" alt="Journalog posts" width="600" />
-</p>
-<p align="center"><em>Example of a post created with the line breaks preserved.</em></p>
-
----
 
 ## Features
+
 - Create, edit, and delete posts
 - Posts are timestamped and ordered newest-first
 - Clean and responsive layout with partials (header & footer)
@@ -32,206 +17,202 @@
 - RESTful architecture using proper HTTP verbs
 - Intuitive interface for post editing and deletion
 
----
-
 ## Technologies Used
 
 ### Frontend
+
 - **Embedded JavaScript (EJS):** For dynamic templating and rendering data on the frontend
 - **CSS:** For styling and responsive design
 - **Vanilla JavaScript:** To enhance interactivity
 
 ### Backend
+
 - **Node.js:** JavaScript runtime for server-side logic
 
----
-
 ## Dependencies
+
 - **express:** Web framework for handling routes and server logic
 - **ejs:** Template engine for rendering HTML with embedded JavaScript
 - **express-validator**: Middleware for validating and sanitising user input
 
-
----
-
 ## Challenges & Solutions
 
-### 1. Truncating Long Posts
-**Challenge:**  
-Long posts made the homepage cluttered and harder to scan.
+### Truncating Long Posts
 
-**Solution:**  
-Truncated posts to 100 characters using `slice()`, then added a `Read more` anchor tag to link to the full post. Posts shorter than 100 characters omit the link.
+**Challenge:** Long posts made the homepage cluttered and harder to scan.\
+**Solution:** Truncated posts to 100 characters using `slice()`, then added a `Read more` anchor tag to link to the full post. Posts shorter than 100 characters omit the link.
 
 ```ejs
-  <% if (post.text.length > 100) { %>
-    <p class="post-text preview">
-        <%= post.text.length > 100 ? post.text.slice(0,100).trim() + "...": post.text  %><small><a href="/posts/<%= post.id %>">Read more</a></small>
-    </p>
-    <% } else { %>
-        <p class="post-text preview"><%= post.text %></p>
-    <% } %>
+<% if (post.text.length > 100) { %>
+  <p class="post-text preview">
+      <%= post.text.length > 100 ? post.text.slice(0,100).trim() + "...": post.text  %><small><a href="/posts/<%= post.id %>">Read more</a></small>
+  </p>
+<% } else { %>
+  <p class="post-text preview"><%= post.text %></p>
+<% } %>
 ```
----
 
-### 2. Simplifying Date Formatting
-**Challenge:**  
-JavaScript’s default `Date()` output included verbose timezone info (e.g., `GMT+1000` and full timezone names), making the UI look cluttered.  
+### Simplifying Date Formatting
 
-**Solution:**  
-Formatted the date on the backend using `toLocaleDateString()` and `toLocaleTimeString()` with custom options to return a cleaner, user-friendly string like `"17 June 2025 at 20:47"`.
+**Challenge:** JavaScript’s default `Date()` output included verbose timezone info.\
+**Solution:** Used `toLocaleDateString()` and `toLocaleTimeString()` with custom options for cleaner formatting like `17 June 2025 at 20:47`.
 
----
+### Implementing Post Editing with Prefilled Form Values
 
-### 2. Implementing Post Editing with Prefilled Form Values  
-**Challenge:**  
-Allowing users to edit a post by pre-populating the form with the current post content.  
+**Challenge:** Needed to populate the edit form with existing content.\
+**Solution:** Routed to `/edit/:postID`, passed the selected post to the template, and prefilled form fields using EJS.
 
-**Solution:**  
-Used dynamic routing (`/edit/:postID`) to fetch the selected post by ID. Passed the data to the `edit-posts.ejs` template and prefilled the input fields using EJS. Unchanged fields were preserved during submission.
+### Deleting a Specific Post by ID
 
----
+**Challenge:** Enable precise deletion of a post using its ID.\
+**Solution:** Switched from GET-based deletion to dynamic `DELETE /posts/:postID` route using Fetch API.
 
-### 3. Deleting a Specific Post by ID  
-**Challenge:**  
-Enable reliable and efficient deletion of a single post using its unique identifier.  
+### Reusing Header and Footer with Partials
 
-**Solution:**  
-Created a dynamic GET route (`/posts/delete/:postID`) to locate the post in the in-memory array and remove it using `splice()`, then redirected back to the updated posts view.
+**Challenge:** Avoid layout duplication across views.\
+**Solution:** Created `partials/header.ejs` and `partials/footer.ejs` and included them in all templates.
 
----
+### Preserving Line Breaks in User-Submitted Posts
 
-### 4. Reusing Header and Footer with Partials  
-**Challenge:**  
-Avoid code duplication and maintain consistency across multiple views.  
+**Challenge:** Line breaks were lost when rendering textarea input.\
+**Solution:** Used CSS `white-space: pre-line` on `.post-text` elements.
 
-**Solution:**  
-Abstracted the header and footer into partial EJS files (`partials/header.ejs` and `partials/footer.ejs`) and included them in all views using `<%- include("partials/header.ejs") %>` and `<%- include("partials/footer.ejs") %>`. This made the layout modular and easy to maintain.
-
----
-
-### 5. Preserving Line Breaks in User-Submitted Posts
-**Challenge:**  
-When users wrote multi-line posts using a `<textarea>`, any line breaks (e.g. pressing Enter) were ignored when rendering the post on the page. This caused all the text to appear as one continuous block, making posts hard to read.
-
-**Solution:**  
-Applied the CSS rule `white-space: pre-line` to a reusable `.post-text` class. This property tells the browser to preserve newline characters while still allowing natural line wrapping. The class was then applied to all `<p>` elements displaying user-submitted post content:
-
-```ejs
-<p class="post-text"><%= post.text %></p>
-```
 ```css
 .post-text {
   white-space: pre-line;
 }
 ```
----
 
 ## Recent Improvements
 
 ### Font Stack Refinement
-**Problem:** Fonts appeared inconsistently, leading to a poor and unpredictable user experience.
 
-**Solution:** Adopted a consistent font strategy across the app:
-- Set `Roboto, sans-serif` globally for form inputs, paragraphs, and default body text.
-- Used `Raleway` for headings and buttons to preserve design intent.
-- Added fallbacks (`sans-serif`, `serif`) to ensure graceful degradation.
-
----
+**Problem:** Fonts were inconsistent across browsers.\
+**Solution:** Applied global `Roboto, sans-serif` for body text and `Raleway` for headings and buttons.
 
 ### Layout & Styling Consistency Across Pages
-**Problem:** Typography and spacing varied between pages, creating an inconsistent look—especially when transitioning from homepage to form pages.
 
-**Solution:**
-- Replaced standalone `<h2>` tags with a single `<h1>` per page, using semantic HTML.
-- Introduced utility classes like `.welcome-txt`, `.posts-page-title`, `.form-title` for consistent font size, weight, and spacing.
-- Unified margins, paddings, and responsive breakpoints across all views using custom CSS and media queries.
-
----
+**Problem:** Typography and spacing varied.\
+**Solution:** Introduced consistent heading classes and unified spacing with reusable utility classes.
 
 ### Enhanced Validation and Error Handling
-**Problem:** Users received generic or no feedback on invalid form submissions. Status codes were also incorrectly assigned (e.g., using 400 instead of 404).
 
+**Problem:** Users received unclear or missing error messages.\
 **Solution:**
-- Added backend validation using `express-validator` for new and edited posts.
-- Displayed error messages dynamically on the frontend using EJS and `.form-error` styling.
-- Updated error middleware to return accurate HTTP status codes and cleaner responses.
 
----
+- Used `express-validator` for form and URL validation.
+- Displayed errors with `.form-error` styles or Fetch-based alerts.
+- Returned accurate HTTP status codes (400, 404, 500).
 
 ### Smooth UX After Post Deletion
-**Problem:** After deleting the last post, the app displayed a blank container or preserved query parameters (`?deleted=true`), which looked broken or confusing.
 
-**Solution:**
-- Implemented a conditional message (`.no-post-msg`) that fades in only when there are no posts.
-- Cleared URL query parameters after deletion to avoid stale UI states.
-- Polished spacing and transitions for visual clarity.
-
----
+**Problem:** After deleting all posts, page layout looked broken.\
+**Solution:** Added `.no-post-msg` and removed stale query parameters after deletion.
 
 ### Custom 404 Error Page
-**Problem:** Visiting an unknown route rendered a plain, unstyled error or default Express message, disrupting the user experience.
 
-**Solution:**
-- Added a custom `/404` route with a visually styled EJS template.
-- Centered content using Flexbox (`.content-404`) and applied readable, responsive typography (`.txt-404`).
-
----
+**Problem:** Unrecognized routes showed raw Express error pages.\
+**Solution:** Added styled `404.ejs` page with navigation link and semantic layout.
 
 ### Refactored CSS for Maintainability
-**Problem:**
-The stylesheet contained redundant vendor-specific rules (e.g., `appearance: none`, `-webkit-appearance`), which added noise and had minimal modern effect.
 
-**Solution:**
-- Reviewed cross-browser support and removed unnecessary rules after testing on Firefox, Chrome, and Safari.
-- Centralised font declarations and reduced duplication (e.g., reusing `Raleway`, `Roboto` where needed).
-- Organised styles logically by component: home page, forms, posts, error views, and media queries.
-
----
+**Problem:** Redundant vendor prefixes and messy styles.\
+**Solution:** Removed outdated rules, cleaned up structure, and grouped styles by view/component.
 
 ### Refactored Edit and Delete Routes to Follow RESTful API Standards
 
-**Problem:**
-Previously, post editing and deletion were handled via `POST` requests with non-RESTful endpoints (e.g. `/posts/delete/:postID`). This limited scalability and clarity.
-
+**Problem:** Used non-RESTful GET/POST endpoints.\
 **Solution:**
-- Replaced the `GET` delete and `POST` edit logic with proper `PUT` and `DELETE` routes:
-   - `PUT /posts/:postID`
-   - `DELETE /posts/:postID`
-- Switched from classic HTML form submissions to the **Fetch API** for asynchronous request handling.
-- Ensured updated posts and deletions dynamically refresh the UI or redirect users.
-- Centralised all logic into the `/script.js` file to keep markup clean and behavior consistent.
 
-**Benefits:**
-- Aligns with RESTful architecture principles.
-- Separates concerns between backend logic and frontend rendering.
-
----
+- Updated routes to `PUT /posts/:postID` and `DELETE /posts/:postID`
+- Used Fetch API for asynchronous form handling
+- Centralized logic in `script.js`
 
 ### Building a Dedicated Post View Page
 
-**Problem:**  
-Needed a way to view full post content when navigating from `Read more`.
-
-**Solution:**
-- Added a dynamic `GET` route: `/posts/:postID`
-- Created a `view-post.ejs` template to display full post content
-- Applied the `.post-text` class with `white-space: pre-line` for preserving formatting and improving readability
-- Moved **Edit** and **Delete** buttons to this page to declutter the homepage
-
----
+**Problem:** No way to view full post from homepage.\
+**Solution:** Added `/posts/:postID` route and `view-post.ejs` template with formatted full content.
 
 ### Added "Back to Blogs" Button on Full Post View
 
-**Problem:**  
-Users who landed directly on a full post (e.g. via shared link) had no intuitive way to return to the list of posts.
+**Problem:** No intuitive way to return to blog list from full post view.\
+**Solution:** Added a navigation button with Flexbox layout to balance page actions.
 
-**Solution:**
-- Introduced a Blogs anchor button on the view-post.ejs page.
-- Used a flex container (`.view-post-btns-container`) with `justify-content: space-between` to position it opposite the Edit/Delete controls.
-- Improved usability by reducing steps to navigate between views.
+## Comprehensive Error Handling Refinement
 
----
+### Problem
+
+While initial form validations existed, the app lacked robust mechanisms for handling backend failures, invalid routes, and client-side network issues. This led to unclear or missing user feedback — especially during malformed requests or unexpected runtime errors.
+
+### Solution
+
+A full-stack error-handling layer was added to cover both client and server operations, ensuring resilient behavior, meaningful responses, and a smoother UX.
+
+### 400 – Validation Errors
+
+- Integrated `express-validator` to validate:
+    - Form fields (`title`, `author`, `text`)
+    - URL parameters (`:postID`)
+- On validation failure:
+    - Backend responds with `400 Bad Request`
+    - Frontend either displays form field errors (via EJS) or alert messages (via Fetch)
+
+```js
+if (!errors.isEmpty()) {
+  return res.status(400).json({ errors: errors.array() });
+}
+```
+
+### 404 – Resource Not Found
+
+- Backend explicitly checks if a post exists before attempting update or deletion.
+- Responds with `404 Not Found` if:
+    - The post does not exist
+    - An invalid route is accessed (e.g. `/invalid-route`)
+- Custom `404.ejs` page added with styled feedback and navigation link.
+
+### 500 – Internal Server Errors
+
+- All `PUT` and `DELETE` routes wrapped in `try/catch` blocks to capture unexpected crashes.
+
+```js
+try {
+  posts[foundIndex] = updatedPost;
+  res.status(200).json(...);
+} catch (err) {
+  res.status(500).json({ error: "Internal server error." });
+}
+```
+
+- Ensures a proper server response even if something fails mid-operation.
+
+### Client-Side Network Failures
+
+- All `fetch()` requests now include `.catch()` blocks to capture:
+    - Lost connection
+    - Invalid URLs (e.g. `PUTTT` instead of `PUT`)
+    - Crashed or unreachable server
+
+```js
+try {
+  const response = await fetch(...);
+  if (!response.ok) {
+    const error = await response.json();
+    alert(error.errors?.[0].msg || error.error || "Failed to update the post.");
+    return;
+  }
+  window.location.href = `/posts/${postID}`;
+} catch (err) {
+  alert("Something went wrong while updating the post.");
+}
+```
+
+### Benefits
+
+- Clear user feedback for every error state
+- Proper HTTP status codes used throughout (400, 404, 500)
+- More maintainable and scalable code
+- Eliminates silent failures or raw error dumps
 
 ## Installation
 
@@ -239,27 +220,24 @@ This project is located in the `Blog web application` folder of a larger reposit
 
 To run it locally:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/nima-karkhaneh/portfolio.git
-   cd blog-web-application
-   ```
+```bash
+git clone https://github.com/nima-karkhaneh/portfolio.git
+cd blog-web-application
+```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
-3. Run the application:
-   ```bash
-   node index.js
-   ```
+```bash
+node index.js
+```
 
-4. Open your browser and visit [http://localhost:3000](http://localhost:3000)
-
----
+Visit: [http://localhost:3000](http://localhost:3000)
 
 ## Credit
 
-This project was created as a **capstone project** for the *Complete Full-Stack Web Development Bootcamp* by **The App Brewery**, taught by **Dr. Angela Yu**.  
+This project was created as a **capstone project** for the *Complete Full-Stack Web Development Bootcamp* by **The App Brewery**, taught by **Dr. Angela Yu**.\
 While the course provided foundational knowledge, all logic, structure, and implementation in this blog application were developed independently as part of the capstone challenge.
+
+
