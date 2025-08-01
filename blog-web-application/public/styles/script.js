@@ -41,41 +41,45 @@ if (editForm) {
         e.preventDefault();
         const postID = editForm.dataset.id;
 
-        const author = editForm.elements["author"].value.trim()
-        const title = editForm.elements["title"].value.trim()
-        const text = editForm.elements["text"].value.trim()
+        const author = editForm.elements["author"].value.trim();
+        const title = editForm.elements["title"].value.trim();
+        const text = editForm.elements["text"].value.trim();
 
         try {
-            const response = await fetch(`/posts/${postID}` ,{
+            const response = await fetch(`/posts/${postID}`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ author, title, text })
+                body: JSON.stringify({ author, title, text }),
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                alert(error.errors?.[0].msg || "Failed to update the post.");
-                return
+                // Try to parse error JSON safely
+                try {
+                    const error = await response.json();
+                    alert(error.errors?.[0].msg || error.error || "Failed to update the post.");
+                // catching errors in case parsed error JSON is empty or invalid
+                } catch {
+                    alert("Failed to update the post. No error details were available from the server.");
+                }
+                return;
             }
-
             const result = await response.json();
-            window.location.href = `/posts/${postID}`
-
-        } catch(err) {
+            window.location.href = `/posts/${postID}`;
+        } catch (err) {
             console.error(err.message);
-            alert("Something went wrong while updating the post.")
+            alert("Something went wrong while updating the post.");
         }
-
-    })
+    });
 }
+
 
 
 // Delete functionality
 
-const deleteButton = document.querySelectorAll(".delete-btn")
-deleteButton.forEach(button => {
+const deleteButtons = document.querySelectorAll(".delete-btn")
+deleteButtons.forEach(button => {
         button.addEventListener("click", async (e) => {
             const postID = e.target.dataset.id;
             const confirmDelete = confirm("Are you sure you want to delete this post?")
@@ -83,15 +87,21 @@ deleteButton.forEach(button => {
 
             try {
                 const response = await fetch(`/posts/${postID}`, {
-                    method: "delete",
+                    method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
                     },
                 })
 
                 if (!response.ok) {
-                    const err = await response.json()
-                    alert(err.error || "Failed to delete post.");
+                    // Try to parse error JSON safely
+                    try {
+                        const error = await response.json();
+                        alert(error.errors?.[0].msg || error.error || "Failed to delete the post.");
+                        // catching errors in case parsed error JSON is empty or invalid
+                    } catch {
+                        alert("Failed to delete the post. No error details were available from the server.");
+                    }
                     return;
                 }
 
@@ -102,7 +112,7 @@ deleteButton.forEach(button => {
                     window.location.href= "/posts"
                 }
 
-            } catch(err) {
+            } catch (err) {
                 console.log(err.message)
                 alert("Something went wrong while deleting the post")
 

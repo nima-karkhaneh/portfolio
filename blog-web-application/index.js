@@ -116,20 +116,20 @@ app.post("/submit", postValidator, (req,res) =>{
 // Editing/Updating a specific post
 
 app.put("/posts/:postID", [...postIDValidator, postValidator], (req, res) => {
-    try{
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json( { errors: errors.array() } )
-        }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-        const postID = Number(req.params.postID)
-        const foundIndex = posts.findIndex(p => p.id === postID );
+    const postID = Number(req.params.postID);
+    const foundIndex = posts.findIndex(p => p.id === postID);
 
-        if (foundIndex === -1) {
-            return res.status(404).json({ error: "Post not found." })
-        }
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found." });
+    }
 
-        const foundPost = posts[foundIndex];
+    try {
+        const foundPost = posts[foundIndex];  // fixed typo from foundPostt
 
         const updatedPost = {
             ...foundPost,
@@ -137,43 +137,43 @@ app.put("/posts/:postID", [...postIDValidator, postValidator], (req, res) => {
             title: req.body.title || foundPost.title,
             text: req.body.text || foundPost.text,
             date: getFormattedDate()
-        }
+        };
 
         posts[foundIndex] = updatedPost;
-        res.status(200).json( { message: "Post updated", post: updatedPost })
-    }
-    catch (err) {
-        console.error(err.message)
-        res.status(500).json({ error: "Internal server error."})
+        res.status(200).json({ message: "Post updated", post: updatedPost });
+    } catch (err) {
+        console.error("Unexpected error:", err.message);
+        res.status(500).json({ error: "Internal server error." });
     }
 });
+
 
 
 // Deleting a specific post
 
 app.delete("/posts/:postID", postIDValidator, (req,res)=> {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID)
+
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found."})
+    }
+
     try{
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() })
-        }
-
-        const postID = Number(req.params.postID)
-        const foundIndex = posts.findIndex(p => p.id === postID)
-
-        if (foundIndex === -1) {
-            return res.status(404).json({ error: "Post not found."})
-        }
         posts.splice(foundIndex, 1);
         const noPosts = posts.length === 0;
-
         res.status(200).json({
             message: "Post deleted successfully.",
             noPosts
         })
     }
     catch (err) {
-        console.error(err.message)
+        console.error("Unexpected error:", err.message);
         res.status(500).json({ error: "Internal server error." })
     }
 })
