@@ -51,7 +51,7 @@ app.get("/posts", (req, res) => {
 });
 
 
-// Getting a single post by postID
+// Viewing a single post by postID
 app.get("/posts/:postID", postIDValidator, (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -62,7 +62,9 @@ app.get("/posts/:postID", postIDValidator, (req, res) => {
     const foundPost = posts.find(p => p.id === postID);
 
     if (!foundPost) {
-        return res.status(404).render("404.ejs")
+        return res.status(404).render("404.ejs", {
+            message: "Blog not found."
+        })
     }
     res.render("view-post.ejs", {
         foundPost,
@@ -81,7 +83,9 @@ app.get("/edit/:postID", postIDValidator, (req, res) => {
     const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
 
-    if (!foundPost) return res.status(404).render("404.ejs")
+    if (!foundPost) return res.status(404).render("404.ejs", {
+        message: "Blog not found."
+    })
 
     res.render("edit-posts.ejs", {
         foundPost,
@@ -129,7 +133,7 @@ app.put("/posts/:postID", [...postIDValidator, postValidator], (req, res) => {
     }
 
     try {
-        const foundPost = posts[foundIndex];  // fixed typo from foundPostt
+        const foundPost = posts[foundIndex];
 
         const updatedPost = {
             ...foundPost,
@@ -179,7 +183,9 @@ app.delete("/posts/:postID", postIDValidator, (req,res)=> {
 })
 
 app.use((req, res) => {
-    res.status(404).render("404.ejs")
+    res.status(404).render("404.ejs", {
+        message: "Page not found."
+    })
 })
 
 
