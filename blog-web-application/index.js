@@ -1,5 +1,5 @@
 import express from "express";
-import validator from "./validation-middleware/validator.js";
+import { postIDValidator, postValidator } from "./validation-middleware/validator.js";
 import {validationResult} from "express-validator";
 
 
@@ -51,15 +51,20 @@ app.get("/posts", (req, res) => {
 });
 
 
-// Getting a single post by postID
-app.get("/posts/:postID", (req, res) => {
-    const postID = Number(req.params.postID);
-    if (isNaN(postID) || postID <= 0) {
-        return res.status(404).render("404.ejs")
+// Viewing a single post by postID
+app.get("/posts/:postID", postIDValidator, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
+
+    const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
+
     if (!foundPost) {
-        return res.status(404).render("404.ejs")
+        return res.status(404).render("404.ejs", {
+            message: "Blog not found."
+        })
     }
     res.render("view-post.ejs", {
         foundPost,
@@ -69,11 +74,18 @@ app.get("/posts/:postID", (req, res) => {
 
 // Getting a specific post for editing
 
-app.get("/edit/:postID", (req, res) => {
+app.get("/edit/:postID", postIDValidator, (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array()})
+    }
+
     const postID = Number(req.params.postID);
     const foundPost = posts.find(p => p.id === postID);
 
-    if (!foundPost) return res.status(404).render("404.ejs")
+    if (!foundPost) return res.status(404).render("404.ejs", {
+        message: "Blog not found."
+    })
 
     res.render("edit-posts.ejs", {
         foundPost,
@@ -83,7 +95,7 @@ app.get("/edit/:postID", (req, res) => {
 
 // Submitting a new post
 
-app.post("/submit", validator, (req,res) =>{
+app.post("/submit", postValidator, (req,res) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).render("new-posts.ejs" , {
@@ -107,52 +119,73 @@ app.post("/submit", validator, (req,res) =>{
 
 // Editing/Updating a specific post
 
-app.put("/posts/:postID", validator, (req, res) => {
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID );
-    if (isNaN(postID) || postID <= 0 || foundIndex === -1) return res.status(404).json({ error: "Post not found."} )
-
-
+app.put("/posts/:postID", [...postIDValidator, postValidator], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json( {errors: errors.array()} )
+        return res.status(400).json({ errors: errors.array() });
     }
 
-    const foundPost = posts[foundIndex];
+    const postID = Number(req.params.postID);
+    const foundIndex = posts.findIndex(p => p.id === postID);
 
-    const updatedPost = {
-        ...foundPost,
-        author: req.body.author || foundPost.author,
-        title: req.body.title || foundPost.title,
-        text: req.body.text || foundPost.text,
-        date: getFormattedDate()
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found." });
     }
 
-    posts[foundIndex] = updatedPost;
-    res.status(200).json( { message: "Post updated", post: updatedPost })
+    try {
+        const foundPost = posts[foundIndex];
+
+        const updatedPost = {
+            ...foundPost,
+            author: req.body.author || foundPost.author,
+            title: req.body.title || foundPost.title,
+            text: req.body.text || foundPost.text,
+            date: getFormattedDate()
+        };
+
+        posts[foundIndex] = updatedPost;
+        res.status(200).json({ message: "Post updated", post: updatedPost });
+    } catch (err) {
+        console.error("Unexpected error:", err.message);
+        res.status(500).json({ error: "Internal server error." });
+    }
 });
+
 
 
 // Deleting a specific post
 
-app.delete("/posts/:postID", (req,res)=> {
-    const postID = Number(req.params.postID)
-    const foundIndex = posts.findIndex(p => p.id === postID);
-    if (isNaN(postID) || postID <= 0 || foundIndex === -1) {
-        return res.status(404).json( {error: "Post not found."} );
+app.delete("/posts/:postID", postIDValidator, (req,res)=> {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
     }
 
-    posts.splice(foundIndex, 1);
-    const noPosts = posts.length === 0;
+    const postID = Number(req.params.postID)
+    const foundIndex = posts.findIndex(p => p.id === postID)
 
-    res.status(200).json({
-        message: "Post deleted successfully.",
-        noPosts
-    })
+    if (foundIndex === -1) {
+        return res.status(404).json({ error: "Post not found."})
+    }
+
+    try{
+        posts.splice(foundIndex, 1);
+        const noPosts = posts.length === 0;
+        res.status(200).json({
+            message: "Post deleted successfully.",
+            noPosts
+        })
+    }
+    catch (err) {
+        console.error("Unexpected error:", err.message);
+        res.status(500).json({ error: "Internal server error." })
+    }
 })
 
 app.use((req, res) => {
-    res.status(404).render("404.ejs")
+    res.status(404).render("404.ejs", {
+        message: "Page not found."
+    })
 })
 
 
