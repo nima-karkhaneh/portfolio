@@ -4,7 +4,56 @@
 
 **Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
 
+---
+
 ## Screenshots
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-home.png" alt="Home page" width="600"/>
+</p>
+<p align="center"><em>Journalog home page.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/no-posts-screenshot.png" alt="Home page with no posts error" width="600"/>
+</p>
+<p align="center"><em>Home page with no posts error message.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-new-post.png" alt="New post page" width="600"/>
+</p>
+<p align="center"><em>New post page.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-validation-errors.png" alt="New post with validation error" width="600"/>
+</p>
+<p align="center"><em>New post with validation errors.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-truncated-blogs.png" alt="Truncated post page" width="600"/>
+</p>
+<p align="center"><em>Truncated posts page.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-full-post.png" alt="Full post page" width="600"/>
+</p>
+<p align="center"><em>Full post page.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-delete-confirmation.png" alt="Full post page" width="600"/>
+</p>
+<p align="center"><em>Full post page with delete functionality confirmation.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-404-not-found-blog.png" alt="404 not found blog" width="600"/>
+</p>
+<p align="center"><em>404 not found blog.</em></p>
+
+<p align="center">
+  <img src="./README-screenshots/screenshot-404-not-found-page.png" alt="404 not found blog" width="600"/>
+</p>
+<p align="center"><em>404 not found page.</em></p>
+
+---
 
 ## Features
 
@@ -16,6 +65,8 @@
 - View full post on its own page (`/posts/:id`)
 - RESTful architecture using proper HTTP verbs
 - Intuitive interface for post editing and deletion
+
+---
 
 ## Technologies Used
 
@@ -29,11 +80,15 @@
 
 - **Node.js:** JavaScript runtime for server-side logic
 
+---
+
 ## Dependencies
 
 - **express:** Web framework for handling routes and server logic
 - **ejs:** Template engine for rendering HTML with embedded JavaScript
 - **express-validator**: Middleware for validating and sanitising user input
+
+---
 
 ## Challenges & Solutions
 
@@ -82,6 +137,7 @@
   white-space: pre-line;
 }
 ```
+---
 
 ## Recent Improvements
 
@@ -137,6 +193,8 @@
 
 **Problem:** No intuitive way to return to blog list from full post view.\
 **Solution:** Added a navigation button with Flexbox layout to balance page actions.
+
+---
 
 ## Comprehensive Error Handling Refinement
 
@@ -214,6 +272,8 @@ try {
 - More maintainable and scalable code
 - Eliminates silent failures or raw error dumps
 
+---
+
 ## Installation
 
 This project is located in the `Blog web application` folder of a larger repository named `portfolio`.
@@ -234,6 +294,8 @@ node index.js
 ```
 
 Visit: [http://localhost:3000](http://localhost:3000)
+
+---
 
 ## Credit
 

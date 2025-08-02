@@ -113,7 +113,7 @@ deleteButtons.forEach(button => {
                 }
 
             } catch (err) {
-                console.log(err.message)
+                console.error(err.message)
                 alert("Something went wrong while deleting the post")
 
             }
