@@ -9,6 +9,7 @@ This project demonstrates UI/UX design, backend integration, session management,
 
 ## Table of Contents
 - [Overview](#overview)
+- [Live Demo](#live-demo)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Implementation Notes](#implementation-notes)
@@ -21,6 +22,13 @@ This project demonstrates UI/UX design, backend integration, session management,
 - [Author](#author)
 - [License](#license)
 
+
+---
+
+## Live Demo
+
+**Access the deployed application here:**  
+[https://maan-design-studio.onrender.com/](https://maan-design-studio.onrender.com/)
 
 ---
 

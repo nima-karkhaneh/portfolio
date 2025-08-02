@@ -11,6 +11,8 @@
 **Access the deployed application here:**  
 [https://journalog-2nz8.onrender.com/](https://journalog-2nz8.onrender.com/)
 
+---
+
 
 ## Screenshots
 
