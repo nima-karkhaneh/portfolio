@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./styles/main.css">
     <title>OzWeather</title>
+    <script src="/script/script.js" defer></script>
 </head>
 <body>
 <!--invisible form when displaying weather data-->
@@ -16,7 +17,16 @@
 <% if (locals.city) { %>
 class="invisible"
 <% } %>>
-    <input type="text" name="city" placeholder="Search for a town" autocomplete="off" required>
+    <input
+            type="text"
+            name="city"
+            placeholder="Search for a town"
+            autocomplete="off"
+            value="<%= typeof locals.city !== "undefined" ? locals.city : "" %>"
+            pattern="^[A-Za-z\s\-']{2-50}$"
+            title="Only letters, spaces, apostrophes, and hyphens are allowed"
+            data-error="<%= locals.errMsg || "" %>"
+            >
     <button class="search-btn" type="submit"><img class="search-icon"  src="./images/search icon.svg" alt=""></button>
 </form>
 <% if (locals.city) { %>
@@ -39,12 +49,12 @@ class="invisible"
     <p>Current weather around Australia</p>
 </div>
 <% } %>
-<script>
-    // Adding the error message to the input placeholder
-    const error = <%- JSON.stringify(locals.errMsg || "") %>
-    if (error){
-        document.querySelector("input").setAttribute("placeholder", error);
-    }
-</script>
+<!--<script>-->
+<!--    // Adding the error message to the input placeholder-->
+<!--    const error = <%- JSON.stringify(locals.errMsg || "") %>-->
+<!--    if (error){-->
+<!--        document.querySelector("input").setAttribute("placeholder", error);-->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>
