@@ -23,9 +23,10 @@ class="invisible"
             placeholder="Search for a town"
             autocomplete="off"
             value="<%= typeof locals.city !== "undefined" ? locals.city : "" %>"
-            pattern="^[A-Za-z\s\-']{2-50}$"
+            pattern="^[A-Za-z\s\-']{2,50}$"
             title="Only letters, spaces, apostrophes, and hyphens are allowed"
             data-error="<%= locals.errMsg || "" %>"
+            required
             >
     <button class="search-btn" type="submit"><img class="search-icon"  src="./images/search icon.svg" alt=""></button>
 </form>
@@ -49,12 +50,5 @@ class="invisible"
     <p>Current weather around Australia</p>
 </div>
 <% } %>
-<!--<script>-->
-<!--    // Adding the error message to the input placeholder-->
-<!--    const error = <%- JSON.stringify(locals.errMsg || "") %>-->
-<!--    if (error){-->
-<!--        document.querySelector("input").setAttribute("placeholder", error);-->
-<!--    }-->
-<!--</script>-->
 </body>
 </html>
