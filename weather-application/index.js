@@ -16,6 +16,14 @@ app.get("/", (req,res) => {
 
 app.post("/submit", async (req, res) =>{
     const city = req.body.city;
+    const cityPattern = /^[A-Za-z\s\-']{2,50}$/;
+
+    if (!cityPattern.test(city)) {
+        const errMsg = "Town has to be in Australia";
+        return res.status(400).render("index.ejs", {
+            errMsg
+        })
+    }
     const key = process.env.API_KEY
     try{
         const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},AU&appid=${key}&units=metric`);
@@ -31,13 +39,25 @@ app.post("/submit", async (req, res) =>{
         }
         res.render("index.ejs", data);
     }
-    catch(err){
-        const errMsg = "Town has to be in Australia";
-        console.log(`Failed to fetch data, ${err.message}`)
-        res.render("index.ejs",{
-            errMsg: errMsg
-        })
+    catch (err) {
+        let errMsg;
+
+        if (err.response) {
+            // The API responded but with an error (e.g., 404 for city not found)
+            errMsg = "Town has to be in Australia";
+            res.status(400).render("index.ejs", { errMsg });
+        } else if (err.request) {
+            // The request was made but no response received (e.g., API server down)
+            errMsg = "Unable to connect to weather service";
+            res.status(503).render("index.ejs", { errMsg });
+        } else {
+            // Unexpected backend error
+            errMsg = "Something went wrong";
+            console.error("Unexpected error:", err.message);
+            res.status(500).render("index.ejs", { errMsg });
+        }
     }
+
 })
 
 app.listen(port, () =>{
