@@ -42,21 +42,42 @@
 Some cities share the same name globally, leading to incorrect weather data.
 
 **Solution:**  
-Implemented a country code filter in the API request (`AU`for Australia) to ensure results are restricted to Australian locations only.
+Implemented a country code filter in the API request (`AU` for Australia) to ensure results are restricted to Australian locations only.
 
-### 2. Displaying API Data on the Frontend  
+### 2. Robust Error Handling and Validation
 **Challenge:**  
-Passing the retrieved data to the frontend without using a frontend framework.
+The original implementation lacked proper feedback for invalid inputs and failed API responses, making it unclear to users why their request didn’t work.
 
 **Solution:**  
-Used EJS to inject data into HTML templates. This allowed rendering weather details on the server before sending them to the client.
+This app performs backend validation using regex and sends the appropriate HTTP status with user feedback rendered on the frontend. This ensures a more user-friendly and reliable experience.
 
-### 3. Form Visiblity Logic After Submission  
+### 3. Accurate Min/Max Temperature For the Next 24 Hour Period
+**Challenge:**  
+The initial logic relied on the current temperature to determine daily highs and lows, which led to unrealistic or misleading results — especially early in the day.
+
+**Solution:**  
+Implemented logic to calculate `tempMin` and `tempMax` using the 5-day/3-hour forecast API, filtered by local time. This resulted in more accurate, dynamic temperature ranges.
+
+### 4. Timezone Offset & Local Time Conversion Fix
+**Challenge:**  
+Accurately converting forecast times from UTC to the city’s local time zone was complex, especially handling the timezone offset in seconds, ensuring displayed local times were correct for Australia’s multiple time zones.
+
+**Solution:**  
+Implemented a custom date formatting function that adds the OpenWeatherMap API’s timezone offset (in seconds) to the UTC date. Verified correctness extensively with console logs showing both UTC and local times. This was a non-trivial fix that ensures users see accurate local forecast times.
+
+### 5. Full-Stack Design and Error Routing
+**Challenge:**  
+Many basic weather apps do not handle undefined routes, leading to generic or unhelpful error messages when users enter a wrong URL.
+
+**Solution:**  
+Built the app using Express routes, added a global catch-all route for undefined paths, and displayed a custom 404 page. The result is a well-structured full-stack application.
+
+### 6. Form Visibility Logic After Submission
 **Challenge:**  
 After displaying the weather data, the form input should disappear for a better UI/UX.
 
 **Solution:**  
-Added conditional logic in the EJS form element to apply a `.invislbe` class.  
+Added conditional logic in the EJS form element to apply a `.invisible` class.
 ```ejs
 <form action="/submit" method="post"
 <% if (locals.city) { %>
@@ -67,30 +88,14 @@ class="invisible"
 </form>
 ```
 
-### 4. Handling Invalid or Misspelled City Names
-**Challenge:**  
-API requests failed when users entered invalid or misspelled city names, crashing the app or showing no feedback.
-
-**Solution:**  
-Wrapped API calls in `try/catch`blocks and added logic to show a user-friendly error message on the frontend if the city is not found.
-```javascript
-<script>
-    // Adding the error message to the input placeholder
-    const error = <%- JSON.stringify(locals.errMsg || "") %>
-    if (error){
-        document.querySelector("input").setAttribute("placeholder", error);
-    }
-</script>
-```
-
-### 5. Securing the API Key  
+### 7. Securing the API Key
 **Challenge:**  
 Risk of exposing sensitive API credentials in the codebase.
 
 **Solution:**  
-Used `dotenv` to load environment variables from a `.env` file and ensured `.env` was included in `.gitignoe`.
+Used `dotenv` to load environment variables from a `.env` file and ensured `.env` was included in `.gitignore`.
 
-### 6. Designing a Responsive UI Without a Framework
+### 8. Designing a Responsive UI Without a Framework
 **Challenge:**  
 Maintaining a clean and responsive design using only plain CSS.
 
@@ -119,6 +124,7 @@ cd weather-application
 API_KEY="Your own API key"
 
 ```  
+**Note:** Individual API keys are provided by OpenWeatherMap after signing up
 4. Run the application:
 
 `node index.js`
@@ -126,7 +132,13 @@ API_KEY="Your own API key"
 5. Visit http://localhost:3000 in your browser to start the application
 
 ## Credit
-This project was developed independently as a capstone assignment for **The Complete Full-Stack Web Development Bootcamp** by **Angela Yu (The App Brewery)**. While inspired by course objectives, all implementation decisions, styling, and additional features (like error handling and UI improvements) were completed by myself.
+This project was developed independently as a capstone assignment for **The Complete Full-Stack Web Development Bootcamp** by **Angela Yu (The App Brewery)**.
 
 Supplementary concepts were also reinforced through external learning, including the YouTube tutorial:  
 *“Asynchronous JavaScript Course – Async/Await, Promises, Callbacks, Fetch API”* by **CodeLab98**.
+
+While inspired by course objectives and tutorials, this app includes distinct features that make it a robust, independent portfolio project:
+- Implements robust backend error handling and user feedback with HTTP status codes, unlike the tutorial’s frontend-only fetch with console logging.
+- Accurately calculates daily minimum and maximum temperatures using the forecast API filtered by the local time, unlike the tutorial’s use of the current temperature only.
+- Accurately handles timezone offset and local time conversion for Australian cities, a challenging fix to ensure correct forecast display.
+- Built as a full-stack Express application with structured routing, including custom 404 error pages and catch-all middleware for undefined routes.

@@ -14,35 +14,77 @@ app.get("/", (req,res) => {
         res.render("index.ejs" , {})
 })
 
-app.post("/submit", async (req, res) =>{
+app.post("/submit", async (req, res) => {
     const city = req.body.city;
     const cityPattern = /^[A-Za-z\s\-']{2,50}$/;
 
     if (!cityPattern.test(city)) {
         const errMsg = "Town has to be in Australia";
-        return res.status(400).render("index.ejs", {
-            errMsg
-        })
+        return res.status(400).render("index.ejs", { errMsg });
     }
-    const key = process.env.API_KEY
-    try{
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},AU&appid=${key}&units=metric`);
-        const result = response.data;
+
+    const key = process.env.API_KEY;
+
+    try {
+        // 1. Get current weather
+        const currentRes = await axios.get(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city},AU&appid=${key}&units=metric`
+        );
+        const result = currentRes.data;
         const { lon, lat } = result.coord;
-        const forecastRes = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${key}&units=metric`);
-        const today = new Date().toLocaleDateString("sv-SE"); // Gives "YYYY-MM-DD" in your local time
+
+        // 2. Get 5-day / 3-hour forecast
+        const forecastRes = await axios.get(
+            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${key}&units=metric`
+        );
+        const forecastData = forecastRes.data;
+        const timezoneOffset = forecastData.city.timezone; // in seconds
+
+        // 3. Current UTC time & cutoff UTC (24h ahead)
+        const nowUtc = new Date();
+        const cutoffUtc = new Date(nowUtc.getTime() + 24 * 60 * 60 * 1000);
+
+        // Helper: format Date with offset (in seconds) to local-like string (yyyy-mm-dd hh:mm:ss)
+        function formatWithOffset(date, offsetSeconds) {
+            const localTimestamp = date.getTime() + offsetSeconds * 1000;
+            const localDate = new Date(localTimestamp);
+
+            const pad = n => n.toString().padStart(2, "0");
+
+            return `${localDate.getUTCFullYear()}-${pad(localDate.getUTCMonth() + 1)}-${pad(localDate.getUTCDate())} ` +
+                `${pad(localDate.getUTCHours())}:${pad(localDate.getUTCMinutes())}:${pad(localDate.getUTCSeconds())}`;
+        }
 
 
-        const todayTemps = forecastRes.data.list
-            .filter(entry => entry.dt_txt.startsWith(today))
-            .map(entry => entry.main.temp)
-            .slice(0,8);
+        // Filter forecast entries for next 24h by UTC time
+        const next24hTemps = forecastData.list
+            .filter(entry => {
+                const entryUtc = new Date(entry.dt_txt + "Z");
+                return entryUtc > nowUtc && entryUtc <= cutoffUtc;
+            })
+            .map(entry => entry.main.temp);
 
-        const tempMin = Math.min(...todayTemps);
-        const tempMax = Math.max(...todayTemps);
+        // Essential logs only
+        console.log(`Timezone offset (seconds): ${timezoneOffset}`);
+        console.log(`UTC Now: ${nowUtc.toISOString()}`);
+        console.log(`Local Now: ${formatWithOffset(nowUtc, timezoneOffset)}`);
+        console.log(`Cutoff (24h UTC): ${cutoffUtc.toISOString()}`);
+        console.log(`Cutoff (24h local): ${formatWithOffset(cutoffUtc, timezoneOffset)}`);
 
+        console.log("Forecast entries for next 24h (local time):");
+        forecastData.list.forEach(entry => {
+            const entryUtc = new Date(entry.dt_txt + "Z");
+            if (entryUtc > nowUtc && entryUtc <= cutoffUtc) {
+                console.log(`→ ${entry.dt_txt} UTC → ${formatWithOffset(entryUtc, timezoneOffset)} local → ${entry.main.temp}°C`);
+            }
+        });
 
+        // Calculate temp range: current + forecast
+        const allTemps = [result.main.temp, ...next24hTemps];
+        const tempMin = Math.min(...allTemps);
+        const tempMax = Math.max(...allTemps);
 
+        // Final data object for rendering
         const data = {
             description: result.weather[0].main,
             icon: result.weather[0].icon,
@@ -51,31 +93,32 @@ app.post("/submit", async (req, res) =>{
             tempMin: Math.round(tempMin),
             tempMax: Math.round(tempMax),
             humidity: result.main.humidity
-        }
+        };
+
         res.render("index.ejs", data);
-    }
-    catch (err) {
+
+    } catch (err) {
         let errMsg;
 
         if (err.response) {
-            // The API responded but with an error (e.g., 404 for city not found)
-            console.error(`400 | ${err.message}`)
+            console.error(`400 | ${err.message}`);
             errMsg = "Town has to be in Australia";
             res.status(400).render("index.ejs", { errMsg });
         } else if (err.request) {
-            // The request was made but no response received (e.g., API server down)
+            console.error(`503 | ${err.message}`);
             errMsg = "Unable to connect to weather service";
-            console.error(`503 | ${err.message}`)
             res.status(503).render("index.ejs", { errMsg });
         } else {
-            // Unexpected backend error
+            console.error(`500 | Unexpected error: ${err.message}`);
             errMsg = "Something went wrong";
-            console.error(`500 | Unexpected error:, ${err.message}`);
             res.status(500).render("index.ejs", { errMsg });
         }
     }
+});
 
-})
+
+
+
 
 app.listen(port, () =>{
     console.log(`server is listening on http://localhost:${port}/`);
