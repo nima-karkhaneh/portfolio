@@ -20,6 +20,39 @@
 </p>
 <p align="center"><em>Example displaying an error message.</em></p>
 
+## Features
+
+### Australia-Only Search Scope
+Weather data is restricted to Australian cities using a country code filter (`AU`), avoiding global city-name conflicts.
+
+### Current Weather Data
+Displays real-time temperature, high/low, humidity, and weather conditions using OpenWeatherMap's current weather API.
+
+### Dynamic Min/Max Calculation (Next 24 Hours)
+Calculates accurate daily highs and lows using 5-day/3-hour forecast data — filtered by local time — instead of relying on static daily summaries.
+
+### Timezone-Adjusted Forecasts
+Converts UTC timestamps from the API into local time using each city’s timezone offset (in seconds), ensuring users see the correct upcoming hours in their time zone.
+
+### Full Backend Error Handling
+Handles invalid input, API errors, and undefined routes with clear feedback and custom views — not just console logs.
+
+### Input Validation via Regex
+Validates form input on the server to avoid invalid or malicious submissions before API calls are made.
+
+### Conditional UI Behavior
+Form hides after a successful weather lookup for a cleaner interface, using dynamic EJS logic.
+
+### Custom 404 Page
+Implements a catch-all middleware route to handle undefined paths and render a helpful 404 page.
+
+### Responsive, Framework-Free Design
+Built with plain CSS and media queries for a fully responsive layout across devices, without relying on external frameworks like Bootstrap or Tailwind.
+
+### Secure API Key Handling
+Uses `dotenv` to store environment variables locally and keeps sensitive keys out of the public repo with `.gitignore`.
+
+
 ## Technologies Used
 
 ### Frontend
