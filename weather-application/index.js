@@ -14,6 +14,7 @@ app.get("/", (req,res) => {
         res.render("index.ejs" , {})
 })
 
+
 app.post("/submit", async (req, res) => {
     const city = req.body.city;
     const cityPattern = /^[A-Za-z\s\-']{2,50}$/;
@@ -117,7 +118,11 @@ app.post("/submit", async (req, res) => {
 });
 
 
+// catch-all middleware
 
+app.use((req, res) => {
+    res.status(404).render("404.ejs")
+})
 
 
 app.listen(port, () =>{
