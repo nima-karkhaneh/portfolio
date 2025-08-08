@@ -69,20 +69,22 @@ app.post("/submit", async (req, res) => {
             })
             .map(entry => entry.main.temp);
 
-        // Essential logs only
-        console.log(`Timezone offset (seconds): ${timezoneOffset}`);
-        console.log(`UTC Now: ${nowUtc.toISOString()}`);
-        console.log(`Local Now: ${formatWithOffset(nowUtc, timezoneOffset)}`);
-        console.log(`Cutoff (24h UTC): ${cutoffUtc.toISOString()}`);
-        console.log(`Cutoff (24h local): ${formatWithOffset(cutoffUtc, timezoneOffset)}`);
+        if (process.env.NODE_ENV !== "production") {
+            console.log(`Timezone offset (seconds): ${timezoneOffset}`);
+            console.log(`UTC Now: ${nowUtc.toISOString()}`);
+            console.log(`Local Now: ${formatWithOffset(nowUtc, timezoneOffset)}`);
+            console.log(`Cutoff (24h UTC): ${cutoffUtc.toISOString()}`);
+            console.log(`Cutoff (24h local): ${formatWithOffset(cutoffUtc, timezoneOffset)}`);
 
-        console.log("Forecast entries for next 24h (local time):");
-        forecastData.list.forEach(entry => {
-            const entryUtc = new Date(entry.dt_txt + "Z");
-            if (entryUtc > nowUtc && entryUtc <= cutoffUtc) {
-                console.log(`→ ${entry.dt_txt} UTC → ${formatWithOffset(entryUtc, timezoneOffset)} local → ${entry.main.temp}°C`);
-            }
-        });
+            console.log("Forecast entries for next 24h (local time):");
+            forecastData.list.forEach(entry => {
+                const entryUtc = new Date(entry.dt_txt + "Z");
+                if (entryUtc > nowUtc && entryUtc <= cutoffUtc) {
+                    console.log(`→ ${entry.dt_txt} UTC → ${formatWithOffset(entryUtc, timezoneOffset)} local → ${entry.main.temp}°C`);
+                }
+            });
+        }
+
 
         // Calculate temp range: current + forecast
         const allTemps = [result.main.temp, ...next24hTemps];
@@ -129,7 +131,10 @@ app.use((req, res) => {
 })
 
 
-app.listen(port, () =>{
-    console.log(`server is listening on http://localhost:${port}/`);
-})
-
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, "0.0.0.0", () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+} else {
+    app.listen(port);
+}
