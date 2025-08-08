@@ -1,11 +1,15 @@
 import express from "express";
 import axios from "axios";
-import env from "dotenv"
+import env from "dotenv";
+import favicon from "serve-favicon";
+import path from "path";
 
 const app = express();
 env.config();
 const port = process.env.PORT || 3000;
 
+
+app.use(favicon(path.resolve("public/images/favicon.ico")));
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
