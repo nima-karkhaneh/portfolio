@@ -1,11 +1,15 @@
 import express from "express";
 import axios from "axios";
-import env from "dotenv"
+import env from "dotenv";
+import favicon from "serve-favicon";
+import path from "path";
 
 const app = express();
 env.config();
 const port = process.env.PORT || 3000;
 
+
+app.use(favicon(path.resolve("public/images/favicon.ico")));
 app.use(express.static("public"));
 app.use(express.urlencoded({extended:true}));
 
@@ -13,6 +17,7 @@ app.use(express.urlencoded({extended:true}));
 app.get("/", (req,res) => {
         res.render("index.ejs" , {})
 })
+
 
 app.post("/submit", async (req, res) => {
     const city = req.body.city;
@@ -117,7 +122,11 @@ app.post("/submit", async (req, res) => {
 });
 
 
+// catch-all middleware
 
+app.use((req, res) => {
+    res.status(404).render("404.ejs")
+})
 
 
 app.listen(port, () =>{

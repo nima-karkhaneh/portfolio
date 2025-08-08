@@ -63,10 +63,11 @@ Uses `dotenv` to store environment variables locally and keeps sensitive keys ou
 * **Node.js**: To run JavaScript on the server-side of the application
 
 ## Dependencies
-* **axios:** To make `htttp` requests to OpenWeatherMap API
+* **axios:** To make `http` requests to OpenWeatherMap API
 * **dotenv:** To store the sensitive information such as the API key securely
 * **express:** To build server-side of the application
 * **ejs:**  To enable Embedded JavasScript
+* **serve-favicon:** To serve the favicon reliably
 
 ## Challenges and Solutions
 

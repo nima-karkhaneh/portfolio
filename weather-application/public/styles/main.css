@@ -1,3 +1,11 @@
+body{
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    background: rgb(60,162,255);
+    background: linear-gradient(90deg, rgba(60,162,255,1) 30%, rgba(144,185,255,1) 100%);
+    min-height: 100dvh;
+}
 *{
     border: 0;
     margin: 0;
@@ -5,13 +13,6 @@
     box-sizing: border-box;
     color: whitesmoke;
     font-family: "Montserrat", sans-serif;
-}
-body{
-    display: flex;
-    flex-direction: column;
-    background: rgb(60,162,255);
-    background: linear-gradient(90deg, rgba(60,162,255,1) 30%, rgba(144,185,255,1) 100%);
-    min-height: 100dvh;
 }
 p{
     font-size: 1.2rem;
@@ -106,6 +107,22 @@ i{
     gap: 10px;
 padding: 5px;
 }
+
+/*404 page styling*/
+
+
+#page-404 {
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+#page-404 h1 {
+    font-size: 3rem;
+}
+#page-404 a {
+    text-decoration: none;
+    margin-top: 20px;
+}
 /*Media Queries*/
 @media(max-width:770px) {
     #city-name{
@@ -123,7 +140,7 @@ padding: 5px;
 }
 @media(max-width: 430px){
     #welcome-msg{
-        font-size: 1.3rem;
+        font-size: 0.7rem;
     }
     input::placeholder{
         font-size: 1rem;
