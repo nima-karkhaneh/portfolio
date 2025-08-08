@@ -3,6 +3,11 @@
 ## Overview
 **OzWeather** is a weather application that provides users with current weather information — including temperature, highs/lows, and humidity — for cities and towns within **Australia**.
 
+## Live Demo
+
+**Access the deployed application here:**  
+[https://ozweather.onrender.com/](https://ozweather.onrender.com/)
+
 ## Screenshots
 
 <p align="center">
