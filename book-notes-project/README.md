@@ -298,6 +298,31 @@ DB_PORT="5432"
 `node index.js `  
 
 6. Visit http://localhost:3000 in your browser to start the application
+
+## Backend API Refactor
+The backend API has been refactored to follow a RESTful JSON approach. The `/books` route now supports optional sorting via query parameter `sort`(`Rating`, `Date`, or `Alphabet`). It returns JSON data, suitable for frontend fetch calls and easier API integration.
+
+### Example Request:  
+`GET /books?sort=rating`
+
+### Example Response
+```json
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "Book Title",
+      "author": "Author Name",
+      "isbn": 1234567890123,
+      "date": "2024-04-01",
+      "review": "Great book!",
+      "rate": 5
+    }
+  ]
+}
+```
+This refactor improves separation of concerns by delivering JSON data from the backend, allowing the frontend to handle rendering and interactivity dynamically.
+
 ## Credit
 This project was developed independently as a capstone assignment for **The Complete Full-Stack Web Development Bootcamp** by **Angela Yu (The App Brewery)**. While inspired by course objectives, all implementation decisions, styling, and additional features (like error handling and UI improvements) were completed by myself.
 
