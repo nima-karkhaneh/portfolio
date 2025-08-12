@@ -92,6 +92,59 @@ app.post ("/submit", async (req, res) => {
 })
 
 
+app.patch("/books/:id", async (req, res) => {
+const { id } = req.params;
+const { date, review, rate } = req.body;
+
+try {
+    const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
+    if (checkBook.rows.length === 0) {
+        return res.status(404).json({ error: "Book not found." });
+    }
+
+    // Dynamic SQL for library update
+
+    const libraryUpdates = [];
+    const libraryValue = [];
+    let valueIndex = 1
+
+    if (date) {
+        libraryUpdates.push(`date=$${valueIndex++}`);
+        libraryValue.push(date)
+    }
+
+    if (review) {
+        libraryUpdates.push(`review=$${valueIndex++}`);
+        libraryValue.push(review)
+    }
+
+    if (libraryUpdates.length > 0) {
+        libraryValue.push(id);
+        await db.query(
+            `UPDATE library SET ${libraryUpdates.join(", ")} WHERE id = $${valueIndex}`,
+            libraryValue
+        );
+    }
+
+    // Update rating table if provided
+
+    if (rate !== undefined) {
+        await db.query(
+            `UPDATE rating SET rate = $1 WHERE library_id = $2`,
+            [rate, id]
+        );
+    }
+    res.status(200).json( { message: "Book updated successfully." })
+
+    }
+
+    catch (err) {
+        console.log(err.message)
+        res.status(500).json({ error: "Server error." })
+    }
+})
+
+
 
 
 
