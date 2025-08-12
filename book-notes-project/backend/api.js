@@ -28,7 +28,7 @@ app.get("/books", async (req, res) => {
         const queryText = `
               SELECT library.id, library.title, library.author, library.isbn, library.date, library.review, rating.rate
               FROM library
-              LEFT JOIN rating ON library.id = rating.id
+              LEFT JOIN rating ON library.id = rating.library_id
               ORDER BY ${orderBy};
     `;
 
