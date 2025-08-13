@@ -145,6 +145,30 @@ try {
 })
 
 
+// DELETE ROUTE
+
+app.delete("/books/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
+
+        if (checkBook.rows.length === 0) {
+            return res.status(404).json({ error : "Book not found." })
+        }
+
+        // Relevant row from rating table gets deleted thanks to ON DELETE CASCADE
+        await db.query("DELETE FROM library WHERE id = $1", [id]);
+        res.status(200).json({ message: "Book deleted successfully."})
+    }
+
+    catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Sever error." })
+    }
+})
+
+
 
 
 
