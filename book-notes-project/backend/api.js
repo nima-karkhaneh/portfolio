@@ -175,5 +175,5 @@ app.delete("/books/:id", async (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`server is listening on http://localhost:${port}/`);
+    console.log(`api is listening on http://localhost:${port}/`);
 })
