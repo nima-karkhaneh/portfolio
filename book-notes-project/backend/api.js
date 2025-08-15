@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.API_PORT || 4000;
 
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+
 
 app.get("/books", async (req, res) => {
     try {
@@ -90,6 +90,32 @@ app.post ("/submit", async (req, res) => {
         res.status(500).json( { error: "server error" });
     }
 })
+
+// GETTING A SPECIFIC BOOK
+
+app.get("/books/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const bookResult = await db.query(`
+      SELECT l.id, l.title, l.author, l.isbn, l.reader_name, l.date, l.review, r.rate
+      FROM library l
+      LEFT JOIN rating r ON l.id = r.library_id
+      WHERE l.id = $1
+    `, [id]);
+
+        if (bookResult.rows.length === 0) {
+            return res.status(404).json({ error: "Book not found." });
+        }
+
+        res.status(200).json({ book: bookResult.rows[0] });
+    }
+    catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error." });
+    }
+});
+
 
 
 app.patch("/books/:id", async (req, res) => {

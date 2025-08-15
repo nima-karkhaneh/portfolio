@@ -94,6 +94,49 @@ app.post("/submit", async (req, res) => {
     }
 });
 
+// Rendering edit.ejs with prefilled values
+
+app.get("/books/edit/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/books/${id}`);
+
+        if (!response?.data?.book) {
+            return res.status(404).render("error.ejs", {
+                error: "Book not found."
+            });
+        }
+
+        const foundBook = response.data.book;
+
+        res.render("edit.ejs", { foundBook });
+    }
+    catch (err) {
+        console.error(`Error fetching book with ID ${id}:`, err.message);
+
+        if (err.response) {
+            // API responded with error status
+            res.status(err.response.status).render("error.ejs", {
+                error: err.response.data?.error || "API error fetching book."
+            });
+        }
+        else if (err.request) {
+            // No response from API
+            res.status(503).render("error.ejs", {
+                error: "Service unavailable. Please try again later."
+            });
+        }
+        else {
+            // Server-side error
+            res.status(500).render("error.ejs", {
+                error: "Internal server error."
+            });
+        }
+    }
+});
+
+
 
 
 

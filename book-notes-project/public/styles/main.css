@@ -214,6 +214,13 @@ textarea{
     margin-top: 30px;
 }
 
+input[readonly] {
+    color: #555;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+
 /*Media Queries*/
 @media(max-width: 600px) {
     footer{
