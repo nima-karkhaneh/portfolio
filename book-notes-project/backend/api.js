@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.API_PORT || 4000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 app.get("/books", async (req, res) => {
     try {
@@ -81,7 +81,7 @@ app.post ("/submit", async (req, res) => {
     `;
 
         await db.query(insertRatingQuery, [rate, newLibraryId]);
-        res.status(201).json( {message: "Book added successfully."})
+        res.status(201).json( { message: "Book added successfully." })
 
     }
 

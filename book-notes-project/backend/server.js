@@ -8,41 +8,93 @@ const port = process.env.PORT || 3000;
 const API_BASE_URL = process.env.API_BASE_URL
 
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
 
 // GET ROUTES
 app.get("/", (req,res)=>{
     res.render("index.ejs")
 })
+
+
+app.get("/books", async (req, res) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/books`);
+
+        // Checks for undefined or null values at each level
+        const booksArr = response?.data?.books ?? [];
+
+        // Build starDisplay array from books data
+        const starDisplay = booksArr.map(book => ({
+            // ?? only falls back if value is null or undefined, unlike || which treats 0 as falsy.
+            library_id: book.id,
+            rate: book?.rate ?? 0
+        }));
+
+        res.render("books.ejs", {
+            booksArr,
+            starDisplay
+        });
+    }
+    catch (err) {
+        console.error("Error in GET /books:", err.message);
+
+        if (err.response) {
+            // API responded but returned an error status
+            console.error("API error details:", err.response.data);
+
+            res.status(err.response.status).json({ error: err.response.data?.error || "API request failed." });
+        }
+        else if (err.request) {
+            // No response from API
+            console.error("No response from API:", err.request);
+
+            res.status(503).json({ error: "Service unavailable. Please try again later." });
+        }
+        else {
+            // Unexpected server-side error
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
+});
+
+
+// Adding a new book
+
 app.get("/add", (req,res)=>{
     res.render("add.ejs");
 })
 
-app.get("/books", async(req, res) => {
+app.post("/submit", async (req, res) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/books`)
-        // checks for undefined or null values at each level
-        const booksArr = response?.data?.books ?? [];
+        const response = await axios.post(`${API_BASE_URL}/submit`, req.body);
 
-
-        // Implicit return using parentheses
-        const starDisplay = booksArr.map(book => ({
-            // Use ?? instead of || so that valid 0 ratings are preserved.
-            // ?? only falls back if value is null or undefined, unlike || which treats 0 as falsy.
-            library_id: book.id,
-            rate: book?.rate ?? 0
-        }))
-
-        res.render("books.ejs", {
-            booksArr: booksArr,
-            starDisplay: starDisplay
-        })
+        // Redirect to books page if successful
+        res.redirect("/books");
     }
     catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: "Server error. Unable to fetch data" })
+        console.error("Error in POST /submit:", err.message);
+
+        if (err.response) {
+            // API responded but with an error status (4xx or 5xx)
+            console.error("API error details:", err.response.data);
+
+            res.status(err.response.status).json({error: err.response.data?.error || "API request failed."});
+        }
+        else if (err.request) {
+            // No response from API (e.g., network error, API down)
+            console.error("No response from API:", err.request);
+
+            res.status(503).json({ error: "Service unavailable. Please try again later." });
+        }
+        else {
+            // Unexpected server-side error (e.g., bad code, runtime bug)
+            res.status(500).json({ error: "Internal server error." });
+        }
     }
-})
+});
+
+
 
 
 app.listen(port, () => {
