@@ -45,7 +45,7 @@
         <p class="review line-break-fix"><%= book.review %></p>
     </div>
     <div id="edit-delete-container">
-        <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
+        <button class="delete" data-id="<%= book.id %>">Delete</button>
         <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
     </div>
     <% }) %>

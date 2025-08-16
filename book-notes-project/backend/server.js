@@ -9,6 +9,7 @@ const API_BASE_URL = process.env.API_BASE_URL
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 
 // GET ROUTES
@@ -135,6 +136,22 @@ app.get("/books/edit/:id", async (req, res) => {
         }
     }
 });
+
+
+// Delete route
+app.post("/books/delete/:id", async (req, res) => {
+    try{
+        const { id } = req.params;
+        const response = await axios.delete(`${API_BASE_URL}/books/${id}`)
+        console.log(response.data)
+        res.status(200).json( { message: "Book deleted" })
+    }
+
+    catch(err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Unable to delete books. Sever error." })
+    }
+})
 
 
 
