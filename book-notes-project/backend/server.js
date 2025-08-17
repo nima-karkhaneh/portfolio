@@ -138,7 +138,25 @@ app.get("/books/edit/:id", async (req, res) => {
 });
 
 
-// Delete route
+// Edit a post
+
+app.post("/books/edit/:id", async (req, res) => {
+    try{
+        const { id } = req.params;
+        console.log(id, req.body)
+        const response = await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
+        console.log(response.data);
+        res.redirect("/books")
+    }
+
+    catch (err) {
+        console.error(err.message)
+        res.status(500).json({ error: "Server error. Unable to edit books."})
+    }
+
+})
+
+// Delete a route
 app.post("/books/delete/:id", async (req, res) => {
     try{
         const { id } = req.params;
