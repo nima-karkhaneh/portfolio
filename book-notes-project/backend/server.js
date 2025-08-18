@@ -20,10 +20,12 @@ app.get("/", (req,res)=>{
 
 app.get("/books", async (req, res) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/books`);
+        const sort = req.query.sort;
+        const response = await axios.get(`${API_BASE_URL}/books?sort=${sort}`, req.query.sort);
 
         // Checks for undefined or null values at each level
         const booksArr = response?.data?.books ?? [];
+
 
         // Build starDisplay array from books data
         const starDisplay = booksArr.map(book => ({
@@ -145,7 +147,6 @@ app.post("/books/edit/:id", async (req, res) => {
         const { id } = req.params;
         console.log(id, req.body)
         const response = await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
-        console.log(response.data);
         res.redirect("/books")
     }
 
@@ -161,7 +162,6 @@ app.post("/books/delete/:id", async (req, res) => {
     try{
         const { id } = req.params;
         const response = await axios.delete(`${API_BASE_URL}/books/${id}`)
-        console.log(response.data)
         res.status(200).json( { message: "Book deleted" })
     }
 
