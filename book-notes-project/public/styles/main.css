@@ -155,7 +155,7 @@ textarea{
     padding: 2px;
 }
 .book-container{
-    padding: 30px;
+    padding: 20px 30px;
 }
 .book-cover{
     float: left;
@@ -168,10 +168,16 @@ textarea{
     text-decoration: underline;
     font-weight: 400;
 }
-.date-read{
+.date-read {
     color: dimgray;
     margin: 10px;
 }
+
+.reader_name {
+    color: dimgray;
+    margin-top: 15px;
+}
+
 .ranking-display{
     margin-bottom: 10px;
 }
