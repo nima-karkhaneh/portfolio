@@ -151,8 +151,17 @@ app.post("/books/edit/:id", async (req, res) => {
     }
 
     catch (err) {
-        console.error(err.message)
-        res.status(500).json({ error: "Server error. Unable to edit books."})
+        console.error("Error updating book:", err.message)
+
+        if (err.response) {
+            res.status(err.response.status).json( { error: err.response.data?.error || "API update request failed."})
+        }
+        else if (err.request) {
+            res.status(503).json({ error: "Service unavailable. Please try again later." })
+        }
+        else {
+            res.status(500).json({ error: "Unable to edit books. Internal sever error" })
+        }
     }
 
 })
@@ -166,10 +175,27 @@ app.post("/books/delete/:id", async (req, res) => {
     }
 
     catch(err) {
-        console.error(err.message);
-        res.status(500).json({ error: "Unable to delete books. Sever error." })
+        console.error("Error deleting book:", err.message);
+
+        if (err.response) {
+            res.status(err.response.status).json( {error: err.response.data?.error || "API delete request failed"})
+        }
+        else if (err.request) {
+            res.status(503).json({ error: "Service unavailable. Please try again late.r"})
+        }
+        else {
+            res.status(500).json({ error: "Unable to delete books. Internal Sever error."})
+        }
     }
 })
+
+
+// Catch-all for undefined routes (404)
+app.use((req, res) => {
+    res.status(404).json({
+        error: "404 Not Found: The route you are trying to access does not exist."
+    });
+});
 
 
 
