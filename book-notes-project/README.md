@@ -1,17 +1,43 @@
 # Virtual Bookroom (Book Notes Project)
 
 ## Overview
-**Virtual Bookroom** is a full-stack web application that allows users to create and manage their collection of book reviews. Users can add books with details such as title, author, ISBN, review, star rating, and the date they read the book. Book cover images are fetched dynamically from the Open Library API to enrich the experience. While the app does not implement user authentication, it captures the reader’s name with each review to provide basic identification. The library supports sorting by date, rating, or alphabetically for easy browsing.
+**Virtual Bookroom** is a full-stack web application that allows users to build a virtual library and record reviews of their books.
+
+The application has been **refactored into a RESTful architecture** with clear separation of concerns:
+
+- **Client-facing Express app (`server.js`, runs on `localhost:3000`)**  
+  Serves the UI (EJS templates, CSS, JS) to the browser.
+
+  For all data operations, it calls the backend API using `axios`.
+
+- **Backend API (`api.js`, runs on `localhost:4000`)**  
+  Exposes RESTful JSON endpoints (`/books`, `/books/:id`). Handles all PostgreSQL queries, validation, and error handling.
+
+- **Database (PostgreSQL)**  
+  Two normalised tables:
+    - `library` → book details (title, author, ISBN, review, date, reader name)
+    - `rating` → star ratings, linked to `library` via foreign key
+
+Book covers are fetched dynamically from the **Open Library API**, and users can sort by **date read**, **rating**, or **alphabetically**.
+
+**Note:** The **Open Library API** returns a blank placeholder image if no cover is available.
+
+---
 
 ## Table of Contents
 - [Overview](#overview)
 - [Screenshots](#screenshots)
 - [Features](#features)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
 - [Technologies Used](#technologies-used)
 - [Dependencies](#dependencies)
 - [Challenges and Solutions](#challenges-and-solutions)
 - [Installation Guide](#installation-guide)
+- [API Endpoints](#api-endpoints)
 - [Credit](#credit)
+
+---
 
 
 ## Screenshots
@@ -32,297 +58,263 @@
 </p>
 <p align="center"><em>Invalid ISBN error.</em></p>
 
+---
+
 ## Features
-* **Add Book & Reviews:** Users can add books along with detailed reviews, star ratings, and reading dates. The name of the reader also appears after each review submission to allow for identifiable readers.
-* **Edit and Delete:** Users can modify or remove their reviews anytime.
-* **Dynamic Book Covers:** Book cover images are retrieved from the **Open Library API** based on ISBN.
-* **Sorting:** Content can be sorted by review date, star rating, or book title alphabetically for improved navigation.
-* **Responsive Design:** The interface adapts to different screen sizes for a smooth user experience.
+- Add book reviews with: title, author, ISBN, star rating, review text, reader’s name, and date read.
+- Edit and delete reviews through API-powered forms.
+- Dynamic book covers via the **Open Library API**.
+- Sort library by **date read**, **rating**, or **title**.
+- Responsive design.
+- RESTful JSON API.
+
+---
+
+## Architecture
+
+```
+Frontend (EJS templates + static assets)
+      |
+   Express app (server.js @ localhost:3000) ← acts as client-facing server
+      |
+   axios/fetch
+      ↓
+Backend API (api.js @ localhost:4000)
+      |
+   PostgreSQL
+
+```
+
+- **server.js** → renders pages, handles form submissions, and calls the API.
+- **api.js** → handles CRUD via RESTful endpoints and queries the PostgreSQL database.
+- **PostgreSQL** → normalised schema with two tables (`library`, `rating`) and foreign key constraints.
+
+---
+
+## Database Schema
+
+```sql
+-- Table: library
+\d library
+
+   Column     |          Type          | Nullable | Default
+--------------+------------------------+----------+-------------------------------------
+ id           | integer                | not null | nextval('library_id_seq'::regclass)
+ title        | character varying(50)  |          |
+ author       | character varying(50)  |          |
+ isbn         | bigint                 |          |
+ date         | date                   |          |
+ review       | text                   |          |
+ reader_name  | character varying(255) |          |
+Indexes:
+    "library_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "rating" CONSTRAINT "fk_library" FOREIGN KEY (library_id) REFERENCES library(id) ON DELETE CASCADE
+
+
+-- Table: rating
+\d rating
+
+   Column     |  Type   | Nullable | Default
+--------------+---------+----------+------------------------------------
+ id           | integer | not null | nextval('rating_id_seq'::regclass)
+ rate         | integer |          |
+ library_id   | integer | not null |
+Indexes:
+    "rating_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "fk_library" FOREIGN KEY (library_id) REFERENCES library(id) ON DELETE CASCADE
+```
+
+Key changes from original schema:
+- `date` column in `library` is now **DATE** (not `CHARACTER(10)`).
+- `rate` moved into separate `rating` table.
+- `rating.library_id` → foreign key referencing `library.id`, with **ON DELETE CASCADE** for cleanup.
+
+---
 
 ## Technologies Used
 ### Frontend
-* **Embedded JavaScript (EJS):** To structure the content of the website and add some functionality
-* **Cascading Style Sheets (CSS):** To style the content of the website including a responsive design
-* **JavaScript:** To add extra functionality to the website
+- **EJS**
+- **CSS**
+- **Vanilla JavaScript**
+
 ### Backend
-* **Node.js**: To run JavaScript on the server-side of the application
-### Database
-* **PostgresSQL**: To create a database for the web application
+- **Node.js + Express**
+- **Axios**
+- **PostgreSQL (pg)**
+
 ### APIs
-* **Open Library API**: To access book covers
+- **Open Library API**
+
+---
 
 ## Dependencies
-* **dotenv**: To store sensitive information like the database credentials or API keys
-* **express**: To build server-side of the application
-* **ejs**: To enable Embedded JavaScript templates
-* **pg**: To interact with the PostgresSQL from the backend
+- `express`
+- `dotenv`
+- `axios`
+- `pg`
+- `ejs`
+
+---
 
 ## Challenges and Solutions
 
-### 1. Separating Data for Reviews and Ratings
-**Challenge:**  
-Displaying interactive star ratings while preserving clean data separation was difficult using a single table. Directly inserting review data (often containing quotes and line breaks) into JavaScript via EJS risked breaking scripts. Apart from this, you it is not possible to manipulate the DOM elements using EJS.
+### Pre-Refactor Challenges (Original Version)
 
-**Solution:**  
-I created two separate tables:  
-* **Library:** stores book details like title, author, ISBN, date read, review and name of the reader.  
-* **Rating:** stores the numerical star rating for each book.
+1. **ISBN Validation**
+    - *Challenge*: Users could enter invalid or malformed ISBNs.
+    - *Solution*: Added backend ISBN validation middleware with checksum logic.
 
- This allowed review text to be rendered cleanly in EJS, while star ratings were handled via JavaScript using a safely serialized dataset
-```javascript
-const ratingData = JSON.parse('<%- JSON.stringify( starDisplay )%>');
-ratingData.forEach((d)=>{
-    const id = d.id;
-    const rate = d.rate;
-    const stars = document.querySelectorAll(`.star${id}`);
-    if (stars != null)
-    for (let i = 0; i < rate; i++){
-        stars[i].style.color = "#dabd18b2"
-    }
-})
-```
-**Note:** `starDisplay` is declared and assigned with rating data in the backend and passed to the EJS render.
-### 2. Displaying Readable Dates in Templates
-**Challenge:**  
-The database stored dates in YYYY-MM-DD format, but a more readable DD-MM-YYYY format was preferred for the frontend.
+2. **Star Ratings**
+    - *Challenge*: Displaying dynamic star ratings without breaking alignment.
+    - *Solution*: Stored ratings in a dedicated `rating` table and rendered stars dynamically in EJS.
 
-**Solution:**  
-I formatted dates inside the EJS template using the JavaScript `Date` object and `padStart` to ensure consistency:
-```ejs
-<% booksArr.forEach((book) => {
-    const date = new Date(book.date);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
-%>
-<p class="date-read">DATE READ: <%= formattedDate %></p>
-```
-### 3. Optimising Sorting and Page Rendering
-**Challenge:**  
-Implementing sorting on the backend and ensuring that the frontend reflects sorting data without redundant queries or rendering issues.
+3. **Empty Library Page**
+    - *Challenge*: Empty state looked broken if no books were stored.
+    - *Solution*: Displayed a fallback message encouraging users to add their first book.
 
-**Solution:**  
-I introduced a `sortFunctionality` boolean flag. If sorting was triggered, the app reused the cached sorted data. Otherwise, it fetched fresh data from the database:
-```javascript
-let sortFunctionality = false;
-app.get("/books", async (req,res)=>{
-    if (!sortFunctionality) {
-        try{
-            const books = await db.query("SELECT * FROM library ORDER BY id ASC");
-            const rating = await db.query("SELECT * FROM rating")
-            if (books.rows == 0) {
-               return res.render("index.ejs", {
-                   error: "You don't have any books in your library. Please use the + icon on the top right to add your books!"
-               })
-            }
-            booksArr = books.rows;
-            starDisplay = rating.rows
-            res.render("books.ejs",{
-                booksArr: booksArr,
-                starDisplay: starDisplay
-            })
-        }
-        catch(err){
-            console.log(err.message)
-        }
-    } else {
-        res.render("books.ejs",{
-            booksArr: booksArr,
-            starDisplay: starDisplay
-        })
-        sortFunctionality = false;
-    }
-})
-```
-### 4. Validating ISBN Format and Checksums on the Backend
-* **Challenge:**  
-Ensuring only valid ISBN-10 or ISBN-13 codes get saved.
-* **Solution:**  
-I implemented a middleware to validate ISBN formats and checksums before database insertion:
-```javascript
-const isbn10Regex = /^\d{9}(\d|X)$/; // ISBN-10 format regex
-const isbn13Regex = /^\d{13}$/;     // ISBN-13 format regex
+4. **CSS Wrapping for Long Text**
+    - *Challenge*: Reviews and titles overflowed containers.
+    - *Solution*: Applied `word-wrap: break-word;` and flexbox fixes.
 
-function validateISBN(req, res, next) {
-    const { ISBN } = req.body;
+---
 
-    // Clean input (remove non-numeric characters except 'X' in ISBN-10)
-    const cleanedISBN = ISBN.replace(/[^0-9X]/gi, '').toUpperCase();
+### Post-Refactor Challenges (RESTful API Upgrade)
 
-    // Check if the ISBN matches the format for ISBN-10 or ISBN-13
-    if (isbn10Regex.test(cleanedISBN)) {
-        if (isValidISBN10(cleanedISBN)) {
-            return next(); // Valid ISBN-10, proceed to the next middleware/handler
-        } else {
-            return res.status(400).render("add.ejs", {
-                error: 'Invalid ISBN-10 checksum' });
-        }
-    } else if (isbn13Regex.test(cleanedISBN)) {
-        if (isValidISBN13(cleanedISBN)) {
-            return next(); // Valid ISBN-13, proceed to the next middleware/handler
-        } else {
-            return res.status(400).render("add.ejs", {
-                error: 'Invalid ISBN-13 checksum' });
-        }
-    }
+1. **Refactoring to RESTful Design**
+    - *Challenge*: Original app mixed DB queries with frontend routes.
+    - *Solution*: Split into `server.js` (frontend) and `api.js` (backend API).
 
-    return res.status(400).render("add.ejs",{
-        error: 'Invalid ISBN format. Please use a valid ISBN!' }); // Invalid format
-}
-```
-### 5. Editing and Deleting Books While Maintaining Consistent Data
-**Challenge:**  
-Syncing changes/deletions across library and rating tables.
+2. **Sorting by Date, Rating, Title**
+    - *Challenge*: Sorting had to be reliable and efficient.
+    - *Solution*: Implemented SQL `ORDER BY` with query params (`?sort=date`, `?sort=rating`, `?sort=alphabet`).
 
-**Solution:**  
-On edit or delete actions, I ensured that both tables were updated based on the shared `id`:
-```javascript
-app.post("/books/edit/:bookID", async (req, res) =>{
-    const foundStarRating = starDisplay.find((d)=> d.id === parseInt(req.params.bookID));
-    const foundBook = booksArr.find((d)=> d.id === parseInt(req.params.bookID));
-    try{
-        await db.query("UPDATE rating SET rate = ($1) WHERE id = ($2)", [req.body.rate, foundStarRating.id]);
-        await db.query("UPDATE library SET title = ($1), author = ($2), isbn = ($3), date = ($4), review = ($5) , rate = ($6) WHERE id = ($7)", [req.body.title, req.body.author, req.body.ISBN, req.body.date, req.body.review, req.body.rate, foundBook.id]);
-        res.redirect("/books")
-    }
-    catch(err){
-        console.log(err.message);
-    }
-})
-```
-### 6. Aligning Book Covers and Reviews with CSS Float and Width
-**Challenge:**  
-Making book covers and text reviews wrap nicely and responsively.
+3. **Error Handling**
+    - *Challenge*: Crashes on invalid routes or failed DB queries.
+    - *Solution*: Added structured error handling and catch-all middleware returning JSON:
+      ```js
+      app.use((req, res) => {
+        res.status(404).json({ error: "Route not found" });
+      });
+      ```  
 
-**Solution:**  
-I used CSS float for the book cover image and adjusted the width and margins to ensure the review text wraps properly:
-```css
-.book-cover{
-    float: left;
-    width: 100px;
-    margin-right: 30px;
-}
-```
-### 7. Handling Star Rating Clicks for Interactive UI
-**Challenge:**  
-Allow users to click stars to set their rating visually on the frontend.
+4. **Editing & Deleting Books**
+    - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation wasn’t covered in depth in the course materials
+    - *Solution*: Added proper REST methods (`PATCH`, `DELETE`) with cascading deletes via FK.
 
-**Solution:**
-I added an event listener to stars and toggle classes based on click positions:
-```javascript
-const stars = document.querySelectorAll(".star-ranking");
-stars.forEach((star, index1) =>{
-    star.addEventListener("click", ()=>{
-        stars.forEach((star, index2)=>{
-            index1 >= index2 ? star.classList.add("active") : star.classList.remove("active");
-        })
-    })
-})
-```
-### 8. Coordinating Data from Multiple Tables
-**Challenge:**  
-Displaying book info and ratings together from two separate tables required careful data handling.
-
-**Solution:**  
-I queried both tables on page load and passed them separately into the EJS render:
-```javascript
-const books = await db.query("SELECT * FROM library ORDER BY id ASC");
-const rating = await db.query("SELECT * FROM rating")
-res.render("books.ejs",{
-            booksgit Arr: books.rows,
-            starDisplay: rating.rows
-        })
-```
-### 9. Handling Empty Library Edge Case Gracefully
-**Challenge:**  
-Prevent error or blank pages when user tries to view the library with no books.
-
-**Solution:**  
-I checked if the query result was empty and rendered an error message:
-```javascript
- const books = await db.query("SELECT * FROM library ORDER BY id ASC");
- if (books.rows == 0) {
-               return res.render("index.ejs", {
-                   error: "You don't have any books in your library. Please use the + icon on the top right to add your books!"
-               })
-```
+---
 
 ## Installation Guide
-### Book Notes Project
-This project is located in the `Book Notes Project` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run.
-To install and use the project, please follow these steps:
-1. Clone the repository  
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
 cd book-notes-project
 
 ```
-2. Install dependencies
+
+2. Install dependencies:
 ```bash
 npm install
 ```
-3. Launch **pgAdmin** and connect to your PostgreSQL server. Create a new database followed by creating the following two tables:
-```
-CREATE TABLE library (
-id SERIAL PRIMARY KEY,
-title VARCHAR(50),
-author VARCHAR(50),
-isbn BIGINT,
-date CHAR(10),
-review TEXT,
-rate INT
-);
 
-CREATE TABLE rating (
-id SERIAL PRIMARY KEY,
-rate INT
-);
+3. Setup PostgreSQL:  
 
-```
-**Note:** `library.rate` is deprecated and only used initially, but `rating.rate` is used for display logic.  
+    **Step 1 Access PostgreSQL:**  
+    Open your terminal and run:
 
-**Note:** Ensure that `rating.id` matches the corresponding `library.id` for accurate star rendering.
+    ```bash
+    psql -U <your_postgres_username>
+    ```
+   *Alternative:* If your terminal is not configured for PostgreSQL, you can launch PgAdmin (the official PostgreSQL GUI) to create a database and run the commands.
 
-4. Create a `.env` file in the root of the project and replace the placeholders with your local PostgreSQL credentials. Here is an example for your `.env` file:
-```
-DB_USER="Your PostgreSQL username (usually postgress unless you specified another)"
-DB_HOST="localhost"
-DB_DATABASE="The name of your database (e.g., my_project_db)"
-DB_PASSWORD="Your PostgreSQL password"
-DB_PORT="5432"
+    **Step 2: Create Database:**  
+    ```sql
+    CREATE DATABASE virtual_bookroom;
+    \c virtual_bookroom;
 
-```
-5. Run the application:  
+    ```
+   *Note:* You can replace `virtual_bookroom` with any database name you prefer.
 
-`node index.js `  
+    **Step 3: Create Tables:**  
 
-6. Visit http://localhost:3000 in your browser to start the application
+    **Library Table**
+    ```sql
+   CREATE TABLE library (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50),
+    author VARCHAR(50),
+    isbn BIGINT,
+    date DATE,
+    review TEXT,
+    reader_name VARCHAR(255)
+    );
+   ```
+   **Rating Table** 
+    ```
+   CREATE TABLE rating (
+    id SERIAL PRIMARY KEY,
+    rate INT,
+    library_id INT NOT NULL,
+    CONSTRAINT fk_library FOREIGN KEY (library_id) REFERENCES library(id) ON DELETE CASCADE
+    );
+    ```
+   *Note:* The `rating` table uses a foreign key to link each rating to a book in the `library` table. Deleting a book automatically deletes its ratings.  
 
-## Backend API Refactor
-The backend API has been refactored to follow a RESTful JSON approach. The `/books` route now supports optional sorting via query parameter `sort`(`Rating`, `Date`, or `Alphabet`). It returns JSON data, suitable for frontend fetch calls and easier API integration.
+    **Step 4: Verify Tables:**
+    ```sql
+   \d library
+    \d rating
+    ```
+   You should see columns, types, and the foreign key relationship correctly listed.
 
-### Example Request:  
-`GET /books?sort=rating`
 
-### Example Response
-```json
-{
-  "books": [
-    {
-      "id": 1,
-      "title": "Book Title",
-      "author": "Author Name",
-      "isbn": 1234567890123,
-      "date": "2024-04-01",
-      "review": "Great book!",
-      "rate": 5
-    }
-  ]
-}
-```
-This refactor improves separation of concerns by delivering JSON data from the backend, allowing the frontend to handle rendering and interactivity dynamically.
+4. Run servers:  
+To start the app locally:
+   ```bash
+   # frontend
+   npm run dev:server
+
+   # backend
+   npm run dev:api
+   ```
+   *Note:* Keep both servers running in separate terminal windows/tabs. The frontend runs on `localhost:3000` and calls the backend API on `localhost:4000`.
+
+---
+
+## API Endpoints
+
+### `GET /books`
+Fetch all books. Supports sorting:
+- `?sort=date`
+- `?sort=rating`
+- `?sort=alphabet`
+
+### `GET /books/:id`
+Fetch a single book by ID.
+
+### `POST /books`
+Add a new book (and optional rating).
+
+### `PATCH /books/:id`
+Edit a book.
+
+### `DELETE /books/:id`
+Delete a book (cascades to ratings).
+
+---
+
+## Planned Improvements
+
+- **Full Input Validation**
+   - *Current*: ISBNs are validated with custom logic to prevent malformed entries.
+   - *Next Step*: Integrate [`express-validator`](https://express-validator.github.io/docs/) to validate all form inputs (title, author, review, rating, date, reader name) server-side. This will enhance security, prevent bad data, and make the app more robust.
+ ---
 
 ## Credit
-This project was developed independently as a capstone assignment for **The Complete Full-Stack Web Development Bootcamp** by **Angela Yu (The App Brewery)**. While inspired by course objectives, all implementation decisions, styling, and additional features (like error handling and UI improvements) were completed by myself.
+- This project was developed independently as a **capstone project** for *The Complete Full-Stack Web Development Bootcamp* by **Angela Yu (The App Brewery)**. Unlike the guided tutorial projects (such as the blog app), the capstone had **no starter or solution code** — all design, database schema, REST API implementation, error handling, and UI development were completed entirely by me. The course provided the broad learning foundation, but the **Virtual Bookroom** is my own original implementation.  
+
+
+- [Open Library API](https://openlibrary.org/dev/docs/api/books) for book cover data.
 
