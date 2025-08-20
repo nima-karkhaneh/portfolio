@@ -16,9 +16,10 @@
 <main class="main-add">
     <form action="/books/edit/<%= foundBook.id %>" method="post">
         <h2>Please edit your book</h2>
-        <input type="text" name="title" placeholder="Title" value="<%= foundBook.title%>" autocomplete="off" required>
-        <input type="text" name="author" placeholder="Author" value="<%= foundBook.author %>" autocomplete="off" required>
-        <input type="text" name="ISBN" placeholder="ISBN" value="<%= foundBook.isbn %>" autocomplete="off" required>
+        <input type="text" name="title" placeholder="Title" value="<%= foundBook.title%>" autocomplete="off" readonly>
+        <input type="text" name="author" placeholder="Author" value="<%= foundBook.author %>" autocomplete="off" readonly>
+        <input type="text" name="ISBN" placeholder="ISBN" value="<%= foundBook.isbn %>" autocomplete="off" readonly>
+        <input type="text" name="reader_name" placeholder="Your name" value="<%= foundBook.reader_name %>" autocomplete="off" readonly>
         <input type="date" id="date" name="date" placeholder="date read" value="<%= foundBook.date%>" autocomplete="off" required>
         <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review"><%= foundBook.review %></textarea>
         <label for="select">Please leave a rating</label>
@@ -38,5 +39,9 @@
     </form>
 </main>
 <%- include("./partials/footer.ejs") %>
+<script>
+    const book = <%- JSON.stringify(foundBook) %>;
+    console.log(book);
+</script>
 </body>
 </html>

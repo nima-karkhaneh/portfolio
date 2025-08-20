@@ -8,63 +8,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/styles/main.css">
-    <title>Book Notes Project</title>
+    <script src="/styles/script.js" defer></script>
+    <title>Books</title>
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
 <main id="main-books">
-    <form id="sort-form" action="/sort" method="post">
+    <form id="sort-form" action="/books" method="GET">
         <div id="sort-container">
             <label for="sort">Sort by:</label>
             <select name="sort" id="sort" onchange="this.form.submit()">
                 <option value="">-- Please choose an option --</option>
-                <option value="Rating">Rating</option>
-                <option value="Date Read">Date Read</option>
-                <option value="Alphabet">Alphabet</option>
+                <option value="rating">Rating</option>
+                <option value="date">Date Read</option>
+                <option value="alphabet">Alphabet</option>
             </select>
         </div>
     </form>
-    <% booksArr.forEach((book) => {
-        const date = new Date(book.date);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        const formattedDate = `${day}-${month}-${year}`;
-    %>
+
+    <% booksArr.forEach((book) => { %>
         <div class="book-container">
             <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg" alt="book cover">
-            <h2 class="book-title"> <%= book.title%> - By <%= book.author %>  </h2>
-            <p class="date-read">DATE READ: <%= formattedDate %></p>
-            <div class="ranking-display">
-                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
-                <i class="star<%=book.id%> fa-solid fa-star star-display"></i>
+            <h2 class="book-title"><%= book.title %> - By <%= book.author %></h2>
+            <p class="date-read">
+                DATE READ: <%= new Date(book.date).toLocaleDateString('en-GB').replace(/\//g, '-') %>
+
+            </p>
+            <div class="ranking-display" data-book-id="<%= book.id %>">
+                <% for(let i = 0; i < 5; i++) { %>
+                    <i class="fa-solid fa-star star<%= book.id %> star-display"></i>
+                <% } %>
             </div>
             <p class="review line-break-fix"><%= book.review %></p>
+            <p class="reader_name">READ BY: <%= book.reader_name %></p>
         </div>
         <div id="edit-delete-container">
-            <a href="/books/delete/<%= book.id %>"><button class="delete">Delete</button></a>
+            <button class="delete" data-id="<%= book.id %>">Delete</button>
             <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>
         </div>
     <% }) %>
+
+
 </main>
 <%- include("./partials/footer.ejs") %>
 <script>
-    const date = new Date ();
-    const year = date.getFullYear();
-    document.querySelector("footer").innerHTML = `<p>Copyright &copy; ${year} - Website created by Nima Karkhaneh</p><p><i class=\"fa-solid fa-envelope\"></i>nimakarkahneh@gmail.com</p><p><a href=\"/\"><i class=\"fab fa-linkedin\"></a></i><a href=\"/\"><i class=\"fa-brands fa-github\"></i></a></p>`;
-        const ratingData = JSON.parse('<%- JSON.stringify( starDisplay )%>');
-        ratingData.forEach((d)=>{
-            const id = d.id;
-            const rate = d.rate;
-            const stars = document.querySelectorAll(`.star${id}`);
-            if (stars != null)
-            for (let i = 0; i < rate; i++){
-                stars[i].style.color = "#dabd18b2"
-            }
-        })
+    // Dynamic star coloring
+    const ratingData = JSON.parse('<%- JSON.stringify(starDisplay) %>');
+
+    ratingData.forEach(d => {
+        const stars = document.querySelectorAll(`.star${d.library_id}`);
+        if (stars) {
+            stars.forEach((star, i) => {
+                star.style.color = i < d.rate ? "#dabd18b2" : "#ccc";
+            });
+        }
+    });
 </script>
 </body>
 </html>
+
