@@ -73,16 +73,15 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 ## Architecture
 
 ```
-Frontend (EJS templates + static assets)
-      |
-   Express app (server.js @ localhost:3000) ← acts as client-facing server
-      |
-   axios/fetch
-      ↓
+Frontend (EJS + static assets)
+         |
+Backend server.js (server.js @ localhost:3000)
+         |
+       axios/fetch
+         ↓
 Backend API (api.js @ localhost:4000)
-      |
-   PostgreSQL
-
+         |
+      PostgreSQL
 ```
 
 - **server.js** → renders pages, handles form submissions, and calls the API.
@@ -221,7 +220,7 @@ npm install
 
 3. Setup PostgreSQL:  
 
-    **Step 1 Access PostgreSQL:**  
+    **Step 1: Access PostgreSQL**  
     Open your terminal and run:
 
     ```bash
@@ -229,7 +228,7 @@ npm install
     ```
    *Alternative:* If your terminal is not configured for PostgreSQL, you can launch PgAdmin (the official PostgreSQL GUI) to create a database and run the commands.
 
-    **Step 2: Create Database:**  
+    **Step 2: Create Database**  
     ```sql
     CREATE DATABASE virtual_bookroom;
     \c virtual_bookroom;
@@ -237,7 +236,7 @@ npm install
     ```
    *Note:* You can replace `virtual_bookroom` with any database name you prefer.
 
-    **Step 3: Create Tables:**  
+    **Step 3: Create Tables**  
 
     **Library Table**
     ```sql
@@ -262,7 +261,7 @@ npm install
     ```
    *Note:* The `rating` table uses a foreign key to link each rating to a book in the `library` table. Deleting a book automatically deletes its ratings.  
 
-    **Step 4: Verify Tables:**
+    **Step 4: Verify Tables**
     ```sql
    \d library
     \d rating
