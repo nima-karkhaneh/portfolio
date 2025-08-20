@@ -145,7 +145,6 @@ app.get("/books/edit/:id", async (req, res) => {
 app.post("/books/edit/:id", async (req, res) => {
     try{
         const { id } = req.params;
-        console.log(id, req.body)
         const response = await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
         res.redirect("/books")
     }
