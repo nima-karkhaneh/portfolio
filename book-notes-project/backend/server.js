@@ -192,9 +192,7 @@ app.post("/books/delete/:id", async (req, res) => {
 
 // Catch-all for undefined routes (404)
 app.use((req, res) => {
-    res.status(404).json({
-        error: "404 Not Found: The route you are trying to access does not exist."
-    });
+    res.status(404).render("404.ejs");
 });
 
 
