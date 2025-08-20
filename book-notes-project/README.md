@@ -269,7 +269,17 @@ npm install
    You should see columns, types, and the foreign key relationship correctly listed.
 
 
-4. Run servers:  
+4. Create a `.env` file in the root of the project and replace the placeholders with your local PostgreSQL credentials. Here is an example for your `.env` file:
+```dotenv
+DB_USER="Your PostgreSQL username (usually postgress unless you specified another)"
+DB_HOST="localhost"
+DB_DATABASE="The name of your database (e.g., my_project_db)"
+DB_PASSWORD="Your PostgreSQL password"
+DB_PORT="5432"
+API_BASE_URL="http://localhost:4000"
+```
+
+5. Run servers:  
 To start the app locally:
    ```bash
    # frontend
