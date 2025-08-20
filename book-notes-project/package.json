@@ -4,7 +4,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev:index": "nodemon index.js",
     "dev:server": "nodemon backend/server.js",
     "dev:api": "nodemon backend/api.js",
     "start": "node backend/server.js",
