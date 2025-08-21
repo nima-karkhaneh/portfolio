@@ -69,6 +69,7 @@ app.get("/add", (req,res)=>{
 })
 
 app.post("/submit", async (req, res) => {
+    // console.log(req.body)
     try {
         const response = await axios.post(`${API_BASE_URL}/submit`, req.body);
 
@@ -80,9 +81,10 @@ app.post("/submit", async (req, res) => {
 
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
-            console.error("API error details:", err.response.data);
-
-            res.status(err.response.status).json({error: err.response.data?.error || "API request failed."});
+            const errors = err.response.data.errors
+            res.status(err.response.status).render("add.ejs", {
+                errors: errors
+            })
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
