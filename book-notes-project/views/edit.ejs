@@ -18,22 +18,22 @@
         <h2>Please edit your book</h2>
         <input type="text" name="title" placeholder="Title" value="<%= foundBook.title%>" autocomplete="off" readonly>
         <input type="text" name="author" placeholder="Author" value="<%= foundBook.author %>" autocomplete="off" readonly>
-        <input type="text" name="ISBN" placeholder="ISBN" value="<%= foundBook.isbn %>" autocomplete="off" readonly>
+        <input type="text" name="isbn" placeholder="ISBN" value="<%= foundBook.isbn %>" autocomplete="off" readonly>
         <input type="text" name="reader_name" placeholder="Your name" value="<%= foundBook.reader_name %>" autocomplete="off" readonly>
         <input type="date" id="date" name="date" placeholder="date read" value="<%= foundBook.date%>" autocomplete="off" required>
-        <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review"><%= foundBook.review %></textarea>
+        <textarea name="review" id="" cols="60" rows="20" autocomplete="off" placeholder="Please leave a review" required><%= foundBook.review %></textarea>
         <label for="select">Please leave a rating</label>
         <div class="ranking-container">
             <label for="rate-1"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-1" name="rate" value="1" hidden="hidden">
+            <input type="radio" id="rate-1" name="rate" value="1" hidden="hidden" required>
             <label for="rate-2"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-2" name="rate" value="2" hidden="hidden">
+            <input type="radio" id="rate-2" name="rate" value="2" hidden="hidden" required>
             <label for="rate-3"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-3" name="rate" value="3" hidden="hidden">
+            <input type="radio" id="rate-3" name="rate" value="3" hidden="hidden" required>
             <label for="rate-4"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-4" name="rate" value="4" hidden="hidden">
+            <input type="radio" id="rate-4" name="rate" value="4" hidden="hidden" required>
             <label for="rate-5"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-5" name="rate" value="5" hidden="hidden">
+            <input type="radio" id="rate-5" name="rate" value="5" hidden="hidden" required>
         </div>
         <button type="submit">Submit</button>
     </form>

@@ -40,8 +40,8 @@
                 <% } %>
             </div>
             <p class="review line-break-fix"><%= book.review %></p>
-            <p class="reader_name">READ BY: <%= book.reader_name %></p>
         </div>
+        <p class="reader_name">READ BY: <%= book.reader_name %></p>
         <div id="edit-delete-container">
             <button class="delete" data-id="<%= book.id %>">Delete</button>
             <a href="/books/edit/<%= book.id %>"><button class="edit">Edit</button></a>

@@ -1,7 +1,10 @@
 import express from "express";
 import env from "dotenv";
-import db from "./db.js";
 env.config()
+import db from "./db.js";
+import { validateCreateBook, validateUpdateBook, validateGetAndDeleteBook } from "./validator.js";
+import { validationResult } from "express-validator";
+
 
 const app = express();
 const port = process.env.API_PORT || 4000;
@@ -58,11 +61,16 @@ app.get("/books", async (req, res) => {
 })
 
 
-app.post ("/submit", async (req, res) => {
-    const { title, author, ISBN, date, review, rate, reader_name } = req.body;
+app.post ("/submit", validateCreateBook, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const { title, author, isbn, date, review, rate, reader_name } = req.body;
 
     try  {
-        const checkBook = await db.query("SELECT * FROM library WHERE isbn = $1", [ISBN]);
+        const checkBook = await db.query("SELECT * FROM library WHERE isbn = $1", [isbn]);
         if (checkBook.rows.length !== 0) {
             return res.status(400).json({ error: "Book already exists in the library." })
         }
@@ -72,7 +80,7 @@ app.post ("/submit", async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING id;
     `;
-        const libraryResult = await db.query(insertLibraryQuery, [title, author, ISBN, date, review, reader_name]);
+        const libraryResult = await db.query(insertLibraryQuery, [title, author, isbn, date, review, reader_name]);
 
         const newLibraryId = libraryResult.rows[0].id;
 
@@ -93,7 +101,12 @@ app.post ("/submit", async (req, res) => {
 
 // GETTING A SPECIFIC BOOK
 
-app.get("/books/:id", async (req, res) => {
+app.get("/books/:id", validateGetAndDeleteBook, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
     const { id } = req.params;
 
     try {
@@ -118,39 +131,45 @@ app.get("/books/:id", async (req, res) => {
 
 
 
-app.patch("/books/:id", async (req, res) => {
-const { id } = req.params;
-const { date, review, rate } = req.body;
+app.patch("/books/:id", validateUpdateBook, async (req, res) => {
 
-try {
-    const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
-    if (checkBook.rows.length === 0) {
-        return res.status(404).json({ error: "Book not found." });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json( { errors: errors.array() })
     }
 
-    // Dynamic SQL for library update
+    const { id } = req.params;
+    const { date, review, rate } = req.body;
 
-    const libraryUpdates = [];
-    const libraryValue = [];
-    let valueIndex = 1
+    try {
+        const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
+        if (checkBook.rows.length === 0) {
+            return res.status(404).json({ error: "Book not found." });
+        }
 
-    if (date) {
-        libraryUpdates.push(`date=$${valueIndex++}`);
-        libraryValue.push(date)
-    }
+        // Dynamic SQL for library update
 
-    if (review) {
-        libraryUpdates.push(`review=$${valueIndex++}`);
-        libraryValue.push(review)
-    }
+        const libraryUpdates = [];
+        const libraryValue = [];
+        let valueIndex = 1
 
-    if (libraryUpdates.length > 0) {
-        libraryValue.push(id);
-        await db.query(
-            `UPDATE library SET ${libraryUpdates.join(", ")} WHERE id = $${valueIndex}`,
-            libraryValue
-        );
-    }
+        if (date) {
+            libraryUpdates.push(`date=$${valueIndex++}`);
+            libraryValue.push(date)
+        }
+
+        if (review) {
+            libraryUpdates.push(`review=$${valueIndex++}`);
+            libraryValue.push(review)
+        }
+
+        if (libraryUpdates.length > 0) {
+            libraryValue.push(id);
+            await db.query(
+                `UPDATE library SET ${libraryUpdates.join(", ")} WHERE id = $${valueIndex}`,
+                libraryValue
+            );
+        }
 
     // Update rating table if provided
 
@@ -165,15 +184,20 @@ try {
     }
 
     catch (err) {
-        console.log(err.message)
-        res.status(500).json({ error: "Server error." })
+            console.log(err.message)
+            res.status(500).json({ error: "Server error." })
     }
 })
 
 
 // DELETE ROUTE
 
-app.delete("/books/:id", async (req, res) => {
+app.delete("/books/:id", validateGetAndDeleteBook, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
     const { id } = req.params;
 
     try {

@@ -154,6 +154,8 @@ Key changes from original schema:
 - `axios`
 - `pg`
 - `ejs`
+- `express-validator`
+- `isbn-utils`
 
 ---
 

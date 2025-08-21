@@ -175,7 +175,7 @@ textarea{
 
 .reader_name {
     color: dimgray;
-    margin-top: 15px;
+    padding-left: 30px;
 }
 
 .ranking-display{
@@ -191,7 +191,7 @@ textarea{
 #edit-delete-container{
     display: flex;
     gap: 20px;
-    padding: 0 30px;
+    padding: 10px 30px;
 }
 .delete, .edit{
     padding: 10px;
