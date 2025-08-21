@@ -155,7 +155,14 @@ app.post("/books/edit/:id", async (req, res) => {
         console.error("Error updating book:", err.message)
 
         if (err.response) {
-            res.status(err.response.status).json( { error: err.response.data?.error || "API update request failed."})
+            const formData = req.body;
+            const formId = req.params
+            const errors = err.response.data.errors;
+            res.status(err.response.status).render("edit.ejs", {
+                errors: errors,
+                formData,
+                formId
+            })
         }
         else if (err.request) {
             res.status(503).json({ error: "Service unavailable. Please try again later." })
