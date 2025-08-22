@@ -107,11 +107,6 @@ app.get("/books/edit/:id", async (req, res) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/books/${id}`);
 
-        if (!response?.data?.book) {
-            return res.status(404).render("error.ejs", {
-                error: "Book not found."
-            });
-        }
 
         const foundBook = response.data.book;
 
@@ -122,8 +117,10 @@ app.get("/books/edit/:id", async (req, res) => {
 
         if (err.response) {
             // API responded with error status
-            res.status(err.response.status).render("error.ejs", {
-                error: err.response.data?.error || "API error fetching book."
+            const errors = err.response.data.errors;
+            console.log(errors)
+            res.status(err.response.status).render("404.ejs", {
+                errors: errors
             });
         }
         else if (err.request) {

@@ -14,7 +14,14 @@
 </header>
 <main id="page-404">
     <h1>404</h1>
-    <p>The route you're looking for does not exist.</p>
+    <% if (locals.errors && locals.errors.length > 0) { %>
+        <% locals.errors.forEach(err => { %>
+            <p><%= err.msg %></p>
+        <% }) %>
+    <% } else { %>
+        <p>The route you're looking for does not exist.</p>
+    <% } %>
+
     <a href="/" class="btn">Return to Home</a>
 </main>
 
