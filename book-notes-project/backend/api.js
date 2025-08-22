@@ -65,7 +65,7 @@ app.get("/books", async (req, res) => {
 app.post ("/submit", validateCreateBook, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return sendError(res, 400, "Validation failed", errors.array())
     }
 
     const { title, author, isbn, date, review, rate, reader_name } = req.body;

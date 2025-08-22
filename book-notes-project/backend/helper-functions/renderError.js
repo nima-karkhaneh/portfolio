@@ -5,4 +5,11 @@ function renderError(res, status, error) {
     })
 }
 
+function renderPostError(res, status, error) {
+    return res.status(status).render("add.ejs", {
+        error
+    })
+}
+
 export default renderError;
+export { renderPostError }

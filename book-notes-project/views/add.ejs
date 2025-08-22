@@ -16,8 +16,8 @@
 <main class="main-add">
     <!--    Validation error helper-->
     <% function getError(field) {
-        if (!locals.errors) return null;
-        const err = locals.errors.find(e => e.path === field);
+        if (!locals.error) return null;
+        const err = locals.error.details.find(e => e.path === field);
         return err ? err.msg : null;
     } %>
     <form action="/submit" method="post">

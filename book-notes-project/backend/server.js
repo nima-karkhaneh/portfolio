@@ -1,7 +1,7 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
-import renderError from "./helper-functions/renderError.js";
+import renderError, { renderPostError } from "./helper-functions/renderError.js";
 env.config();
 
 const app = express();
@@ -82,10 +82,8 @@ app.post("/submit", async (req, res) => {
 
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
-            const errors = err.response.data.errors
-            res.status(err.response.status).render("add.ejs", {
-                errors: errors
-            })
+            const errorData = err.response.data.error;
+            renderPostError(res, err.response.status, errorData)
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
