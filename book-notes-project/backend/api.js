@@ -2,8 +2,9 @@ import express from "express";
 import env from "dotenv";
 env.config()
 import db from "./db.js";
-import { validateCreateBook, validateUpdateBook, validateGetAndDeleteBook } from "./validator.js";
+import { validateCreateBook, validateUpdateBook, validateGetAndDeleteBook } from "./helper-functions/validator.js";
 import { validationResult } from "express-validator";
+import sendError from "./helper-functions/sendError.js";
 
 
 const app = express();
@@ -104,7 +105,7 @@ app.post ("/submit", validateCreateBook, async (req, res) => {
 app.get("/books/:id", validateGetAndDeleteBook, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return sendError(res, 400, "Validation failed.", errors.array())
     }
 
     const { id } = req.params;
@@ -118,14 +119,14 @@ app.get("/books/:id", validateGetAndDeleteBook, async (req, res) => {
     `, [id]);
 
         if (bookResult.rows.length === 0) {
-            return res.status(404).json({ error: "Book not found." });
+            return sendError(res, 404, "Book not found.")
         }
 
         res.status(200).json({ book: bookResult.rows[0] });
     }
     catch (err) {
         console.error(err.message);
-        res.status(500).json({ error: "Server error." });
+        return sendError(res, 500, "Server Error")
     }
 });
 

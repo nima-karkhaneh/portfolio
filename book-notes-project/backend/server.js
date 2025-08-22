@@ -1,6 +1,7 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
+import renderError from "./helper-functions/renderError.js";
 env.config();
 
 const app = express();
@@ -117,23 +118,16 @@ app.get("/books/edit/:id", async (req, res) => {
 
         if (err.response) {
             // API responded with error status
-            const errors = err.response.data.errors;
-            console.log(errors)
-            res.status(err.response.status).render("404.ejs", {
-                errors: errors
-            });
+            const errorData = err.response.data.error || { message: "Unknown error." };
+            renderError(res, err.response.status, errorData )
         }
         else if (err.request) {
             // No response from API
-            res.status(503).render("error.ejs", {
-                error: "Service unavailable. Please try again later."
-            });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Server-side error
-            res.status(500).render("error.ejs", {
-                error: "Internal server error."
-            });
+           renderError(res, 503, { message: "Internal server error."})
         }
     }
 });
@@ -197,7 +191,7 @@ app.post("/books/delete/:id", async (req, res) => {
 
 // Catch-all for undefined routes (404)
 app.use((req, res) => {
-    res.status(404).render("404.ejs");
+    res.status(404).render("error.ejs");
 });
 
 
