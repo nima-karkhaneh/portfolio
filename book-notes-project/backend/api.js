@@ -49,15 +49,15 @@ app.get("/books", async (req, res) => {
         const result = await db.query(queryText);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: "No books found in the library." });
+            return sendError(res, 404, "No books found in the library.")
         }
 
-        res.json({ books: result.rows });
+        res.status(200).json({ books: result.rows });
 
     }
     catch (err) {
         console.log(err.message);
-        res.status(500).json({ error: "server error" })
+        return sendError(res, 500, "server error");
     }
 })
 
@@ -73,7 +73,7 @@ app.post ("/submit", validateCreateBook, async (req, res) => {
     try  {
         const checkBook = await db.query("SELECT * FROM library WHERE isbn = $1", [isbn]);
         if (checkBook.rows.length !== 0) {
-            return res.status(400).json({ error: "Book already exists in the library." })
+            return sendError(res, 400, "Book already exists in the library.")
         }
 
         const insertLibraryQuery = `
@@ -96,7 +96,7 @@ app.post ("/submit", validateCreateBook, async (req, res) => {
 
     catch (err) {
         console.log(err.message);
-        res.status(500).json( { error: "server error" });
+        return sendError(res, 500,  "server error")
     }
 })
 
@@ -136,7 +136,7 @@ app.patch("/books/:id", validateUpdateBook, async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json( { errors: errors.array() })
+        return sendError(res, 400, "Validation failed", errors.array())
     }
 
     const { id } = req.params;
@@ -145,7 +145,7 @@ app.patch("/books/:id", validateUpdateBook, async (req, res) => {
     try {
         const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
         if (checkBook.rows.length === 0) {
-            return res.status(404).json({ error: "Book not found." });
+            return sendError(res, 404, "Book not found.")
         }
 
         // Dynamic SQL for library update
@@ -186,7 +186,7 @@ app.patch("/books/:id", validateUpdateBook, async (req, res) => {
 
     catch (err) {
             console.log(err.message)
-            res.status(500).json({ error: "Server error." })
+            return sendError(res, 500, "Server error.")
     }
 })
 
@@ -196,7 +196,7 @@ app.patch("/books/:id", validateUpdateBook, async (req, res) => {
 app.delete("/books/:id", validateGetAndDeleteBook, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return sendError(res, 400, "Validation failed", errors.array())
     }
 
     const { id } = req.params;
@@ -205,7 +205,7 @@ app.delete("/books/:id", validateGetAndDeleteBook, async (req, res) => {
         const checkBook = await db.query("SELECT * FROM library WHERE id = $1", [id]);
 
         if (checkBook.rows.length === 0) {
-            return res.status(404).json({ error : "Book not found." })
+            return sendError(res, 404, "Book not found.")
         }
 
         // Relevant row from rating table gets deleted thanks to ON DELETE CASCADE
@@ -215,7 +215,7 @@ app.delete("/books/:id", validateGetAndDeleteBook, async (req, res) => {
 
     catch (err) {
         console.error(err.message);
-        res.status(500).json({ error: "Sever error." })
+        return sendError(res, 500, "Sever error.")
     }
 })
 

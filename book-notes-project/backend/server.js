@@ -70,7 +70,6 @@ app.get("/add", (req,res)=>{
 })
 
 app.post("/submit", async (req, res) => {
-    // console.log(req.body)
     try {
         const response = await axios.post(`${API_BASE_URL}/submit`, req.body);
 
