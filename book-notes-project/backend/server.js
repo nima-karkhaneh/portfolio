@@ -86,8 +86,9 @@ app.post("/submit", async (req, res) => {
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
             const errorData = err.response.data.error;
+            const status = err.response.status
             const formData = req.body;
-            renderPostError(res, err.response.status, errorData, formData)
+            renderPostError(res, status, errorData, formData)
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
@@ -119,8 +120,9 @@ app.get("/books/edit/:id", async (req, res) => {
 
         if (err.response) {
             // API responded with error status
-            const errorData = err.response.data.error || { message: "Unknown error." };
-            renderError(res, err.response.status, errorData )
+            const errorData = err.response.data.error
+            const status = err.response.status;
+            renderError(res, status, errorData )
         }
         else if (err.request) {
             // No response from API
@@ -128,7 +130,7 @@ app.get("/books/edit/:id", async (req, res) => {
         }
         else {
             // Server-side error
-           renderError(res, 503, { message: "Internal server error."})
+            renderError(res, 503, { message: "Internal server error."})
         }
     }
 });
@@ -139,7 +141,7 @@ app.get("/books/edit/:id", async (req, res) => {
 app.post("/books/edit/:id", async (req, res) => {
     try{
         const { id } = req.params;
-        const response = await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
+        await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
         res.redirect("/books")
     }
 
@@ -151,7 +153,6 @@ app.post("/books/edit/:id", async (req, res) => {
             const status = err.response.status
             const formData = req.body;
             const formId = req.params;
-            console.log(errorData);
             renderEditError(res, status, errorData, formData, formId)
 
 
@@ -170,7 +171,7 @@ app.post("/books/edit/:id", async (req, res) => {
 app.post("/books/delete/:id", async (req, res) => {
     try{
         const { id } = req.params;
-        const response = await axios.delete(`${API_BASE_URL}/books/${id}`)
+        await axios.delete(`${API_BASE_URL}/books/${id}`)
         res.status(200).json( { message: "Book deleted" })
     }
 
@@ -178,13 +179,16 @@ app.post("/books/delete/:id", async (req, res) => {
         console.error("Error deleting book:", err.message);
 
         if (err.response) {
-            res.status(err.response.status).json( {error: err.response.data?.error || "API delete request failed"})
+            const errorData = err.response.data.error
+            const status = err.response.status
+            renderError(res, status, errorData)
+
         }
         else if (err.request) {
-            res.status(503).json({ error: "Service unavailable. Please try again late.r"})
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
-            res.status(500).json({ error: "Unable to delete books. Internal Sever error."})
+            renderError(res, 500, { message: "Unable to delete books. Internal Sever error." })
         }
     }
 })
