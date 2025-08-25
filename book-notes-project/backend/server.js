@@ -1,7 +1,7 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
-import renderError, { renderPostError } from "./helper-functions/renderError.js";
+import renderError, { renderPostError, renderNoBookError } from "./helper-functions/renderError.js";
 env.config();
 
 const app = express();
@@ -46,18 +46,22 @@ app.get("/books", async (req, res) => {
         if (err.response) {
             // API responded but returned an error status
             console.error("API error details:", err.response.data);
-
-            res.status(err.response.status).json({ error: err.response.data?.error || "API request failed." });
+            const status = err.response.status
+            const errorData = err.response.data.error;
+            if (status === 404) {
+                renderNoBookError(res, status, errorData)
+            } else {
+                renderError(res, status, errorData)
+            }
         }
         else if (err.request) {
             // No response from API
             console.error("No response from API:", err.request);
-
-            res.status(503).json({ error: "Service unavailable. Please try again later." });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Unexpected server-side error
-            res.status(500).json({ error: "Internal server error." });
+            renderError(res, 500, { message: "Internal server error."})
         }
     }
 });

@@ -21,7 +21,7 @@
     <p>OR</p>
     <a href="/books" class="btn">View your existing libaray</a>
     <% if (locals.error) { %>
-        <p class="no-books-error"><i class="fas fa-exclamation-triangle"></i> <%= error %></p>
+        <p class="no-books-error"><i class="fas fa-exclamation-triangle"></i> <%= error.message %></p>
     <% } %>
 </main>
 <%- include("./partials/footer.ejs") %>
