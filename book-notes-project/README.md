@@ -164,8 +164,8 @@ Key changes from original schema:
 ### Pre-Refactor Challenges (Original Version)
 
 1. **ISBN Validation**
-    - *Challenge*: Users could enter invalid or malformed ISBNs.
-    - *Solution*: Added backend ISBN validation middleware with checksum logic.
+    - *Challenge*: Users could enter invalid or malformed ISBNs, and manual checksum logic was complex and hard to read.
+    - *Solution*: Implemented backend validation using `isbn-utils`, which simplifies the code, ensures reliable ISBN checks, and improves maintainability.
 
 2. **Star Ratings**
     - *Challenge*: Displaying dynamic star ratings without breaking alignment.
@@ -184,24 +184,30 @@ Key changes from original schema:
 ### Post-Refactor Challenges (RESTful API Upgrade)
 
 1. **Refactoring to RESTful Design**
-    - *Challenge*: Original app mixed DB queries with frontend routes.
-    - *Solution*: Split into `server.js` (frontend) and `api.js` (backend API).
+    - *Challenge*: The original app mixed database queries with frontend routes, making maintenance difficult and violating REST principles.
+    - *Solution*: Separated concerns into:
+      - `server.js` → Handles frontend rendering (EJS templates, static assets) and form submissions.
+      - `api.js` → Handles all CRUD operations via RESTful JSON endpoints.
 
 2. **Sorting by Date, Rating, Title**
-    - *Challenge*: Sorting had to be reliable and efficient.
+    - *Challenge*: Users needed reliable ways to sort the library by **date read**, **rating**, or **title**.
     - *Solution*: Implemented SQL `ORDER BY` with query params (`?sort=date`, `?sort=rating`, `?sort=alphabet`).
 
-3. **Error Handling**
-    - *Challenge*: Crashes on invalid routes or failed DB queries.
-    - *Solution*: Added structured error handling and catch-all middleware returning JSON:
-      ```js
-      app.use((req, res) => {
-        res.status(404).json({ error: "Route not found" });
-      });
-      ```  
+3. **Robust Error Handling, Input Validation & Advanced JS Techniques**
+   - *Challenge*: The app could crash on invalid routes, missing books, or undefined form data.
+   - *Solution*:
+     -  Centralised error handling using `sendError.js` and `renderError.js` for consistent status codes and messages.
+     - Used **optional chaining** in EJS templates (`locals.formData?.title`) to prevent runtime errors when data is missing.
+     - Implemented **server-side validation** using `express-validator`, with inline error messages displayed in the form to guide users and preserve their previous input.
+      
+   ```ejs
+     <% if (getError('date')) { %>
+        <p class="form-error"><%= getError('date') %></p>
+      <% } %>
+   ```  
 
 4. **Editing & Deleting Books**
-    - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation wasn’t covered in depth in the course materials
+    - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation was not covered in depth in the course materials
     - *Solution*: Added proper REST methods (`PATCH`, `DELETE`) with cascading deletes via FK.
 
 ---
@@ -273,7 +279,7 @@ npm install
 
 4. Create a `.env` file in the root of the project and replace the placeholders with your local PostgreSQL credentials. Here is an example for your `.env` file:
 ```dotenv
-DB_USER="Your PostgreSQL username (usually postgress unless you specified another)"
+DB_USER="Your PostgreSQL username (usually postgres unless you specified another)"
 DB_HOST="localhost"
 DB_DATABASE="The name of your database (e.g., my_project_db)"
 DB_PASSWORD="Your PostgreSQL password"
@@ -318,9 +324,11 @@ Delete a book (cascades to ratings).
 
 ## Planned Improvements
 
-- **Full Input Validation**
-   - *Current*: ISBNs are validated with custom logic to prevent malformed entries.
-   - *Next Step*: Integrate [`express-validator`](https://express-validator.github.io/docs/) to validate all form inputs (title, author, review, rating, date, reader name) server-side. This will enhance security, prevent bad data, and make the app more robust.
+- **Many-to-Many Relationship Between Readers and Books**
+  -  *Current*: Each book is associated with a single reader (one-to-many). Multiple readers cannot review the same book.
+  - *Next Step*: Refactor the database schema to support a many-to-many relationship between readers and books. This would allow multiple users to review the same book while still tracking who submitted each review.
+  - *Benefit*: Expands the app to support a social library model and more realistic multi-user scenarios.
+  
  ---
 
 ## Credit
