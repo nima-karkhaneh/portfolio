@@ -11,12 +11,22 @@ function renderNoBookError(res, status, error) {
     })
 }
 
-function renderPostError(res, status, error) {
+function renderPostError(res, status, error, formData) {
     return res.status(status).render("add.ejs", {
-        error
+        error,
+        formData
+    })
+}
+
+function renderEditError(res, status, error, formData, formId) {
+    return res.status(status).render("edit.ejs", {
+        error,
+        formData,
+        formId
     })
 }
 
 export default renderError;
 export { renderNoBookError };
 export { renderPostError };
+export { renderEditError }

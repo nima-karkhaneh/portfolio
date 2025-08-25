@@ -1,7 +1,7 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
-import renderError, { renderPostError, renderNoBookError } from "./helper-functions/renderError.js";
+import renderError, {renderPostError, renderNoBookError, renderEditError} from "./helper-functions/renderError.js";
 env.config();
 
 const app = express();
@@ -86,17 +86,17 @@ app.post("/submit", async (req, res) => {
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
             const errorData = err.response.data.error;
-            renderPostError(res, err.response.status, errorData)
+            const formData = req.body;
+            renderPostError(res, err.response.status, errorData, formData)
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
             console.error("No response from API:", err.request);
-
-            res.status(503).json({ error: "Service unavailable. Please try again later." });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Unexpected server-side error (e.g., bad code, runtime bug)
-            res.status(500).json({ error: "Internal server error." });
+            renderError(res, 500, { message: "Internal server error." })
         }
     }
 });
@@ -147,14 +147,14 @@ app.post("/books/edit/:id", async (req, res) => {
         console.error("Error updating book:", err.message)
 
         if (err.response) {
+            const errorData = err.response.data.error;
+            const status = err.response.status
             const formData = req.body;
-            const formId = req.params
-            const errors = err.response.data.errors;
-            res.status(err.response.status).render("edit.ejs", {
-                errors: errors,
-                formData,
-                formId
-            })
+            const formId = req.params;
+            console.log(errorData);
+            renderEditError(res, status, errorData, formData, formId)
+
+
         }
         else if (err.request) {
             res.status(503).json({ error: "Service unavailable. Please try again later." })
