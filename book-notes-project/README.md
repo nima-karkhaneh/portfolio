@@ -35,6 +35,7 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 - [Challenges and Solutions](#challenges-and-solutions)
 - [Installation Guide](#installation-guide)
 - [API Endpoints](#api-endpoints)
+- [Planned Improvements](#planned-improvements)
 - [Credit](#credit)
 
 ---
@@ -199,17 +200,24 @@ Key changes from original schema:
      -  Centralised error handling using `sendError.js` and `renderError.js` for consistent status codes and messages.
      - Used **optional chaining** in EJS templates (`locals.formData?.title`) to prevent runtime errors when data is missing.
      - Implemented **server-side validation** using `express-validator`, with inline error messages displayed in the form to guide users and preserve their previous input.
-      
-   ```ejs
+     ```ejs
      <% if (getError('date')) { %>
         <p class="form-error"><%= getError('date') %></p>
       <% } %>
-   ```  
-
+   ```
+   
 4. **Editing & Deleting Books**
-    - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation was not covered in depth in the course materials
+    - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation was not covered in depth in the course materials.
     - *Solution*: Added proper REST methods (`PATCH`, `DELETE`) with cascading deletes via FK.
 
+5. **Duplicate ISBN Handling**  
+   - *Challenge*: Preventing duplicate book entries while keeping inline error messages clear. The API sends generic messages like `Validation failed` for normal validation errors. If `locals.error.message` were rendered, it could show that generic API message alongside the field-specific inline messages, which would be confusing to the user because they’d see two different messages for one issue.
+   -  *Solution*: Constructed the `details` array manually so the duplicate error `Book already exists in the library` is displayed, while API-specific messages like `Validation failed` were avoided when input validation failed.  
+   ```ejs
+        return sendError(res, 400, "Duplicate ISBN", [
+        { path: "isbn", msg: "Book already exists in the library." }
+        ]);
+     ```
 ---
 
 ## Installation Guide

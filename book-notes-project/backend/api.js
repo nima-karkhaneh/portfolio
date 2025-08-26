@@ -73,7 +73,9 @@ app.post ("/submit", validateCreateBook, async (req, res) => {
     try  {
         const checkBook = await db.query("SELECT * FROM library WHERE isbn = $1", [isbn]);
         if (checkBook.rows.length !== 0) {
-            return sendError(res, 400, "Book already exists in the library.")
+            return sendError(res, 400, "Duplicate ISBN.", [
+                { path: "isbn", msg: "Book already exists in the library." }
+            ]);
         }
 
         const insertLibraryQuery = `
