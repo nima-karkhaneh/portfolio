@@ -85,7 +85,6 @@ footer{
     align-items: center;
     flex-grow: 1;
     padding: 6rem 1rem 1rem 1rem;
-    border: 2px solid blue;
 }
 .add-edit-heading {
     margin-bottom: 20px;
