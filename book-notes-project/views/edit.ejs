@@ -21,7 +21,7 @@
         return err ? err.msg : null;
     } %>
     <form action="/books/edit/<%= locals.foundBook?.id || formId.id %>" method="post">
-        <h2>Please edit your book</h2>
+        <h2 class="add-edit-heading">Please edit your book</h2>
         <input type="text" name="title" placeholder="Title" value="<%= locals.foundBook?.title || formData.title %>" autocomplete="off" readonly>
         <input type="text" name="author" placeholder="Author" value="<%= locals.foundBook?.author || formData.author %>" autocomplete="off" readonly>
         <input type="text" name="isbn" placeholder="ISBN" value="<%= locals.foundBook?.isbn || formData.isbn %>" autocomplete="off" readonly>
