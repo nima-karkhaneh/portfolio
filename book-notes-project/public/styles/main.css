@@ -54,6 +54,22 @@ h1{
     background-color: deepskyblue;
     color: whitesmoke;
 }
+
+.no-books-error{
+    text-align: center;
+    height: 2rem;
+    gap: 5px;
+    margin-top: 20px;
+}
+.no-books-error.hidden {
+    visibility: hidden;
+}
+
+.fa-exclamation-triangle{
+    color: #fcc107;
+    margin-right: 5px;
+}
+
 footer{
     display: flex;
     justify-content: center;
@@ -136,8 +152,7 @@ input::placeholder, textarea::placeholder{
     color: red;
     font-size: 0.9rem;
     line-height: 1.2rem;
-    min-height: 1.2rem; /* always takes up 1 line of space */
-    max-height: 1.2rem; /* prevents layout growth */
+    height: 1.2rem;
     margin: 5px 0;
 }
 
@@ -226,16 +241,7 @@ input::placeholder, textarea::placeholder{
 .star-display{
     cursor: auto;
 }
-.no-books-error{
-    font-size: 1.5rem;
-}
-.error{
-    margin-bottom: 5px;
-}
-.fa-exclamation-triangle{
-    color: #fcc107;
-    margin-top: 30px;
-}
+
 
 input[readonly] {
     color: #555;

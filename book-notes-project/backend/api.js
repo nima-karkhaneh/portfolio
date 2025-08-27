@@ -49,7 +49,7 @@ app.get("/books", async (req, res) => {
         const result = await db.query(queryText);
 
         if (result.rows.length === 0) {
-            return sendError(res, 404, "No books found in the library.")
+            return sendError(res, 404, "No books found in the library, please use + icon to add books.")
         }
 
         res.status(200).json({ books: result.rows });

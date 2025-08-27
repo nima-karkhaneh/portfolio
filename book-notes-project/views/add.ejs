@@ -23,7 +23,7 @@
     <form action="/submit" method="post">
         <h2 class="add-edit-heading">Please add a new book</h2>
         <input type="text" name="title" placeholder="Title" value="<%= locals.formData?.title || "" %>" autocomplete="off">
-        <p class="form-error"><%= getError('title') || "" %></p>
+        <p class="form-error"><%= getError('title') %></p>
         <input type="text" name="author" placeholder="Author" value="<%= locals.formData?.author || "" %>" autocomplete="off">
         <p class="form-error"><%= getError('author') %></p>
         <input type="text" name="isbn" placeholder="ISBN" value="<%= locals.formData?.isbn || "" %>" autocomplete="off">

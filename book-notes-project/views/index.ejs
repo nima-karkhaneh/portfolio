@@ -15,14 +15,16 @@
 <%- include("./partials/header.ejs") %>
 <main id="main-content">
     <div>
-       <h1>Welcome to your virtual bookroom</h1>
+       <h1>Welcome to Your Virtual Bookroom</h1>
        <p>Please add books to your library</p>
     </div>
     <p>OR</p>
     <a href="/books" class="btn">View your existing library</a>
-    <% if (locals.error) { %>
-        <p class="no-books-error"><i class="fas fa-exclamation-triangle"></i> <%= error.message %></p>
-    <% } %>
+    <p class="no-books-error <%= locals.error ? '' : 'hidden' %>">
+        <% if (locals.error) { %>
+            <i class="fas fa-exclamation-triangle"></i><%= error.message %>
+        <% } %>
+    </p>
 </main>
 <%- include("./partials/footer.ejs") %>
 </body>
