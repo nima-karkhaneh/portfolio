@@ -61,9 +61,6 @@ h1{
     gap: 5px;
     margin-top: 20px;
 }
-.no-books-error.hidden {
-    visibility: hidden;
-}
 
 .fa-exclamation-triangle{
     color: #fcc107;

@@ -20,7 +20,7 @@
     </div>
     <p>OR</p>
     <a href="/books" class="btn">View your existing library</a>
-    <p class="no-books-error <%= locals.error ? '' : 'hidden' %>">
+    <p class="no-books-error">
         <% if (locals.error) { %>
             <i class="fas fa-exclamation-triangle"></i><%= error.message %>
         <% } %>
