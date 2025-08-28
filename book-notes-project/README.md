@@ -335,8 +335,56 @@ Delete a book (cascades to ratings).
 - **Many-to-Many Relationship Between Readers and Books**
   -  *Current*: Each book is associated with a single reader (one-to-many). Multiple readers cannot review the same book.
   - *Next Step*: Refactor the database schema to support a many-to-many relationship between readers and books. This would allow multiple users to review the same book while still tracking who submitted each review.
-  - *Benefit*: Expands the app to support a social library model and more realistic multi-user scenarios.
+  - *Benefit*: Expands the app to support a **social library model** and more realistic multi-user scenarios.  
   
+  **Schema Example**
+    ```sql
+    CREATE TABLE book_readers (
+      id SERIAL PRIMARY KEY,
+      book_id INT REFERENCES books(id) ON DELETE CASCADE,
+      reader_id INT REFERENCES readers(id) ON DELETE CASCADE,
+      review TEXT,
+      rating INT CHECK (rating >= 1 AND rating <= 5),
+      date_read DATE
+    );
+    ```
+    **Query Example**
+    ```sql
+    SELECT r.name, br.review, br.rating, br.date_read
+    FROM book_readers br
+    JOIN readers r ON br.reader_id = r.id
+    WHERE br.book_id = $1;
+    ```
+- **Lightweight API for Checking Library State**
+    - *Current*: On the landing page, the app shows a “View Library” button to either render `/books` with posted books or throw and error `No books found in the library, please use + icon to add books`. A frontend CSS trick predefines space for an error message ("No books in the library") instead of dynamically checking the backend.
+    - *Next Step*: Create a lightweight API endpoint (e.g., `GET /api/books/count`) that returns the number of books. The frontend can fetch this on page load and decide whether to enable the “View Library” button or display a “No books available” message.
+    - *Benefit*: Improves UX by making the frontend **data-driven rather than layout-driven**. This also decouples the frontend from assumptions and makes the logic more scalable if additional conditions are needed later.  
+  
+    **Route Example (api.js)**
+    ```javascript
+  app.get("/api/books/count", async (req, res) => {
+      const { rows } = await pool.query("SELECT COUNT(*) FROM books");
+      res.json({ count: parseInt(rows[0].count, 10) });
+    });
+    ```
+  **Frontend Example (script.js)**
+    ```javascript
+  fetch("/api/books/count")
+  .then(res => res.json())
+  .then(data => {
+    const btn = document.querySelector(".btn-view-library");
+    const errorMsg = document.querySelector(".no-books-error");
+
+    if (data.count === 0) {
+      btn.style.display = "none";
+      errorMsg.style.visibility = "visible";
+    } else {
+      btn.style.display = "inline-block";
+      errorMsg.style.visibility = "hidden";
+    }
+  });
+    ```
+
  ---
 
 ## Credit
