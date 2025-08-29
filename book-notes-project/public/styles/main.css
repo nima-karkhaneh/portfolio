@@ -1,15 +1,17 @@
+body{
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Montserrat", sans-serif;
+}
+
 *{
     border: 0;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
 }
-body{
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-}
+
 a{
     color: inherit;
     text-decoration: none;
@@ -111,17 +113,22 @@ footer{
     background-color: whitesmoke;
     padding: 20px;
 }
-textarea{
+
+/* Standardise form inputs and textareas */
+.main-add input,
+.main-add textarea {
     width: 100%;
     padding: 5px;
-}
-input::placeholder, textarea::placeholder{
-    color: black;
-}
-.main-add input{
-    width: 100%;
-    padding: 5px;
+    font-size: 0.9rem;
+    line-height: 1rem;
     border-radius: 5px;
+}
+
+/* Placeholder styling */
+.main-add input::placeholder,
+.main-add textarea::placeholder {
+    color: black;
+    font-size: 0.9rem;
 }
 
 .main-add button{
@@ -132,6 +139,7 @@ input::placeholder, textarea::placeholder{
     color: whitesmoke;
     text-transform: uppercase;
 }
+
 .ranking-container{
     display: flex;
     padding: 5px;
