@@ -1,6 +1,7 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
+import renderError, {renderPostError, renderNoBookError, renderEditError} from "./helper-functions/renderError.js";
 env.config();
 
 const app = express();
@@ -45,18 +46,22 @@ app.get("/books", async (req, res) => {
         if (err.response) {
             // API responded but returned an error status
             console.error("API error details:", err.response.data);
-
-            res.status(err.response.status).json({ error: err.response.data?.error || "API request failed." });
+            const status = err.response.status
+            const errorData = err.response.data.error;
+            if (status === 404) {
+                renderNoBookError(res, status, errorData)
+            } else {
+                renderError(res, status, errorData)
+            }
         }
         else if (err.request) {
             // No response from API
             console.error("No response from API:", err.request);
-
-            res.status(503).json({ error: "Service unavailable. Please try again later." });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Unexpected server-side error
-            res.status(500).json({ error: "Internal server error." });
+            renderError(res, 500, { message: "Internal server error."})
         }
     }
 });
@@ -80,19 +85,19 @@ app.post("/submit", async (req, res) => {
 
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
-            console.error("API error details:", err.response.data);
-
-            res.status(err.response.status).json({error: err.response.data?.error || "API request failed."});
+            const errorData = err.response.data.error;
+            const status = err.response.status
+            const formData = req.body;
+            renderPostError(res, status, errorData, formData)
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
             console.error("No response from API:", err.request);
-
-            res.status(503).json({ error: "Service unavailable. Please try again later." });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Unexpected server-side error (e.g., bad code, runtime bug)
-            res.status(500).json({ error: "Internal server error." });
+            renderError(res, 500, { message: "Internal server error." })
         }
     }
 });
@@ -105,11 +110,6 @@ app.get("/books/edit/:id", async (req, res) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/books/${id}`);
 
-        if (!response?.data?.book) {
-            return res.status(404).render("error.ejs", {
-                error: "Book not found."
-            });
-        }
 
         const foundBook = response.data.book;
 
@@ -120,21 +120,17 @@ app.get("/books/edit/:id", async (req, res) => {
 
         if (err.response) {
             // API responded with error status
-            res.status(err.response.status).render("error.ejs", {
-                error: err.response.data?.error || "API error fetching book."
-            });
+            const errorData = err.response.data.error
+            const status = err.response.status;
+            renderError(res, status, errorData )
         }
         else if (err.request) {
             // No response from API
-            res.status(503).render("error.ejs", {
-                error: "Service unavailable. Please try again later."
-            });
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
             // Server-side error
-            res.status(500).render("error.ejs", {
-                error: "Internal server error."
-            });
+            renderError(res, 503, { message: "Internal server error."})
         }
     }
 });
@@ -145,7 +141,7 @@ app.get("/books/edit/:id", async (req, res) => {
 app.post("/books/edit/:id", async (req, res) => {
     try{
         const { id } = req.params;
-        const response = await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
+        await axios.patch(`${API_BASE_URL}/books/${id}`, req.body);
         res.redirect("/books")
     }
 
@@ -153,7 +149,13 @@ app.post("/books/edit/:id", async (req, res) => {
         console.error("Error updating book:", err.message)
 
         if (err.response) {
-            res.status(err.response.status).json( { error: err.response.data?.error || "API update request failed."})
+            const errorData = err.response.data.error;
+            const status = err.response.status
+            const formData = req.body;
+            const formId = req.params;
+            renderEditError(res, status, errorData, formData, formId)
+
+
         }
         else if (err.request) {
             res.status(503).json({ error: "Service unavailable. Please try again later." })
@@ -169,7 +171,7 @@ app.post("/books/edit/:id", async (req, res) => {
 app.post("/books/delete/:id", async (req, res) => {
     try{
         const { id } = req.params;
-        const response = await axios.delete(`${API_BASE_URL}/books/${id}`)
+        await axios.delete(`${API_BASE_URL}/books/${id}`)
         res.status(200).json( { message: "Book deleted" })
     }
 
@@ -177,13 +179,16 @@ app.post("/books/delete/:id", async (req, res) => {
         console.error("Error deleting book:", err.message);
 
         if (err.response) {
-            res.status(err.response.status).json( {error: err.response.data?.error || "API delete request failed"})
+            const errorData = err.response.data.error
+            const status = err.response.status
+            renderError(res, status, errorData)
+
         }
         else if (err.request) {
-            res.status(503).json({ error: "Service unavailable. Please try again late.r"})
+            renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
-            res.status(500).json({ error: "Unable to delete books. Internal Sever error."})
+            renderError(res, 500, { message: "Unable to delete books. Internal Sever error." })
         }
     }
 })
@@ -191,7 +196,7 @@ app.post("/books/delete/:id", async (req, res) => {
 
 // Catch-all for undefined routes (404)
 app.use((req, res) => {
-    res.status(404).render("404.ejs");
+    res.status(404).render("error.ejs");
 });
 
 

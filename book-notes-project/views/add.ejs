@@ -14,30 +14,40 @@
 <body>
 <%- include("./partials/header.ejs") %>
 <main class="main-add">
+    <!--    Validation error helper-->
+    <% function getError(field) {
+        if (!locals.error) return null;
+        const err = locals.error.details.find(e => e.path === field);
+        return err ? err.msg : null;
+    } %>
     <form action="/submit" method="post">
-        <h2>Please add a new book</h2>
-        <% if (locals.error)  { %>
-        <p class="error"><i class="fas fa-exclamation-triangle"></i> <%= error %> </p>
-        <% } %>
-        <input type="text" name="title" placeholder="Title" autocomplete="off" required>
-        <input type="text" name="author" placeholder="Author" autocomplete="off" required>
-        <input type="text" name="ISBN" placeholder="ISBN" autocomplete="off" required>
-        <input type="text" name="reader_name" placeholder="Your name" autocomplete="off" required>
-        <input type="date" id="date" name="date" placeholder="date read" autocomplete="off" required>
-        <textarea name="review" id="" cols="50" rows="12" autocomplete="off" placeholder="Please leave a review" required></textarea>
+        <h2 class="add-edit-heading">Please add a new book</h2>
+        <input type="text" name="title" placeholder="Title" value="<%= locals.formData?.title || "" %>" autocomplete="off">
+        <p class="form-error"><%= getError('title') %></p>
+        <input type="text" name="author" placeholder="Author" value="<%= locals.formData?.author || "" %>" autocomplete="off">
+        <p class="form-error"><%= getError('author') %></p>
+        <input type="text" name="isbn" placeholder="ISBN" value="<%= locals.formData?.isbn || "" %>" autocomplete="off">
+        <p class="form-error"><%= getError('isbn') %></p>
+        <input type="text" name="reader_name" placeholder="Your name" value="<%= locals.formData?.reader_name || "" %>" autocomplete="off">
+        <p class="form-error"><%= getError('reader_name') %></p>
+        <input type="date" id="date" name="date" placeholder="date read" value="<%= locals.formData?.date || "" %>" autocomplete="off">
+        <p class="form-error"><%= getError('date') %></p>
+        <textarea name="review" rows="10" autocomplete="off" placeholder="Please leave a review"><%= locals.formData?.review || "" %></textarea>
+        <p class="form-error"><%= getError('review') %></p>
         <label for="select">Please leave a rating</label>
         <div class="ranking-container">
             <label for="rate-1"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-1" name="rate" value="1" hidden="hidden" required>
+            <input type="radio" id="rate-1" name="rate" value="1" hidden="hidden">
             <label for="rate-2"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-2" name="rate" value="2" hidden="hidden" required>
+            <input type="radio" id="rate-2" name="rate" value="2" hidden="hidden">
             <label for="rate-3"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-3" name="rate" value="3" hidden="hidden" required>
+            <input type="radio" id="rate-3" name="rate" value="3" hidden="hidden">
             <label for="rate-4"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-4" name="rate" value="4" hidden="hidden" required>
+            <input type="radio" id="rate-4" name="rate" value="4" hidden="hidden">
             <label for="rate-5"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-5" name="rate" value="5" hidden="hidden" required>
+            <input type="radio" id="rate-5" name="rate" value="5" hidden="hidden">
         </div>
+        <p class="form-error"><%= getError('rate') %></p>
         <button type="submit">Submit</button>
     </form>
 </main>
