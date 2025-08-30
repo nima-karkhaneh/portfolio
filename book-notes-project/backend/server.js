@@ -112,6 +112,12 @@ app.get("/books/edit/:id", async (req, res) => {
 
 
         const foundBook = response.data.book;
+        console.log(foundBook)
+        if (foundBook.date) {
+            // Keep only YYYY-MM-DD for <input type="date">
+            foundBook.formattedDate = foundBook.date.split("T")[0];
+        }
+        console.log(foundBook)
 
         res.render("edit.ejs", { foundBook });
     }

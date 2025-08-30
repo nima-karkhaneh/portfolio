@@ -13,7 +13,7 @@
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
-<main class="main-add">
+<main class="main-add-edit">
 <!--    validation error helper-->
     <% function getError(field, isReadOnly = false) {
         if (!locals.error || isReadOnly) return null;
@@ -53,11 +53,13 @@
                 autocomplete="off"
                 readonly>
         <p class="form-error"><%= getError('reader_name', true) %></p>
+        <label for="date" id="form-date-read">Date read:</label>
         <input
                 type="date"
                 name="date"
+                id="date"
                 placeholder="date read"
-                value="<%= locals.foundBook?.date || formData.date %>"
+                value="<%= locals.foundBook?.formattedDate || formData.date %>"
                 autocomplete="off">
         <p class="form-error"><%= getError('date') %></p>
         <textarea

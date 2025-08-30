@@ -13,7 +13,7 @@
 </head>
 <body>
 <%- include("./partials/header.ejs") %>
-<main class="main-add">
+<main class="main-add-edit">
     <!--    Validation error helper-->
     <% function getError(field) {
         if (!locals.error) return null;
@@ -30,7 +30,8 @@
         <p class="form-error"><%= getError('isbn') %></p>
         <input type="text" name="reader_name" placeholder="Your name" value="<%= locals.formData?.reader_name || "" %>" autocomplete="off">
         <p class="form-error"><%= getError('reader_name') %></p>
-        <input type="date" id="date" name="date" placeholder="date read" value="<%= locals.formData?.date || "" %>" autocomplete="off">
+        <label for="date" id="form-date-read">Date read:</label>
+        <input type="date" id="date" name="date" value="<%= locals.formData?.date || "" %>" autocomplete="off">
         <p class="form-error"><%= getError('date') %></p>
         <textarea name="review" rows="10" autocomplete="off" placeholder="Please leave a review"><%= locals.formData?.review || "" %></textarea>
         <p class="form-error"><%= getError('review') %></p>

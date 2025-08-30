@@ -9,10 +9,10 @@
     <title>404 page</title>
 </head>
 <body >
-<header id="header-404">
+<header id="error-page-header">
     <a href="/"><div>Virtual Bookroom</div></a>
 </header>
-<main id="page-404">
+<main id="error-page">
     <% if (locals.status && locals.error) { %>
         <h1><%= status %></h1>
         <p><%= error.message %></p>

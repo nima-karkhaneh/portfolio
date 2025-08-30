@@ -1,15 +1,15 @@
-body{
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    font-family: "Montserrat", sans-serif;
-}
-
 *{
     border: 0;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body{
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
 
 a{
@@ -30,6 +30,9 @@ header div{
     text-transform: uppercase;
     font-size: 1.2rem;
 }
+
+/*Index page styling*/
+
 #main-content{
     flex-grow: 1;
     display: flex;
@@ -39,11 +42,13 @@ header div{
     gap: 20px;
     padding: 20px;
 }
+
 #main-content div{
     text-align: center;
     line-height: 50px;
     margin-top: 4rem;
 }
+
 h1{
     font-size: 2rem;
 }
@@ -80,31 +85,36 @@ footer{
     color: #9d9d9d;
     background-color: #313131;
 }
+
 .fa-solid{
     color: dimgray;
     margin-right: 5px;
 }
+
 .fa-linkedin{
     color: dimgray;
 }
+
 .fa-github{
     color: dimgray;
     margin-left: 5px;
 }
 
-/*Add page styling*/
+/*Add/edit page styling*/
 
-.main-add{
+.main-add-edit {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
     padding: 6rem 1rem 1rem 1rem;
 }
-.add-edit-heading {
+
+.main-add-edit h2 {
     margin-bottom: 20px;
 }
-.main-add form{
+
+.main-add-edit form{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,9 +124,22 @@ footer{
     padding: 20px;
 }
 
-/* Standardise form inputs and textareas */
-.main-add input,
-.main-add textarea {
+#form-date-read {
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+#date {
+    background-color: white;
+}
+
+
+
+/* Standardise form inputs and textarea */
+
+.main-add-edit input,
+.main-add-edit textarea {
     width: 100%;
     padding: 5px;
     font-size: 0.9rem;
@@ -125,13 +148,14 @@ footer{
 }
 
 /* Placeholder styling */
-.main-add input::placeholder,
-.main-add textarea::placeholder {
+
+.main-add-edit input::placeholder,
+.main-add-edit textarea::placeholder {
     color: black;
     font-size: 0.9rem;
 }
 
-.main-add button{
+.main-add-edit button{
     padding: 15px;
     border-radius: 10px;
     cursor: pointer;
@@ -146,12 +170,18 @@ footer{
     gap: 5px;
     margin-top: 5px;
 }
-.active{
+
+/*Adding this class dynamically by js to colour the star-ranking*/
+
+.star-ranking.active{
     color: #dabd18b2;
 }
+
 .fa-star{
     cursor: pointer;
 }
+
+/*Inline errors for add/edit pages*/
 
 .form-error {
     color: red;
@@ -170,6 +200,7 @@ footer{
     gap: 10px;
     padding: 40px 10px;
 }
+
 #sort-form{
     width: 100%;
     display: flex;
@@ -177,28 +208,34 @@ footer{
     background-color: white;
     justify-content: start;
     margin-top: 5rem;
-    padding: 10px 30px
+    padding: 10px 30px;
 }
+
 #sort-container{
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
+
 #sort-form label{
     font-size: 0.8rem;
 }
+
 #sort{
     border: 1px solid dimgray;
     padding: 2px;
 }
+
 .book-container{
     padding: 20px 30px;
 }
+
 .book-cover{
     float: left;
     width: 100px;
     margin-right: 30px;
 }
+
 .book-title{
     font-family: "Noto Serif", serif;
     font-size: 1.7rem;
@@ -218,35 +255,41 @@ footer{
 .ranking-display{
     margin-bottom: 10px;
 }
+
 .review{
     line-height: 2rem;
     font-size: 1.1rem;
 }
-.line-break-fix {
+
+.review.line-break-fix {
     white-space: pre-line;
 }
+
 #edit-delete-container{
     display: flex;
     gap: 20px;
     padding: 10px 30px;
 }
+
 .delete, .edit{
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     color: whitesmoke;
 }
+
 .delete{
     background-color: #dc3545;
 }
+
 .edit{
     background-color: #fcc107;
     color: black;
 }
+
 .star-display{
     cursor: auto;
 }
-
 
 input[readonly] {
     color: #555;
@@ -255,8 +298,12 @@ input[readonly] {
 }
 
 /*404 styling*/
+#error-page-header {
+    padding-left: 0;
+    justify-content: center;
+}
 
-#page-404 {
+#error-page {
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -266,21 +313,16 @@ input[readonly] {
     flex-grow: 1;
 }
 
-#header-404 {
-    padding-left: 0;
-    justify-content: center;
-}
-
-#page-404 h1 {
+#error-page h1 {
     font-size: 3rem;
 }
 
-#page-404 p {
+#error-page p {
     font-size: 1.5rem;
     text-align: center;
 }
 
-#page-404 .btn {
+#error-page .btn {
     margin-top: 50px;
 }
 
@@ -293,6 +335,7 @@ input[readonly] {
         gap: 0;
     }
 }
+
 @media(max-width: 400px) {
     .book-container{
         display: flex;
@@ -304,7 +347,7 @@ input[readonly] {
         font-size: 1.5rem;
         text-align: center;
     }
-    .main-add form {
-        max-width: 300px ;
+    .main-add-edit form {
+        width: 300px;
     }
 }
