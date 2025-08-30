@@ -71,16 +71,12 @@
         <p class="form-error"><%= getError('review') %></p>
         <label for="select">Please leave a rating</label>
         <div class="ranking-container">
-            <label for="rate-1"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-1" name="rate" value="1" hidden="hidden">
-            <label for="rate-2"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-2" name="rate" value="2" hidden="hidden">
-            <label for="rate-3"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-3" name="rate" value="3" hidden="hidden">
-            <label for="rate-4"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-4" name="rate" value="4" hidden="hidden">
-            <label for="rate-5"><i class="star-ranking fa-solid fa-star"></i></label>
-            <input type="radio" id="rate-5" name="rate" value="5" hidden="hidden">
+            <% for (let i = 1; i <= 5; i++) { %>
+                <label for="rate-<%= i %>">
+                    <i class="star-ranking fa-solid fa-star <%= i <= locals.foundBook?.rate ? 'active' : '' %>"></i>
+                </label>
+                <input type="radio" id="rate-<%= i %>" name="rate" value="<%= i %>" hidden>
+            <% } %>
         </div>
         <p class="form-error"><%= getError('rate') %></p>
         <button type="submit">Submit</button>

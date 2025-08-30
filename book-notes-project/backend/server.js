@@ -109,18 +109,15 @@ app.get("/books/edit/:id", async (req, res) => {
 
     try {
         const response = await axios.get(`${API_BASE_URL}/books/${id}`);
-
-
         const foundBook = response.data.book;
-        console.log(foundBook)
+
         if (foundBook.date) {
             // Keep only YYYY-MM-DD for <input type="date">
             foundBook.formattedDate = foundBook.date.split("T")[0];
         }
-        console.log(foundBook)
-
         res.render("edit.ejs", { foundBook });
     }
+
     catch (err) {
         console.error(`Error fetching book with ID ${id}:`, err.message);
 
