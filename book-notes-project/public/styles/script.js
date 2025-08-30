@@ -14,6 +14,19 @@ stars.forEach((star, index1) =>{
     })
 })
 
+// Star display colouring on books.ejs
+
+if (window.ratingData) {
+    window.ratingData.forEach(d => {
+        const stars = document.querySelectorAll(`.star${d.library_id}`);
+        if (stars) {
+            stars.forEach((star, i) => {
+                star.style.color = i < d.rate ? "#dabd18b2" : "#ccc";
+            });
+        }
+    });
+}
+
 
 // DELETE FUNCTIONALITY USING FETCH API
 

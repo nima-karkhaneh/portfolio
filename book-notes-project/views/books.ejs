@@ -52,17 +52,8 @@
 </main>
 <%- include("./partials/footer.ejs") %>
 <script>
-    // Dynamic star coloring
-    const ratingData = JSON.parse('<%- JSON.stringify(starDisplay) %>');
-
-    ratingData.forEach(d => {
-        const stars = document.querySelectorAll(`.star${d.library_id}`);
-        if (stars) {
-            stars.forEach((star, i) => {
-                star.style.color = i < d.rate ? "#dabd18b2" : "#ccc";
-            });
-        }
-    });
+    // Accessing ratingData for star rating display
+    window.ratingData = <%- JSON.stringify(starDisplay) %>;
 </script>
 </body>
 </html>
