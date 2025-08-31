@@ -5,6 +5,7 @@ import db from "./db.js";
 import { validateCreateBook, validateUpdateBook, validateGetAndDeleteBook } from "./helper-functions/validator.js";
 import { validationResult } from "express-validator";
 import sendError from "./helper-functions/sendError.js";
+import errorLogger from "./helper-functions/errorLogger.js";
 
 
 const app = express();
@@ -56,7 +57,7 @@ app.get("/books", async (req, res) => {
 
     }
     catch (err) {
-        console.log(err.message);
+        errorLogger(err.message)
         return sendError(res, 500, "server error");
     }
 })
@@ -97,7 +98,7 @@ app.post ("/submit", validateCreateBook, async (req, res) => {
     }
 
     catch (err) {
-        console.log(err.message);
+        errorLogger(err.message)
         return sendError(res, 500,  "server error")
     }
 })
@@ -127,7 +128,7 @@ app.get("/books/:id", validateGetAndDeleteBook, async (req, res) => {
         res.status(200).json({ book: bookResult.rows[0] });
     }
     catch (err) {
-        console.error(err.message);
+        errorLogger(err.message)
         return sendError(res, 500, "Server Error")
     }
 });
@@ -187,7 +188,7 @@ app.patch("/books/:id", validateUpdateBook, async (req, res) => {
     }
 
     catch (err) {
-            console.log(err.message)
+            errorLogger(err.message)
             return sendError(res, 500, "Server error.")
     }
 })
@@ -216,17 +217,15 @@ app.delete("/books/:id", validateGetAndDeleteBook, async (req, res) => {
     }
 
     catch (err) {
-        console.error(err.message);
+        errorLogger(err.message)
         return sendError(res, 500, "Sever error.")
     }
 })
 
 
+app.listen(port, "0.0.0.0", () => {
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(`Server running at http://localhost:${port}`);
+    }
+});
 
-
-
-
-
-app.listen(port, () => {
-    console.log(`api is listening on http://localhost:${port}/`);
-})

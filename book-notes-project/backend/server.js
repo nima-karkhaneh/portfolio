@@ -3,6 +3,7 @@ import axios from "axios";
 import env from "dotenv";
 env.config();
 import renderError, {renderPostError, renderNoBookError, renderEditError} from "./helper-functions/renderError.js";
+import errorLogger from "./helper-functions/errorLogger.js";
 import favicon from "serve-favicon";
 import path from "path";
 
@@ -45,11 +46,11 @@ app.get("/books", async (req, res) => {
         });
     }
     catch (err) {
-        console.error("Error in GET /books:", err.message);
+        errorLogger("Error in GET /books:", err.message)
 
         if (err.response) {
             // API responded but returned an error status
-            console.error("API error details:", err.response.data);
+            errorLogger("API error details:", err.response.data)
             const status = err.response.status
             const errorData = err.response.data.error;
             if (status === 404) {
@@ -60,7 +61,7 @@ app.get("/books", async (req, res) => {
         }
         else if (err.request) {
             // No response from API
-            console.error("No response from API:", err.request);
+            errorLogger("No response from API:", err.request)
             renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
@@ -85,7 +86,7 @@ app.post("/submit", async (req, res) => {
         res.redirect("/books");
     }
     catch (err) {
-        console.error("Error in POST /submit:", err.message);
+        errorLogger("Error in POST /submit:", err.message)
 
         if (err.response) {
             // API responded but with an error status (4xx or 5xx)
@@ -96,7 +97,7 @@ app.post("/submit", async (req, res) => {
         }
         else if (err.request) {
             // No response from API (e.g., network error, API down)
-            console.error("No response from API:", err.request);
+            errorLogger("No response from API:", err.request);
             renderError(res, 503, { message: "Service unavailable. Please try again later." })
         }
         else {
@@ -123,7 +124,7 @@ app.get("/books/edit/:id", async (req, res) => {
     }
 
     catch (err) {
-        console.error(`Error fetching book with ID ${id}:`, err.message);
+        errorLogger(`Error fetching book with ID ${id}:`, err.message)
 
         if (err.response) {
             // API responded with error status
@@ -153,7 +154,7 @@ app.post("/books/edit/:id", async (req, res) => {
     }
 
     catch (err) {
-        console.error("Error updating book:", err.message)
+        errorLogger("Error updating book:", err.message)
 
         if (err.response) {
             const errorData = err.response.data.error;
@@ -183,7 +184,7 @@ app.post("/books/delete/:id", async (req, res) => {
     }
 
     catch(err) {
-        console.error("Error deleting book:", err.message);
+        errorLogger("Error deleting book:", err.message)
 
         if (err.response) {
             const errorData = err.response.data.error
@@ -208,8 +209,9 @@ app.use((req, res) => {
 
 
 
+app.listen(port, "0.0.0.0", () => {
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(`Server running at http://localhost:${port}`);
+    }
+});
 
-
-app.listen(port, () => {
-    console.log(`server is listening on http://localhost:${port}/`);
-})
