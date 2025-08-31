@@ -1,14 +1,18 @@
 import express from "express";
 import axios from "axios";
 import env from "dotenv";
-import renderError, {renderPostError, renderNoBookError, renderEditError} from "./helper-functions/renderError.js";
 env.config();
+import renderError, {renderPostError, renderNoBookError, renderEditError} from "./helper-functions/renderError.js";
+import favicon from "serve-favicon";
+import path from "path";
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 const API_BASE_URL = process.env.API_BASE_URL
 
 app.use(express.static("public"));
+app.use(favicon(path.resolve("public/images/favicon.ico")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 

@@ -157,6 +157,7 @@ Key changes from original schema:
 - `ejs`
 - `express-validator`
 - `isbn-utils`
+- `serve-favicon`
 
 ---
 
