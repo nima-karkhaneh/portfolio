@@ -47,17 +47,35 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 </p>
 <p align="center"><em>Virtual Bookroom home page.</em></p>
 <p align="center">
-  <img src="public/images/books-screenshot.png" alt="Books" width="600" />
+  <img src="public/images/homepage-inline-error.png" alt="No books inline errors" width="600" />
 </p>
-<p align="center"><em>View when book reviews are added.</em></p>
+<p align="center"><em>No books inline error.</em></p>
 <p align="center">
   <img src="public/images/addpage-screenshot.png" alt="Add page" width="600" />
 </p>
 <p align="center"><em>Virtual Bookroom add page.</em></p>
 <p align="center">
-  <img src="public/images/invalid-isbn-err.png" alt="Invalid ISBN error" width="600" />
+  <img src="public/images/addpage-inline-errors.png" alt="Add page inline errors" width="600" />
 </p>
-<p align="center"><em>Invalid ISBN error.</em></p>
+<p align="center"><em>Add page inline errors.</em></p>  
+
+**Note**: Input fields in the app do not use the HTML `required` attribute. This is intentional — validation is handled on the backend, and inline error messages are displayed to the user after form submission. This ensures consistent validation logic and prevents it from being bypassed.
+<p align="center">
+  <img src="public/images/books-screenshot.png" alt="Books" width="600" />
+</p>
+<p align="center"><em>View when books are added.</em></p>
+<p align="center">
+  <img src="public/images/editpage-screenshot.png" alt="Virtual bookroom edit page" width="600" />
+</p>
+<p align="center"><em>Virtual bookroom edit page.</em></p>  
+<p align="center">
+  <img src="public/images/editpage-inline-error.png" alt="Edit page inline errors" width="600" />
+</p>
+<p align="center"><em>Edit page inline errors.</em></p> 
+<p align="center">
+  <img src="public/images/delete-route-confirmation-msg.png" alt="Confirmation alert for delete functionality" width="600" />
+</p>
+<p align="center"><em>Confirmation alert for delete functionality.</em></p> 
 
 ---
 
@@ -201,6 +219,7 @@ Key changes from original schema:
      -  Centralised error handling using `sendError.js` and `renderError.js` for consistent status codes and messages.
      - Used **optional chaining** in EJS templates (`locals.formData?.title`) to prevent runtime errors when data is missing.
      - Implemented **server-side validation** using `express-validator`, with inline error messages displayed in the form to guide users and preserve their previous input.
+     - **Intentional Design Choice**: I avoided using the HTML `required` attribute on inputs and textareas. Instead, validation happens in the backend, and users see inline error messages when they submit invalid or incomplete data. This showcases the robustness of backend validation and ensures that validation logic is not bypassed.
      ```ejs
      <% if (getError('date')) { %>
         <p class="form-error"><%= getError('date') %></p>
@@ -214,11 +233,33 @@ Key changes from original schema:
 5. **Duplicate ISBN Handling**  
    - *Challenge*: Preventing duplicate book entries while keeping inline error messages clear. The API sends generic messages like `Validation failed` for normal validation errors. If `locals.error.message` were rendered, it could show that generic API message alongside the field-specific inline messages, which would be confusing to the user because they’d see two different messages for one issue.
    -  *Solution*: Constructed the `details` array manually so the duplicate error `Book already exists in the library` is displayed, while API-specific messages like `Validation failed` were avoided when input validation failed.  
-   ```ejs
+   ```javascript
         return sendError(res, 400, "Duplicate ISBN", [
         { path: "isbn", msg: "Book already exists in the library." }
         ]);
      ```
+6. **Preserving Star Ratings on Validation Errors**  
+    - *Challenge*: When users submitted the add or edit forms with other validation errors, their selected star rating would reset, or previously stored ratings appeared gray on the edit page.  
+    - *Solution*: Dynamically determined the current rating from `foundBook.rate` (fallback to `formData.rate`) and applied it both to the radio `checked` attribute and the star icon `active` class.  Here is the code block from `edit.ejs`:
+   ```ejs
+    <div class="ranking-container">
+            <% for (let i = 1; i <= 5; i++) {
+                const currentRate = locals.foundBook?.rate ?? locals.formData?.rate ?? 0;
+            %>
+            <label for="rate-<%= i %>">
+                <i class="star-ranking fa-solid fa-star <%= i <= currentRate ? 'active' : '' %>"></i>
+            </label>
+            <input
+                    type="radio"
+                    id="rate-<%= i %>"
+                    name="rate"
+                    value="<%= i %>"
+                    hidden
+                    <%= i == currentRate ? 'checked' : '' %>
+            >
+            <% } %>
+    </div>
+    ```
 ---
 
 ## Installation Guide
@@ -385,11 +426,50 @@ Delete a book (cascades to ratings).
     }
   });
     ```
-
- ---
+- **Keyboard & Screen Reader Accessible Star Ratings**
+    - *Current*: Star rating selection on the edit/add pages relies on clickable icons and hidden radio inputs. This means keyboard users cannot select a rating, and screen readers cannot properly announce the stars.
+    - *Next Step*: Replace `hidden` radio inputs with visually-hidden, focusable inputs, and link them to the star icons. This will allow:
+        - Keyboard users to tab through and select stars using `Arrow` keys or `Space`.
+        - Screen readers to announce each star rating via `aria-label`.
+        - *Benefit*: Improves accessibility (a11y) and compliance with WCAG standards, making the app more inclusive for all users.  
+      
+    **`edit.ejs` Example**
+    ```ejs
+      <div class="ranking-container">
+      <% for (let i = 1; i <= 5; i++) { %>
+        <input
+          type="radio"
+          id="rate-<%= i %>"
+          name="rate"
+          value="<%= i %>"
+          class="sr-only"
+          aria-label="Rate <%= i %> star<%= i > 1 ? 's' : '' %>"
+          <%= i == (locals.foundBook?.rate ?? locals.formData?.rate ?? 0) ? 'checked' : '' %>
+        >
+        <label for="rate-<%= i %>" tabindex="0">
+          <i class="star-ranking fa-solid fa-star"></i>
+        </label>
+      <% } %>
+    </div>
+     ```
+  **`main.css` Example**
+    ```css
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    ```
+---
 
 ## Credit
-- This project was developed independently as a **capstone project** for *The Complete Full-Stack Web Development Bootcamp* by **Angela Yu (The App Brewery)**. Unlike the guided tutorial projects (such as the blog app), the capstone had **no starter or solution code** — all design, database schema, REST API implementation, error handling, and UI development were completed entirely by me. The course provided the broad learning foundation, but the **Virtual Bookroom** is my own original implementation.  
+- This project was developed independently as a **capstone project** for *The Complete Full-Stack Web Development Bootcamp* by **Angela Yu (The App Brewery)**. Unlike the guided tutorial projects, the capstone projects had **no starter or solution code** — all design, database schema, REST API implementation, error handling, and UI development were completed entirely by myself. The course provided the broad learning foundation, but the **Virtual Bookroom** is my own original implementation.  
 
 
 - [Open Library API](https://openlibrary.org/dev/docs/api/books) for book cover data.

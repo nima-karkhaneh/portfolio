@@ -78,12 +78,22 @@
         <p class="form-error"><%= getError('review') %></p>
         <label for="select">Please leave a rating</label>
         <div class="ranking-container">
-            <% for (let i = 1; i <= 5; i++) { %>
-                <label for="rate-<%= i %>">
-                    <i class="star-ranking fa-solid fa-star <%= i <= locals.foundBook?.rate ? 'active' : '' %>"></i>
-                </label>
-                <input type="radio" id="rate-<%= i %>" name="rate" value="<%= i %>" hidden>
+            <% for (let i = 1; i <= 5; i++) {
+                const currentRate = locals.foundBook?.rate ?? locals.formData?.rate ?? 0;
+            %>
+            <label for="rate-<%= i %>">
+                <i class="star-ranking fa-solid fa-star <%= i <= currentRate ? 'active' : '' %>"></i>
+            </label>
+            <input
+                    type="radio"
+                    id="rate-<%= i %>"
+                    name="rate"
+                    value="<%= i %>"
+                    hidden
+                    <%= i == currentRate ? 'checked' : '' %>
+            >
             <% } %>
+
         </div>
         <p class="form-error"><%= getError('rate') %></p>
         <button type="submit">Submit</button>
