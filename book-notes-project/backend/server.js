@@ -27,7 +27,7 @@ app.get("/", (req,res)=>{
 app.get("/books", async (req, res) => {
     try {
         const sort = req.query.sort;
-        const response = await axios.get(`${API_BASE_URL}/books?sort=${sort}`, req.query.sort);
+        const response = await axios.get(`${API_BASE_URL}/books?sort=${sort}`);
 
         // Checks for undefined or null values at each level
         const booksArr = response?.data?.books ?? [];
