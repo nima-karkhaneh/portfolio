@@ -220,12 +220,11 @@ Key changes from original schema:
      - Used **optional chaining** in EJS templates (`locals.formData?.title`) to prevent runtime errors when data is missing.
      - Implemented **server-side validation** using `express-validator`, with inline error messages displayed in the form to guide users and preserve their previous input.
      - **Intentional Design Choice**: I avoided using the HTML `required` attribute on inputs and textareas. Instead, validation happens in the backend, and users see inline error messages when they submit invalid or incomplete data. This showcases the robustness of backend validation and ensures that validation logic is not bypassed.
-     ```ejs
+   ```ejs
      <% if (getError('date')) { %>
         <p class="form-error"><%= getError('date') %></p>
       <% } %>
    ```
-   
 4. **Editing & Deleting Books**
     - *Challenge*: In the original version, all updates and deletions were handled with just `GET` and `POST` requests. For example, deleting a book via a GET route is both insecure and not in line with RESTful principles. This limitation was not covered in depth in the course materials.
     - *Solution*: Added proper REST methods (`PATCH`, `DELETE`) with cascading deletes via FK.
