@@ -11,8 +11,13 @@ import { validateDescription, validateSignupInput, validateLoginInput, validateI
 const app =  express()
 const port = process.env.PORT || 3000;
 const saltRounds = 10;
+
+
+const isProduction = process.env.NODE_ENV === 'production';
+const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : 'http://localhost:5173';
+
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: origin,
     credentials: true
 }
 
@@ -21,14 +26,28 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
 
+
+// DB logic
 const db = new pg.Client({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
 });
-db.connect();
+
+async function connectDB() {
+    try {
+        await db.connect();
+        console.log("Database connected successfully.");
+    } catch (err) {
+        console.error("Database connection error:", err);
+        process.exit(1); // Exit if DB connection fails
+    }
+}
+
+connectDB();
 
 
 // API ROUTES
