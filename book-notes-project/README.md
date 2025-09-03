@@ -26,6 +26,7 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 
 ## Table of Contents
 - [Overview](#overview)
+- [Live Demo](#live-demo)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Architecture](#architecture)
@@ -40,6 +41,12 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 
 ---
 
+## Live Demo
+
+**Access the deployed application here:**  
+[https://virtual-bookroom.onrender.com](https://virtual-bookroom.onrender.com)
+
+---
 
 ## Screenshots
 <p align="center">
