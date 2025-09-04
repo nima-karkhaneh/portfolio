@@ -15,6 +15,10 @@ const saltRounds = 10;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+if (isProduction) {
+    app.set("trust proxy", 1); // important for secure cookies behind a proxy
+}
+
 const devOrigins = ['http://192.168.1.6:5173'];
 const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : devOrigins;
 
@@ -172,8 +176,8 @@ app.post("/login", async (req, res) => {
 
         res.cookie("authToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 60 * 60 * 1000,
         });
             return res.status(200).json({ success: "Authentication successful." });
@@ -211,8 +215,8 @@ app.get("/verify", authorise, (req, res) => {
 app.post("/signout", (req, res) => {
     res.clearCookie("authToken", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         path: "/"
     })
     res.status(200).json({message: "successful logout"})
@@ -222,7 +226,7 @@ app.post("/signout", (req, res) => {
 
 
 app.listen(port, "0.0.0.0", () => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (!isProduction) {
         console.log(`Server running at http://localhost:${port}`);
     }
 });
