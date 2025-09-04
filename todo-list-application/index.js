@@ -14,7 +14,9 @@ const saltRounds = 10;
 
 
 const isProduction = process.env.NODE_ENV === 'production';
-const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : 'http://localhost:5173';
+
+const devOrigins = ['http://192.168.1.6:5173'];
+const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : devOrigins;
 
 const corsOptions = {
     origin: origin,
@@ -219,6 +221,8 @@ app.post("/signout", (req, res) => {
 
 
 
-app.listen(port, () => {
-    console.log(`server is listening on ${port}`)
-})
+app.listen(port, "0.0.0.0", () => {
+    if (process.env.NODE_ENV !== 'production') {
+        console.log(`Server running at http://localhost:${port}`);
+    }
+});
