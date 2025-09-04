@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import pg from "pg"
 import env from "dotenv"
+env.config();
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import cookieParser from "cookie-parser"
@@ -19,7 +20,7 @@ if (isProduction) {
     app.set("trust proxy", 1); // important for secure cookies behind a proxy
 }
 
-const devOrigins = ['http://192.168.1.6:5173'];
+const devOrigins = [process.env.CLIENT_ORIGIN_URL];
 const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : devOrigins;
 
 const corsOptions = {
@@ -27,7 +28,7 @@ const corsOptions = {
     credentials: true
 }
 
-env.config();
+
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
