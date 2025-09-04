@@ -60,10 +60,12 @@ li {
 .error-message {
   color: #dc3545;
   font-weight: bold;
+  text-align: center;
 }
 .success-message {
   color: #198754;
   font-weight: bold;
+  text-align: center;
 }
 
 .auth-options {
