@@ -213,7 +213,7 @@ CREATE TABLE items(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     description VARCHAR(200)
-)
+);
 
 ```
 8. Create a `.env` file in the root of the project and replace the placeholders with your local PostgreSQL credentials and your JWT secret. Here is an example for your `.env` file:
