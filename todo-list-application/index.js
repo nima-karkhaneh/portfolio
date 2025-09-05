@@ -181,6 +181,7 @@ app.post("/login", async (req, res) => {
             secure: isProduction,
             sameSite: isProduction ? "none" : "lax",
             maxAge: 60 * 60 * 1000,
+            path:"/"
         });
             return res.status(200).json({ success: "Authentication successful." });
     }
