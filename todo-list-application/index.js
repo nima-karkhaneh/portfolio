@@ -15,23 +15,20 @@ const saltRounds = 10;
 
 
 const isProduction = process.env.NODE_ENV === 'production';
-console.log(isProduction)
+console.log("isProduction:", isProduction);
 
+// Trust proxy in production for secure cookies behind Render's proxy
 if (isProduction) {
-    app.set("trust proxy", 1); // important for secure cookies behind a proxy
+    app.set("trust proxy", 1);
 }
-
-const devOrigins = [process.env.CLIENT_ORIGIN_URL];
-const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : devOrigins;
 
 const corsOptions = {
-    origin: origin,
-    credentials: true,
-    proxy: true
-}
+    origin: process.env.CLIENT_ORIGIN_URL, // frontend URL
+    credentials: true, // allow cookies
+};
 
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 app.use(express.json())
 app.use(cookieParser())
 
