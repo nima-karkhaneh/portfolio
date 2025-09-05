@@ -25,7 +25,8 @@ const origin = isProduction ? process.env.CLIENT_ORIGIN_URL : devOrigins;
 
 const corsOptions = {
     origin: origin,
-    credentials: true
+    credentials: true,
+    proxy: true
 }
 
 
