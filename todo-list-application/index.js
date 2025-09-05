@@ -177,16 +177,12 @@ app.post("/login", async (req, res) => {
             const payload = { id: currentUser.id, email: currentUser.email };
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-            // Get the domain from the URL for explicit cookie setting
-            const clientOriginUrl = process.env.CLIENT_ORIGIN_URL;
-            const clientDomain = new URL(clientOriginUrl).hostname;
 
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: isProduction,
             sameSite: isProduction ? "none" : "lax",
             maxAge: 60 * 60 * 1000,
-            domain: clientDomain,
             path:"/"
         });
             return res.status(200).json({ success: "Authentication successful." });
@@ -223,15 +219,11 @@ app.get("/verify", authorise, (req, res) => {
 
 app.post("/signout", (req, res) => {
 
-    // Get the domain from the URL for explicit cookie setting
-    const clientOriginUrl = process.env.CLIENT_ORIGIN_URL;
-    const clientDomain = new URL(clientOriginUrl).hostname;
 
     res.clearCookie("authToken", {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
-        domain: clientDomain,
         path: "/"
     })
     res.status(200).json({message: "successful logout"})
