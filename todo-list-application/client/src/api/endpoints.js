@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const TODOS_URL = `${BASE_URL}${import.meta.env.VITE_API_PATH_TODOS}`;
 export const SUBMIT_URL = `${BASE_URL}${import.meta.env.VITE_API_PATH_SUBMIT}`;
