@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://todo-list-api-af2a.onrender.com/:path*"
+      "source": "/api/(.*)",
+      "destination": "https://todo-list-api-af2a.onrender.com/$1"
     },
     {
       "source": "/(.*)",
