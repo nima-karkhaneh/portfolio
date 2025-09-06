@@ -48,6 +48,7 @@ function App() {
     async function fetchData() {
         try {
             const response = await axios.get(TODOS_URL, { withCredentials: true });
+            console.log(response.data)
             setItems(response.data);
         } catch (err) {
             const backendError = err?.response?.data?.error;
