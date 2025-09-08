@@ -39,6 +39,11 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 <p align="center"><em>Sign up error message when user submits empty fields</em></p>
 
 <p align="center">
+  <img src="client/public/password-length-inline-error.png" alt="Password length error when user inputs a short password" width="600" />
+</p>
+<p align="center"><em>Password length error when user inputs a short password</em></p>
+
+<p align="center">
   <img src="client/public/todoitems-screenshot.png" alt="ToDo items" width="600" />
 </p>
 <p align="center"><em>Example of ToDo items</em></p>
