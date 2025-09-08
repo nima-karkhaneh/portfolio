@@ -7,6 +7,7 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 
 ## Table of Contents
 - [Overview](#overview)
+- [Live Demo](#live-demo)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Technologies Used](#technologies-used) 
@@ -15,6 +16,11 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 - [Installation Guide](#installation-guide)
 - [Development Workflow](#development-workflow)
 - [Credit](#credit)
+
+## Live Demo
+**Access the deployed application here:**  
+
+[https://todo-list-snowy-alpha-10.vercel.app/auth](https://todo-list-snowy-alpha-10.vercel.app/auth)
 
 ## Screenshots
 <p align="center">
