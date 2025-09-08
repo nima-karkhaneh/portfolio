@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
-import pg from "pg"
+import pkg from "pg";
+const { Pool } = pkg;
 import env from "dotenv"
 env.config();
 import bcrypt from "bcrypt"
@@ -15,7 +16,6 @@ const saltRounds = 10;
 
 
 const isProduction = process.env.NODE_ENV === 'production';
-console.log("isProduction:", isProduction);
 
 // Trust proxy in production for secure cookies behind Render's proxy
 if (isProduction) {
@@ -34,35 +34,35 @@ app.use(cookieParser())
 
 
 // DB logic
-const db = new pg.Client({
+const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
-async function connectDB() {
+async function query(text, params) {
+    const client = await pool.connect();
     try {
-        await db.connect();
-        console.log("Database connected successfully.");
+        const result = await client.query(text, params);
+        return result;
     } catch (err) {
-        console.error("Database connection error:", err);
-        process.exit(1); // Exit if DB connection fails
+        console.error("[DB] Query error:", err.message);
+        throw err;
+    } finally {
+        client.release();
     }
 }
 
-connectDB();
+// Turning query function into object -> db.query() in the codebase remains as is
+const db = { query };
 
-
-// API ROUTES
-
-// GET ROUTE
 app.get("/todos", authorise, async (req, res) => {
     const userID = req.user.id
     try{
-        const items = await db.query("SELECT description, id FROM items WHERE user_id = $1;", [userID])
+        const items = await db.query("SELECT description, id FROM items WHERE user_id = $1 ORDER BY id DESC;", [userID])
         res.status(200).json(items.rows)
     }
     catch(err){
