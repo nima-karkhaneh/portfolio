@@ -29,6 +29,16 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 <p align="center"><em>Home page featuring user authentication</em></p>
 
 <p align="center">
+  <img src="client/public/todo-list-success-msg.png" alt="Success message when a new user signs up" width="600" />
+</p>
+<p align="center"><em>Success message when a new user signs up</em></p>
+
+<p align="center">
+  <img src="client/public/signup-inline-error.png" alt="Sign up error message when user submits empty fields" width="600" />
+</p>
+<p align="center"><em>Sign up error message when user submits empty fields</em></p>
+
+<p align="center">
   <img src="client/public/todoitems-screenshot.png" alt="ToDo items" width="600" />
 </p>
 <p align="center"><em>Example of ToDo items</em></p>
