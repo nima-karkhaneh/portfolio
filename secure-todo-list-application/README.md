@@ -238,7 +238,7 @@ After doing some research using AI models (ChatGPT, Gemini), I learnt that Verce
   ]
 }
 ```
-  - **Outcome:** All requests to `/api` were correctly proxied, and hence `httpOnly` cookie were successfully accepted by all browsers. As as result, the app worked smoothly in production across all browsers. It is important to emphasise that this is only a short-term solution.
+  - **Outcome:** All requests to `/api` were correctly proxied, and hence `httpOnly` cookies were successfully accepted by all browsers. As a result, the app worked smoothly in production across all browsers. It is important to emphasise that this is only a short-term solution.
   - **Long-term Strategy:** Implement refresh tokens with Axios interceptor to replace the need for a proxy while keeping the cookies secure.  
   - **Impact:** This resolved a real-world, cross-browser compatibility issue with Chrome’s strict cookie policies — ensuring the app is secure and reliable across all major browsers, not just in development.
 
@@ -252,7 +252,7 @@ This project is located in the `ToDo List Application` directory of a larger rep
 1. Clone the repository:  
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
-cd todo-list-application
+cd secure-todo-list-application
 ```
 2. Change directory to `client`:
 
@@ -275,7 +275,7 @@ VITE_API_PATH_SIGNOUT=/signout
 - The other values are relative API paths that are combined in the frontend code to build complete URLs.
 - This setup allows you to easily switch environments (e.g., production vs. local) without changing your codebase.
 
-5. Change directory to the root directory of the application:
+5. Change directory to the project root:
 
 `cd ../`
 
