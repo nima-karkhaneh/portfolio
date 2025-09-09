@@ -5,7 +5,7 @@ This project is a **production-grade, full-stack ToDo List application** built w
 
 - Authentication is handled using **JWTs stored in secure, `httpOnly` cookies**, protecting against XSS.
 - Backend routes are protected by **authorisation middleware** that verifies tokens and user IDs.
-- All input is **validated and sanitised** before hitting the database, preventing SQL injection and malicious payloads.
+- All input is **validated and sanitised** before reaching the database, preventing SQL injection and malicious payloads.
 - Database connections are managed through **connection pooling** (`pg.Pool`) for stability in production (deployed with Neon).
 
 The frontend is a **responsive SPA** built with React and React Router, providing smooth navigation between login, signup, and dashboard pages without full reloads.
