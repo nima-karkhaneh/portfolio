@@ -1,9 +1,16 @@
-# ToDo List Application
+# Secure ToDo List Application
 
 ## Overview
-This is a secure, full-stack ToDo List application built using the PERN stack (PostgreSQL, Express, React, Node.js). It allows users to sign up, log in, and manage personalised todo items through a smooth and responsive single-page interface.
+This project is a **production-grade, full-stack ToDo List application** built with the PERN stack (PostgreSQL, Express, React, Node.js). Unlike a typical tutorial todo app, it focuses on **real-world security and deployment challenges**:
 
-The app uses **React Router** for SPA (Single Page Application) behavior — meaning users can navigate between routes (login, dashboard, etc.) without full page reloads. JWT authentication is handled securely via `httpOnly` cookies.
+- Authentication is handled using **JWTs stored in secure, `httpOnly` cookies**, protecting against XSS.
+- Backend routes are protected by **authorisation middleware** that verifies tokens and user IDs.
+- All input is **validated and sanitised** before hitting the database, preventing SQL injection and malicious payloads.
+- Database connections are managed through **connection pooling** (`pg.Pool`) for stability in production (deployed with Neon).
+
+The frontend is a **responsive SPA** built with React and React Router, providing smooth navigation between login, signup, and dashboard pages without full reloads.
+
+> **Note:** Since the backend is hosted on Render (with a free-tier PostgreSQL instance on Neon), the API may experience cold starts of several seconds. This can also be true for the frontend which is hosted on Vercel.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -13,14 +20,20 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 - [Technologies Used](#technologies-used) 
 - [Dependencies](#dependencies)
 - [Challenges and Solutions](#challenges-and-solutions)
+- [Deployment Challenges and Solutions](#deployment-challenges-and-solutions)
 - [Installation Guide](#installation-guide)
 - [Development Workflow](#development-workflow)
+- [Planned Improvements](#planned-improvements)
+- [Final Note](#final-note)
 - [Credit](#credit)
 
 ## Live Demo
-**Access the deployed application here:**  
+**Access the deployed application here:**
 
 [https://todo-list-snowy-alpha-10.vercel.app/auth](https://todo-list-snowy-alpha-10.vercel.app/auth)
+
+> **Note:** The app may take 10–20 seconds to load initially due to cold starts on the serverless backend (typical for free-tier deployments). Subsequent requests will be faster.
+
 
 ## Screenshots
 <p align="center">
@@ -49,9 +62,11 @@ The app uses **React Router** for SPA (Single Page Application) behavior — mea
 <p align="center"><em>Example of ToDo items</em></p>
 
 ## Features
-* **Secure Authentication:** Users can securely log in. Upon authentication, a JSON Web Token (JWT) is generated and stored in an `httpOnly` and `secure` cookie for added security.
-* **Edit and Delete:** Users can update or remove their existing todo items.
-* **User-Specific Data:** All data is scoped to the authenticated user via backend-authenticated API.
+- **Secure Authentication:** Login generates a JWT stored in a secure, `httpOnly` cookie.
+- **Input Validation:** All user input (signup, login, todos) is validated and sanitised to block malicious data.
+- **User-Specific Data:** Each todo is linked to the authenticated user, ensuring data isolation.
+- **CRUD Functionality:** Users can create, edit, and delete todos with instant UI updates.
+- **Protected Routes:** Protected routes ensure only logged-in users can access the dashboard.
 
 ## Technologies Used
 ### Frontend
@@ -183,6 +198,55 @@ The original version relied on `window.location` reloads, which broke the single
 - Used conditional rendering with `<Navigate />` and state-based route guards to protect authenticated pages.
 - Enabled seamless user flow without page reloads, improving user experience and aligning with modern SPA standards.
 
+## Deployment Challenges and Solutions
+One of the most challenging part of this project, arose during its deployment. Hosting the frontend as a static site, and the backend as a web service on different domains, while powerful, created unique issues. While the app was tested and ran smoothly in `dev` mode, the production version faced the following real-world challenges:
+### 1. Initial Render Deployment Attempt 
+
+  - **Challenge**: Both frontend and backend were initially deployed on Render. While the app worked on Firefox and Edge, Chrome’s new policy of blocking third-party cookies caused authentication to fail. This was a cross-browser incompatibility issue which needed to be resolved.
+  - **Attempted Solution**: Added rewrite rules directly on Render to setup the deployed backend as a proxy server.
+  - **Outcome**: Render did not fully support the rewrite rules in the desired way, so this short-term solution was unsuccessful.
+### 2. Vercel Proxy Deployment
+After doing some research using AI models (ChatGPT, Gemini), I learnt that Vercel or Netlify could provide a more flexible path to set up a proxy server. I decided to go with Vercel since it required setting up a `vercel.json` file in the root directory and I was more familiar with json format than what was required by Netlify. 
+
+  - **Challenge:** Despite having some success with setting up the `vercel.json` like the following, the set up was not reliable and the `GET` route to fetch todo items failed with issues like `304 Not Modified` errors and `index.html` fallback responses.
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://todo-list-api-af2a.onrender.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+  - **Solution:** Modified `vercel.json` file to use a more common and reliable pattern. This ensured all requests to `/api` were correctly proxied, regardless of  the request type or specific path.
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://todo-list-api-af2a.onrender.com/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+  - **Outcome:** All requests to `/api` were correctly proxied, and hence `httpOnly` cookie were successfully accepted by all browsers. As as result, the app worked smoothly in production across all browsers. It is important to emphasise that this is only a short-term solution.
+  - **Long-term Strategy:** Implement refresh tokens with Axios interceptor to replace the need for a proxy while keeping the cookies secure.  
+  - **Impact:** This resolved a real-world, cross-browser compatibility issue with Chrome’s strict cookie policies — ensuring the app is secure and reliable across all major browsers, not just in development.
+
+### 3. Database Connection Stability  
+  - **Challenge:** Using `pg.Client()` caused unstable DB connections, leading to app crashes during redeployments. There was also log details on Render about this instability.
+  - **Solution:** Refactored backend to use `pg.Pool()` for connection pooling. This stabilised the connection and reduced unexpected crashes, making the app more reliable in production.
+  - **Impact:** Ensures a production-ready app with robust DB handling, going beyond typical course examples and demonstrating real-world backend best practices.
+
 ## Installation Guide
 This project is located in the `ToDo List Application` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
 1. Clone the repository:  
@@ -200,7 +264,6 @@ cd todo-list-application
 
 4. Create a `.env` file in the `client` directory and fill it out with the following values:
 
-
 ```
 VITE_API_URL=http://localhost:3000
 VITE_API_PATH_TODOS=/todos/
@@ -208,7 +271,6 @@ VITE_API_PATH_SUBMIT=/submit
 VITE_API_PATH_VERIFY=/verify
 VITE_API_PATH_SIGNOUT=/signout
 ```
-
 - `VITE_API_URL` is the base URL of your backend (update this if deploying).
 - The other values are relative API paths that are combined in the frontend code to build complete URLs.
 - This setup allows you to easily switch environments (e.g., production vs. local) without changing your codebase.
@@ -260,7 +322,7 @@ JWT_SECRET="Your own created JWT secret"
 ## Development Workflow
 This project follows a Git-based feature branch workflow to simulate professional team collaboration and maintain a clean, stable codebase—even as a solo developer:
 
-- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `todoapp/frontend-error-handling-refinement`, `todoapp/responsive-design-improvements`, `todoapp/env-refacotr`).
+- New features, bug fixes, and improvements are developed in dedicated branches with descriptive names (e.g., `todoapp/frontend-error-handling-refinement`, `todoapp/responsive-design-improvements`, `todoapp/env-refactor`).
 - Changes are committed locally with meaningful messages and pushed to the remote repository using `git push origin <branch-name>`.  
 - In `todoapp/backend-validation-ui-tweak` branch, I practiced `git rebase -i` to clean up my commit history before pushing. This included rewording one of the commits to ensure a professional, readable commit log. The rebase was done prior to merging the branch into `main`, following industry-standard Git hygiene practices.
 - Pull Requests (PRs) are created on GitHub from these branches to merge changes into the `main` branch.
@@ -275,6 +337,14 @@ This project follows a Git-based feature branch workflow to simulate professiona
 
 This workflow ensures a stable `main` branch, clean commit history, and showcases industry-standard Git practices and teamwork—key skills for professional development environments.
 
+## Planned Improvements
+ - **State Management:** Refactor the app to use `Context API` or `Redux` for more scalable and maintainable state management.
+ - **Refresh Tokens:** Implement refresh tokens with Axios interceptors to remove the need for a proxy server while keeping authentication secure.
+ - **Unit/Integration Tests:** Implement tests for backend routes and frontend components to demonstrate test-driven development.
+ - **Dockerisation / CI-CD:** Containerise the app and set up CI/CD pipelines for automated deployment and smoother dev-to-production flow.
+
+## Final Note
+This project demonstrates my ability to go beyond tutorials and tackle complex, real-world problems — from authentication security and cross-browser compatibility to deployment stability and database reliability. It reflects not only technical skills, but also persistence and initiative in solving challenges that mirror professional development environments.
 
 ## Credit
 While this project was independently developed, a few online resources were referenced for learning purposes:
@@ -285,7 +355,6 @@ While this project was independently developed, a few online resources were refe
 
 3. **The Complete Full-Stack Web Development Bootcamp** by *Dr. Angela Yu* (The App Brewery) – This Udemy course helped me build a solid foundation in React. However, it focused on frontend-only projects and server-rendered apps using EJS. Integrating React with a custom backend and PostgreSQL database was a challenge I pursued independently beyond the scope of the course.
 
-This project reflects my initiative to go beyond tutorials by implementing secure authentication and building a fully functioning full-stack application from the ground up.
 
 
 
