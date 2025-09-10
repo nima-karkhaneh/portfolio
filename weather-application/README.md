@@ -13,6 +13,7 @@
 - [Challenges and Solutions](#challenges-and-solutions)
 - [Installation Guide](#installation-guide)
 - [Planned Improvements](#planned-improvements)
+- [Final Note](#final-note)
 - [Credit](#credit)
 
 ## Live Demo
@@ -188,6 +189,9 @@ API_KEY="Your own API key"
 - **Hourly Forecasts with Icons:** Extend the forecast feature to display weather conditions in 3-hour intervals (next 24 hours), complete with icons for clearer visual representation.
 - **Toast Notifications (Optional):** Provide lightweight user feedback (e.g., “City not found”) using styled toast messages instead of only inline text.
 - **Performance Optimisation:** Cache API responses temporarily to reduce redundant calls to OpenWeatherMap and improve response times.
+
+## Final Note
+**OzWeather** demonstrates practical full-stack development skills with server-side input validation, making API requests, timezone-aware data handling, and responsive frontend design without frameworks. It showcases problem-solving for real-world challenges such as accurate min/max calculations, timezone conversion, and secure API key management. Planned improvements like hourly forecasts, toast notifications, and performance optimisations reflect initiative in enhancing usability and scalability. This project highlights the ability to implement maintainable, robust web applications independently.
 
 
 ## Credit
