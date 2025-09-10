@@ -156,7 +156,7 @@ Maintaining a clean and responsive design using only plain CSS.
 Applied responsive design principles (like Flexbox) and media queries to ensure usability across devices.
 
 ## Installation Guide
-This project is located in the `Weather application` directory of a larger repository called `portfolio`. It requires you to sign up to to the OpenWeatherMap API and obtain your own API key. You will also need a `.env` file to store your API key securely.
+This project is located in the `weather-application` directory of a larger repository called `portfolio`. It requires you to sign up to to the OpenWeatherMap API and obtain your own API key. You will also need a `.env` file to store your API key securely.
 To sign up and obtain your API key, please visit the following website;  
 
 https://openweathermap.org/api  

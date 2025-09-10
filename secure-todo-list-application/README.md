@@ -248,7 +248,7 @@ After doing some research using AI models (ChatGPT, Gemini), I learnt that Verce
   - **Impact:** Ensures a production-ready app with robust DB handling, going beyond typical course examples and demonstrating real-world backend best practices.
 
 ## Installation Guide
-This project is located in the `ToDo List Application` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
+This project is located in the `secure-todo-list-application` directory of a larger repository called `portfolio`. It requires a `.env` file and a PostgreSQL database to run. To install and run the project, please follow the following steps;
 1. Clone the repository:  
 ```bash
 git clone https://github.com/nima-karkhaneh/portfolio.git
