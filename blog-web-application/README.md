@@ -2,7 +2,23 @@
 
 ## Overview
 
-**Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, and responsive frontend styling.
+**Journalog** is a web blog application that allows users to create, edit, and delete posts. Each post is timestamped and displayed in reverse chronological order (latest posts first). The app demonstrates clean backend routing, dynamic templating with EJS, robust error handling, and responsive frontend styling.
+
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Live Demo](#live-demo)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Dependencies](#dependencies)
+- [Challenges & Solutions](#challenges--solutions)
+- [Recent Improvements](#recent-improvements)
+- [Installation Guide](#installation-guide)
+- [Planned Improvements](#planned-improvements)
+- [Final Note](#final-note)
+- [Credit](#credit)
 
 ---
 
@@ -283,9 +299,9 @@ try {
 
 ---
 
-## Installation
+## Installation Guide
 
-This project is located in the `Blog web application` folder of a larger repository named `portfolio`.
+This project is located in the `blog-web-application` folder of a larger repository named `portfolio`.
 
 To run it locally:
 
@@ -305,6 +321,17 @@ node index.js
 Visit: [http://localhost:3000](http://localhost:3000)
 
 ---
+
+## Planned Improvements
+- **CSRF Protection:** Implement Cross-Site Request Forgery protection for all routes that mutate data (POST, PUT, DELETE) to prevent unauthorised external requests and ensure only legitimate form submissions from the frontend are processed.
+- **Pagination:** Add paginated views for long lists of posts to improve usability and load times.
+- **Unit/Integration Testing:** Introduce automated tests for backend validation and routes.
+
+## Final Note
+Journalog demonstrates practical full-stack web development skills with a hybrid architecture:
+- **SSR Routes:** Traditional GET and POST routes render pages using EJS templates.
+- **RESTful API Routes:** PUT and DELETE routes return JSON for dynamic post updates.  
+  Key highlights include robust backend validation, comprehensive error handling with proper HTTP status codes, responsive design, and clean RESTful architecture. This project goes beyond tutorials and showcases the ability to build maintainable, user-friendly web applications.
 
 ## Credit
 
