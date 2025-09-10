@@ -7,7 +7,7 @@ This project demonstrates UI/UX design, backend integration, session management,
 
 ---
 
-## Table of Contents
+# Table of Contents
 - [Overview](#overview)
 - [Live Demo](#live-demo)
 - [Features](#features)
@@ -19,9 +19,10 @@ This project demonstrates UI/UX design, backend integration, session management,
 - [Installation & Setup](#installation--setup)
 - [Development Workflow](#development-workflow)
 - [Performance & Optimisation](#performance--optimisation)
+- [Planned Improvements](#planned-improvements)
+- [Final Note](#final-note)
 - [Author](#author)
 - [License](#license)
-
 
 ---
 
@@ -174,6 +175,25 @@ ___
 - Leveraged Bootstrap CDN for core styling to minimise redundant dependencies.
 
 ___
+
+## Planned Improvements
+
+- **Session Storage with Redis:**
+    - *Current*: Sessions are stored in memory via `express-session`.
+    - *Next Step*: Migrate session storage to Redis or another persistent store.
+    - *Benefit*: Improves scalability and reliability, especially if the app is deployed across multiple instances or requires server restarts without losing session data.
+
+- **CSRF Protection:**
+    - *Current*: No explicit CSRF protection for form submissions.
+    - *Next Step*: Implement CSRF tokens for all POST routes (especially the contact form).
+    - *Benefit*: Enhances security by preventing Cross-Site Request Forgery attacks, which is critical for real-world applications with sensitive user interactions.
+  
+---
+
+## Final Note
+Maan Design Studio demonstrates practical full-stack skills in building responsive, accessible, and user-friendly applications. Key highlights include dynamic form handling with Fetch API, session-based route protection, backend validation, and real-time user feedback. This project reflects the ability to deliver professional, maintainable web solutions for real-world clients and startup environments.
+
+---
 
 ## Author
 This project was built by **Nima Karkhaneh** as part of a professional portfolio to demonstrate frontend and backend proficiency in real-world applications.
