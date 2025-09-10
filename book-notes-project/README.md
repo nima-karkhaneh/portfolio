@@ -37,6 +37,7 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 - [Installation Guide](#installation-guide)
 - [API Endpoints](#api-endpoints)
 - [Planned Improvements](#planned-improvements)
+- [Final Note](#final-note)
 - [Credit](#credit)
 
 ---
@@ -473,6 +474,14 @@ Delete a book (cascades to ratings).
       border: 0;
     }
     ```
+
+- **CSRF Protection:** Implement Cross-Site Request Forgery protection for all routes that mutate data (POST, PUT, DELETE) to prevent unauthorised external requests and ensure only legitimate form submissions from the frontend are processed.
+- **Pagination for Book Lists:** Split long lists of books/reviews into pages to improve readability and reduce load times.
+---
+
+## Final Note
+Virtual Bookroom demonstrates practical full-stack skills with a decoupled frontend/backend architecture, robust backend validation, RESTful API design, and PostgreSQL database integration. It showcases problem-solving for real-world challenges such as ISBN validation, inline error handling, and accessibility enhancements (as a planned update). This project reflects initiative, persistence, and the ability to implement scalable, maintainable web applications independently.
+
 ---
 
 ## Credit
