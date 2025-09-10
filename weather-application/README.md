@@ -3,6 +3,18 @@
 ## Overview
 **OzWeather** is a weather application that provides users with current weather information — including temperature, highs/lows, and humidity — for cities and towns within **Australia**.
 
+## Table of Contents
+- [Overview](#overview)
+- [Live Demo](#live-demo)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Dependencies](#dependencies)
+- [Challenges and Solutions](#challenges-and-solutions)
+- [Installation Guide](#installation-guide)
+- [Planned Improvements](#planned-improvements)
+- [Credit](#credit)
+
 ## Live Demo
 
 **Access the deployed application here:**  
@@ -170,6 +182,13 @@ API_KEY="Your own API key"
 `node index.js`
 
 5. Visit http://localhost:3000 in your browser to start the application
+
+## Planned Improvements
+
+- **Hourly Forecasts with Icons:** Extend the forecast feature to display weather conditions in 3-hour intervals (next 24 hours), complete with icons for clearer visual representation.
+- **Toast Notifications (Optional):** Provide lightweight user feedback (e.g., “City not found”) using styled toast messages instead of only inline text.
+- **Performance Optimisation:** Cache API responses temporarily to reduce redundant calls to OpenWeatherMap and improve response times.
+
 
 ## Credit
 This project was developed independently as a capstone assignment for **The Complete Full-Stack Web Development Bootcamp** by **Angela Yu (The App Brewery)**.
