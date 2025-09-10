@@ -10,6 +10,7 @@
 
 **Access the deployed application here:**  
 [https://journalog-2nz8.onrender.com/](https://journalog-2nz8.onrender.com/)
+> **Note:** The app may take 10–20 seconds to load initially due to cold starts on the serverless backend (typical for free-tier deployments). Subsequent requests will be faster.
 
 ---
 

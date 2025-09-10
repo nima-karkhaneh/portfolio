@@ -29,6 +29,7 @@ This project demonstrates UI/UX design, backend integration, session management,
 
 **Access the deployed application here:**  
 [https://maan-design-studio.onrender.com/](https://maan-design-studio.onrender.com/)
+> **Note:** The app may take 10–20 seconds to load initially due to cold starts on the serverless backend (typical for free-tier deployments). Subsequent requests will be faster.
 
 ---
 

@@ -45,6 +45,7 @@ Book covers are fetched dynamically from the **Open Library API**, and users can
 
 **Access the deployed application here:**  
 [https://virtual-bookroom.onrender.com](https://virtual-bookroom.onrender.com)
+> **Note:** The app may take 10–20 seconds to load initially due to cold starts on the serverless backend (typical for free-tier deployments). Subsequent requests will be faster.
 
 ---
 
