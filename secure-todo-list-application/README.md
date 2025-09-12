@@ -338,10 +338,11 @@ This project follows a Git-based feature branch workflow to simulate professiona
 This workflow ensures a stable `main` branch, clean commit history, and showcases industry-standard Git practices and teamwork—key skills for professional development environments.
 
 ## Planned Improvements
- - **State Management:** Refactor the app to use `Context API` or `Redux` for more scalable and maintainable state management.
- - **Refresh Tokens:** Implement refresh tokens with Axios interceptors to remove the need for a proxy server while keeping authentication secure.
- - **Unit/Integration Tests:** Implement tests for backend routes and frontend components to demonstrate test-driven development.
- - **Dockerisation / CI-CD:** Containerise the app and set up CI/CD pipelines for automated deployment and smoother dev-to-production flow.
+- **404 custom error page:** Create a 404 custom error page to handle undefined routes.
+- **State Management:** Refactor the app to use `Context API` or `Redux` for more scalable and maintainable state management.
+- **Refresh Tokens:** Implement refresh tokens with Axios interceptors to remove the need for a proxy server while keeping authentication secure.
+- **Unit/Integration Tests:** Implement tests for backend routes and frontend components to demonstrate test-driven development.
+- **Dockerisation / CI-CD:** Containerise the app and set up CI/CD pipelines for automated deployment and smoother dev-to-production flow.
 
 ## Final Note
 This project demonstrates my ability to go beyond tutorials and tackle complex, real-world problems — from authentication security and cross-browser compatibility to deployment stability and database reliability. It reflects not only technical skills, but also persistence and initiative in solving challenges that mirror professional development environments.
