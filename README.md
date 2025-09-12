@@ -35,7 +35,7 @@ I’ve created this repository to showcase some of my recent web development pro
 ---
 
 ## Key Skills Demonstrated
-- Full-stack development with **Node.js, Express, and React**
+- Full-stack development with **HTML, CSS, JavaScript, Node.js, Express, EJS, React, and PostgreSQL**
 - Responsive UI design and frontend interactivity
 - Authentication and security (**JWT, httpOnly cookies, session management**)
 - API integration and data handling
