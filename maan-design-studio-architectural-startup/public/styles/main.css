@@ -189,11 +189,8 @@ article{
 }
 #top-btn-container{
     cursor: pointer;
-    height: 100%;
-    padding: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    padding: 40px 0;
     background-color: rgb(227, 223, 214);
 }
 .top-btn{
