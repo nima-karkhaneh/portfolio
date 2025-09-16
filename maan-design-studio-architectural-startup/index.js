@@ -64,6 +64,7 @@ app.get("/unsuccess", protectUnsuccessPage, (req,res)=>{
     res.sendFile(path.join(__dirname, "views", "unsuccess-page.html"))
 })
 
+
 if (process.env.NODE_ENV !== "production") {
     app.get("/forbidden", (req, res) => {
         res.sendFile(path.join(__dirname, "views", "403-forbidden-page.html"));
@@ -124,7 +125,9 @@ app.post("/submit",
 );
 
 
-
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, "views", "404-not-found-page.html"))
+})
 
 
 if (process.env.NODE_ENV !== 'production') {
