@@ -6,7 +6,7 @@ function NotFound() {
     return(
         <div id="page-404">
             <h1>404</h1>
-            <p className="not-found-text">The page you are looking for does not exists.</p>
+            <p className="not-found-text">The page you are looking for does not exist.</p>
             <Link to="/">Back to home</Link>
         </div>
     )
