@@ -77,6 +77,21 @@ li {
   padding: 10px;
 }
 
+/*NotFound page*/
+
+#page-404 {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.not-found-text {
+  text-align: center;
+}
+
 @media (max-width: 576px) {
   .auth-options {
     flex-direction: column;

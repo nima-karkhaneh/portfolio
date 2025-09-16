@@ -338,7 +338,6 @@ This project follows a Git-based feature branch workflow to simulate professiona
 This workflow ensures a stable `main` branch, clean commit history, and showcases industry-standard Git practices and teamwork—key skills for professional development environments.
 
 ## Planned Improvements
-- **404 custom error page:** Create a 404 custom error page to handle undefined routes.
 - **State Management:** Refactor the app to use `Context API` or `Redux` for more scalable and maintainable state management.
 - **Refresh Tokens:** Implement refresh tokens with Axios interceptors to remove the need for a proxy server while keeping authentication secure.
 - **Unit/Integration Tests:** Implement tests for backend routes and frontend components to demonstrate test-driven development.

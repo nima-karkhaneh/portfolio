@@ -6,6 +6,7 @@ import Auth from "./components/Auth.jsx";
 import axios from "axios";
 import { TODOS_URL, VERIFY_URL, SIGNOUT_URL } from "./api/endpoints";
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
+import NotFound from "./components/NotFound.jsx";
 
 function App() {
     const [items, setItems] = useState([]);
@@ -145,6 +146,10 @@ function App() {
                         <Navigate to="/auth" replace />
                     )
                 }
+            />
+            <Route
+                path="*"
+                element={<NotFound />}
             />
         </Routes>
     );
