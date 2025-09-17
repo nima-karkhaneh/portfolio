@@ -1,26 +1,36 @@
-import pg from "pg";
+import pkg from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-const db = new pg.Client({
+const { Pool } = pkg;
+
+const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+    ssl: process.env.NODE_ENV === "production"
+        ? { rejectUnauthorized: false }
+        : false,
 });
 
-async function connectDB() {
+// Single query wrapper
+async function query(text, params) {
+    const client = await pool.connect();
     try {
-        await db.connect();
-        console.log("Database connected successfully.");
+        const result = await client.query(text, params);
+        return result;
     } catch (err) {
-        console.error("Database connection error:", err);
-        process.exit(1); // Exit if DB connection fails
+        console.error("[DB] Query error:", err.message);
+        throw err;
+    } finally {
+        client.release();
     }
 }
 
-connectDB();
+// Keep the same interface so db.query() works in the codebase
+const db = { query };
 
 export default db;
+
