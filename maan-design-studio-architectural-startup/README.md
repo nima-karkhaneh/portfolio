@@ -37,7 +37,7 @@ This project demonstrates UI/UX design, backend integration, session management,
 ## Features
 
 -  **Fully responsive** layout for mobile, tablet, and desktop
-- **Contact form** with input validation, sanitization, and email delivery
+- **Contact form** with input validation, sanitisation, and email delivery
 - **Dynamic toast notifications** for real-time form feedback
 - **Protected success/error routes** using `express-session`
 - **Custom 403 Forbidden logic** to prevent URL access after form submission
