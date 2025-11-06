@@ -104,17 +104,13 @@ app.post("/submit",
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log(err.message);
-                }
+                console.log(err.message);
                 req.session.allowUnsuccessPage = true;
                 req.session.save(() => {
                     res.json({ redirectTo: "/unsuccess" });
                 });
             } else {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log(info.response);
-                }
+                console.log(info.response);
                 req.session.allowSuccessPage = true;
                 req.session.save(() => {
                     res.json({ redirectTo: "/success" });
