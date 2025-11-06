@@ -32,7 +32,7 @@ app.use(session({
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        domain: process.env.NODE_ENV === "production" ? ".maandesingstudio.com" : undefined,
+        domain: process.env.NODE_ENV === "production" ? ".maandesignstudio.com" : undefined,
         maxAge: 60 * 60 * 1000
     }
 }));
