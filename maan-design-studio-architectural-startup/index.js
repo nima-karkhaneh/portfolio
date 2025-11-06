@@ -85,11 +85,13 @@ app.post("/submit",
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({errors: errors.array()});
         }
 
         const transporter = nodemailer.createTransport({
-            service: process.env.NODEMAILER_SERVICE,
+            host: process.env.NODEMAILER_HOST,
+            port: process.env.NODEMAILER_PORT,
+            secure: true,
             auth: {
                 user: process.env.NODEMAILER_USER,
                 pass: process.env.NODEMAILER_PASS
@@ -102,26 +104,20 @@ app.post("/submit",
             text: req.body.text
         };
 
-        // transporter.sendMail(mailOptions, (err, info) => {
-        //     if (err) {
-        //         console.log(err.message);
-        //         req.session.allowUnsuccessPage = true;
-        //         req.session.save(() => {
-        //             res.json({ redirectTo: "/unsuccess" });
-        //         });
-        //     } else {
-        //         console.log(info.response);
-        //         req.session.allowSuccessPage = true;
-        //         req.session.save(() => {
-        //             res.json({ redirectTo: "/success" });
-        //         });
-        //     }
-        // });
-
-        console.log("⚠️ Skipping real mail send for now");
-        req.session.allowSuccessPage = true;
-        req.session.save(() => {
-            res.json({ redirectTo: "/success" });
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err.message);
+                req.session.allowUnsuccessPage = true;
+                req.session.save(() => {
+                    res.json({redirectTo: "/unsuccess"});
+                });
+            } else {
+                console.log(info.response);
+                req.session.allowSuccessPage = true;
+                req.session.save(() => {
+                    res.json({redirectTo: "/success"});
+                });
+            }
         });
     }
 );
