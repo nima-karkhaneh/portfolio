@@ -1,6 +1,6 @@
 import express from "express";
 import env from "dotenv"
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
 import favicon from "serve-favicon"
 import path from "path";
 import { dirname } from "path";
@@ -15,6 +15,7 @@ const app = express();
 env.config();
 const port = process.env.PORT || 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 
 app.use(favicon(__dirname + "/public/images/favicon.ico"))
@@ -81,47 +82,30 @@ app.post("/submit",
         body("phone").trim().notEmpty().withMessage("Phone number is required.").matches(/^[0-9+\-\s()]{7,15}$/).withMessage("Invalid phone number format."),
         body("text").trim().escape().notEmpty().withMessage("Message cannot be empty.")
     ],
-    (req, res) => {
+    async (req, res) => {
         const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.status(400).json({errors: errors.array()});
+        if(!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() })
         }
 
-        const transporter = nodemailer.createTransport({
-            host: process.env.NODEMAILER_HOST,
-            port: process.env.NODEMAILER_PORT,
-            secure: true,
-            auth: {
-                user: process.env.NODEMAILER_USER,
-                pass: process.env.NODEMAILER_PASS
-            }
-        });
+        try{
+            await resend.emails.send({
+                from: "onboarding@resend.dev",
+                to: process.env.CLIENT_EMAIL,
+                subject: `Message from: ${req.body.firstname} ${req.body.lastname} | Email: ${req.body.email} | Phone: ${req.body.phone}`,
+                text: req.body.text
+            })
+            req.session.allowSuccessPage = true;
+            req.session.save(() => res.json({ redirectTo: "/success" }));
+        }
+        catch(err) {
+            console.error("Resend error:", err.message);
+            req.session.allowUnsuccessPage = true;
+            req.session.save(() => res.json({ redirectTo: "/unsuccess" }))
 
-        const mailOptions = {
-            to: process.env.CLIENT_EMAIL,
-            subject: `Message from: ${req.body.firstname} ${req.body.lastname} | Email: ${req.body.email} | Phone: ${req.body.phone}`,
-            text: req.body.text
-        };
-
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.log(err.message);
-                req.session.allowUnsuccessPage = true;
-                req.session.save(() => {
-                    res.json({redirectTo: "/unsuccess"});
-                });
-            } else {
-                console.log(info.response);
-                req.session.allowSuccessPage = true;
-                req.session.save(() => {
-                    res.json({redirectTo: "/success"});
-                });
-            }
-        });
+        }
     }
 );
-
 
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, "views", "404-not-found-page.html"))
