@@ -112,10 +112,6 @@ app.use((req, res) => {
 })
 
 
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(port, () => {
-        console.log(`Server running at http://localhost:${port}`);
-    });
-} else {
-    app.listen(port);
-}
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
+});
