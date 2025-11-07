@@ -107,6 +107,10 @@ app.post("/submit",
     }
 );
 
+app.get("/healthz", (req, res) => {
+    res.status(200).send("OK");
+});
+
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, "views", "404-not-found-page.html"))
 })
