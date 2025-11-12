@@ -90,8 +90,9 @@ app.post("/submit",
 
         try{
             await resend.emails.send({
-                from: "onboarding@resend.dev",
+                from: process.env.SENDER_EMAIL,
                 to: process.env.CLIENT_EMAIL,
+                replyTo: req.body.email,
                 subject: `Message from: ${req.body.firstname} ${req.body.lastname} | Email: ${req.body.email} | Phone: ${req.body.phone}`,
                 text: req.body.text
             })
